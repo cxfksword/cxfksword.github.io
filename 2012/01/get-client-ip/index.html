@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset=utf-8><title>获取客户端的真实ip代码改进 &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/2012/01/get-client-ip/><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2012/01/get-client-ip/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>09 Jan 2012, 07:39</time><h1>获取客户端的真实ip代码改进</h1></div></div></a><div class=post-toc><span class=title>Table of contents</span><nav id=TableOfContents></nav></div><section class=post-content><p>现在系统中常用的获取客户端真实ip的代码如下：</p><pre><code>// 获取IP地址
+protected string GetIPAddress()
+{
+    string result = &quot;&quot;;
+    try
+    {
+        //透过代理取客户端ip
+        result = HttpContext.Current.Request.ServerVariables[&quot;HTTP_X_FORWARDED_FOR&quot;] ?? &quot;&quot;;
+        if (result == &quot;&quot;)
+        {
+            //连接主机ip
+            result = HttpContext.Current.Request.ServerVariables[&quot;REMOTE_ADDR&quot;] ?? &quot;&quot;;
+        }
+        if (result == &quot;&quot;)
+        {
+            result = HttpContext.Current.Request.UserHostAddress;
+        }
+    }
+    catch (Exception ex)
+    {
+    }
+    return result;
+}
+</code></pre><p>这段代码有两个问题：
+1、根据<a href=http://www.openinfo.co.uk/apache/index.html>这篇文章</a>说明，当请求经常多个代理时，HTTP_X_FORWARDED_FOR可能会附加上多个服务器ip，格式如下：</p><p>X-Forwarded-For: client1, proxy1, proxy2, &mldr;</p><p>正确的客户端ip应该只是第一个ip地址</p><p>2、当用户手机是用CMWAP访问网站时，上面代码返回的是10.xxx的私有网络ip，而真实的服务器ip是在REMOTE_ADDR中，如下图所示：
+<a href=http://cxfksword.me/wp-content/uploads/2012/01/serverip.jpg><img src=http://cxfksword.me/wp-content/uploads/2012/01/serverip-300x238.jpg alt></a>
+所以对于获取来的ip，需要做是否私有网络ip的判断。所有私有网络的ip段如下：</p><pre><code>private static readonly long[,] privateIpRange = {    //私有网络ip段,长整形表示
+    {0,50331647},                   //{&quot;0.0.0.0&quot;,&quot;2.255.255.255&quot;},
+    {167772160,184549375},          //{&quot;10.0.0.0&quot;,&quot;10.255.255.255&quot;},
+    {2130706432,2147483647},        //{&quot;127.0.0.0&quot;,&quot;127.255.255.255&quot;},
+    {2851995648,2852061183},        //{&quot;169.254.0.0&quot;,&quot;169.254.255.255&quot;},
+    {2886729728,2887778303},        //{&quot;172.16.0.0&quot;,&quot;172.31.255.255&quot;},
+    {3221225984,3221226239},        //{&quot;192.0.2.0&quot;,&quot;192.0.2.255&quot;},
+    {3232235520,3232301055},        //{&quot;192.168.0.0&quot;,&quot;192.168.255.255&quot;},
+    {4294967040,4294967295}};       //{&quot;255.255.255.0&quot;,&quot;255.255.255.255&quot;}
+</code></pre></section><div class=share><a href="http://www.facebook.com/sharer.php?src=bm&u=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fget-client-ip%2f&t=%e8%8e%b7%e5%8f%96%e5%ae%a2%e6%88%b7%e7%ab%af%e7%9a%84%e7%9c%9f%e5%ae%9eip%e4%bb%a3%e7%a0%81%e6%94%b9%e8%bf%9b" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-facebook"></i></a><a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fget-client-ip%2f&text=%e8%8e%b7%e5%8f%96%e5%ae%a2%e6%88%b7%e7%ab%af%e7%9a%84%e7%9c%9f%e5%ae%9eip%e4%bb%a3%e7%a0%81%e6%94%b9%e8%bf%9b&tw_p=tweetbutton" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-twitter"></i></a><a href="https://plus.google.com/share?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fget-client-ip%2f" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-google-plus"></i></a><a href="http://getpocket.com/edit?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fget-client-ip%2f&title=%e8%8e%b7%e5%8f%96%e5%ae%a2%e6%88%b7%e7%ab%af%e7%9a%84%e7%9c%9f%e5%ae%9eip%e4%bb%a3%e7%a0%81%e6%94%b9%e8%bf%9b" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-get-pocket"></i></a></div><div class=post-meta-code><div class=desc>public string description() {<div class=desc>val author = "
+cxfksword
+";</div><div class=desc>val categories = [
+<a href=http://blog.tri-lib.com/categories/%E5%85%A8%E9%83%A8>"全部"</a>
+<a href=http://blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF>"技术"</a>
+];</div>}</div><div class=desc>public string tags() {<div class=desc>val tags = [
+<a href=http://blog.tri-lib.comtags/ip>"ip"</a>
+];</div>}</div></div><div class=post-comment></div><div class="paging post-paging"><a class=left href=http://blog.tri-lib.com/2012/01/crawl-sina-ip-data/ rel=prev><i class="fa fa-caret-left" aria-hidden=true></i><span>通过新浪接口抓取ip库</span></a>
+<a class=right href=http://blog.tri-lib.com/2012/01/config-windows-services-install-name/ rel=next><span>使windows服务安装名称可配置</span> <i class="fa fa-caret-right" aria-hidden=true></i></a></div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>

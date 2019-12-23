@@ -1,0 +1,26 @@
+<!doctype html><html><head><meta charset=utf-8><title>在ubuntu中编译安装php &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/2013/11/install-php-from-source-in-ubuntu/><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2013/11/install-php-from-source-in-ubuntu/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>12 Nov 2013, 01:07</time><h1>在ubuntu中编译安装php</h1></div></div></a><div class=post-toc><span class=title>Table of contents</span><nav id=TableOfContents><ul><li><ul><li><a href=#heading>预装编译环境</a></li><li><a href=#php>下载php源代码</a></li><li><a href=#heading-1>开始编译安装</a></li><li><a href=#apcmemcache>安装apc和memcache扩展</a></li></ul></li></ul></nav></div><section class=post-content><h3 id=heading>预装编译环境</h3><p>在ubuntu中执行下面命令安装编译依赖软件</p><pre><code>&gt; sudo apt-get install \
+    libxml2-dev \
+    libcurl4-openssl-dev \
+    libjpeg-dev \
+    libpng-dev \
+    libxpm-dev \
+    libmysqlclient-dev \
+    libpq-dev \
+    libicu-dev \
+    libfreetype6-dev \
+    libldap2-dev \
+    libxslt-dev
+
+</code></pre><h3 id=php>下载php源代码</h3><pre><code>wget http://us3.php.net/get/php-5.5.5.tar.gz/from/cn2.php.net/mirror
+
+</code></pre><h3 id=heading-1>开始编译安装</h3><pre><code>&gt; tar zxf php-5.5.5.tar.gz
+&gt; cd php-5.5.5
+&gt; sudo ./configurate ...
+</code></pre><h3 id=apcmemcache>安装apc和memcache扩展</h3></section><div class=share><a href="http://www.facebook.com/sharer.php?src=bm&u=http%3a%2f%2fblog.tri-lib.com%2f2013%2f11%2finstall-php-from-source-in-ubuntu%2f&t=%e5%9c%a8ubuntu%e4%b8%ad%e7%bc%96%e8%af%91%e5%ae%89%e8%a3%85php" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-facebook"></i></a><a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fblog.tri-lib.com%2f2013%2f11%2finstall-php-from-source-in-ubuntu%2f&text=%e5%9c%a8ubuntu%e4%b8%ad%e7%bc%96%e8%af%91%e5%ae%89%e8%a3%85php&tw_p=tweetbutton" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-twitter"></i></a><a href="https://plus.google.com/share?url=http%3a%2f%2fblog.tri-lib.com%2f2013%2f11%2finstall-php-from-source-in-ubuntu%2f" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-google-plus"></i></a><a href="http://getpocket.com/edit?url=http%3a%2f%2fblog.tri-lib.com%2f2013%2f11%2finstall-php-from-source-in-ubuntu%2f&title=%e5%9c%a8ubuntu%e4%b8%ad%e7%bc%96%e8%af%91%e5%ae%89%e8%a3%85php" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-get-pocket"></i></a></div><div class=post-meta-code><div class=desc>public string description() {<div class=desc>val author = "
+<a href=mailto:cxfksword@gmail.com>cxfksword</a>
+";</div><div class=desc>val categories = [
+<a href=http://blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF>"技术"</a>
+<a href=http://blog.tri-lib.com/categories/php>"php"</a>
+];</div>}</div><div class=desc>public string tags() {<div class=desc>val tags = [
+];</div>}</div></div><div class=post-comment></div><div class="paging post-paging"><a class=left href=http://blog.tri-lib.com/2013/11/handle-fatal-error-in-php/ rel=prev><i class="fa fa-caret-left" aria-hidden=true></i><span>捕捉php中的fatal error错误</span></a>
+<a class=right href=http://blog.tri-lib.com/2014/01/the-summary-of-2013/ rel=next><span>2013年总结</span> <i class="fa fa-caret-right" aria-hidden=true></i></a></div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>

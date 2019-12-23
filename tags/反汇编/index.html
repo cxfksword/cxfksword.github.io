@@ -1,0 +1,13 @@
+<!doctype html><html><head><meta charset=utf-8><title>反汇编 &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/><link href=http://blog.tri-lib.com/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/index.xml rel=alternate type=application/rss+xml title=反汇编><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2012/05/disassembly-with-ida-pro/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>16 May 2012, 16:30</time><h1>利用IDA Pro反汇编程序</h1></div></div></a><div class=summary-content><p><a href=http://www.hex-rays.com/products/ida/index.shtml>IDA Pro</a>是一款强大的反汇编软件，特有的IDA视图和交叉引用，可以方便理解程序逻辑和快速定位代码片断，以方便修改。
+<img src=http://ww3.sinaimg.cn/large/7ce4a9f6gw1e5q1vme0mij20ly0ihdil.jpg alt=IDA视图></p><h3 id=heading>示例程序</h3><p>下面会通过修改示例程序的输出字符串，来讲解如何使用IDA Pro。</p><pre><code>#include
+
+main()
+{
+    int n;
+    scanf (&quot;%d&quot;,&amp;n);
+    if (n &gt; 0)
+       printf(&quot;a &gt; 0&quot;);  //后面会用IDA Pro把'a'改成'n'
+    else
+       printf(&quot;n &lt; 0&quot;);
+}
+</code></pre><p>编译后的程序下载：<a href=http://cxfksword.me/wp-content/uploads/2012/05/test.zip>demo</a></p><a href=http://blog.tri-lib.com/2012/05/disassembly-with-ida-pro/ class=summary-more>READ MORE</a></div><hr class=summary-sep><div class=paging>PAGE 1 / 1</div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>

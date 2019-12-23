@@ -1,0 +1,71 @@
+<!doctype html><html><head><meta charset=utf-8><title>使用gdb调试php的coredump文件 &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/2015/07/2015-using-gdb-to-debug-php-coredump/><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2015/07/2015-using-gdb-to-debug-php-coredump/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>08 Jul 2015, 01:33</time><h1>使用gdb调试php的coredump文件</h1></div></div></a><div class=post-toc><span class=title>Table of contents</span><nav id=TableOfContents><ul><li><a href=#coredump>生成coredump文件</a></li><li><a href=#gdbcoredump>使用gdb调试coredump文件</a></li><li><a href=#gdb>gdb调试命令</a><ul><li><a href=#bt>bt</a></li><li><a href=#p>p</a></li><li><a href=#f>f</a></li><li><a href=#info>info</a></li></ul></li><li><a href=#php>php脚本调试命令</a><ul><li><a href=#zbacktrace>zbacktrace</a></li><li><a href=#print-cvs>print_cvs</a></li><li><a href=#printzv>printzv</a></li><li><a href=#print-ht>print_ht</a></li><li><a href=#print-htptr>print_htptr</a></li><li><a href=#print-htstr>print_htstr</a></li><li><a href=#print-ft>print_ft</a></li><li><a href=#zmemcheck>zmemcheck</a></li></ul></li><li><a href=#phpexecutor-globals>php全局对象executor_globals</a></li><li><a href=#heading>扩展阅读</a></li></ul></nav></div><section class=post-content><p>使用xhprof测试slim框架的性能时，发现php抛了Segment Fault错误，试着使用gdb查看是什么导致的。</p><h2 id=coredump>生成coredump文件</h2><p>要生成php的coredump文件需要对系统进行一些配置，具体查看：<a href=https://rtcamp.com/tutorials/php/core-dump-php5-fpm/>Generating core-dump for php5-fpm</a></p><h2 id=gdbcoredump>使用gdb调试coredump文件</h2><p>执行gdb命令，因为coredump是php-fpm进程生成的，还需要指定php-fpm的路径，要不查看不了具体的代码执行信息。</p><pre><code>$ gdb /usr/local/php5/sbin/php-fpm -c /tmp/core-php-fpm.1567 
+</code></pre><h2 id=gdb>gdb调试命令</h2><h3 id=bt>bt</h3><p>bt命令打印程序执行的堆栈信息</p><pre><code>(gdb) bt
+#0  _phpi_pop (ht=&lt;value optimized out&gt;, return_value=0x7faf756ace10, return_value_ptr=0x0, this_ptr=&lt;value optimized out&gt;, 
+    return_value_used=&lt;value optimized out&gt;, off_the_end=0) at /home/apps/php-5.6.10/ext/standard/array.c:1879
+#1  0x00007faf7d8f3317 in hp_execute_internal (execute_data=0x7faf8991db40, fci=0x0, ret=1) at /home/apps/xhprof-master/extension/xhprof.c:1730
+#2  0x0000000000888cc5 in zend_do_fcall_common_helper_SPEC (execute_data=&lt;value optimized out&gt;) at /home/apps/php-5.6.10/Zend/zend_vm_execute.h:560
+#3  0x00000000008787d0 in execute_ex (execute_data=0x7faf8991db40) at /home/apps/php-5.6.10/Zend/zend_vm_execute.h:363
+#4  0x00007faf7d8f2ca9 in hp_execute_ex (execute_data=0x7faf8991db40) at /home/apps/xhprof-master/extension/xhprof.c:1675
+</code></pre><h3 id=p>p</h3><p>p命令用于打印变量信息</p><pre><code>(gdb) p *executor_globals-&gt;argument_stack
+$2 = {top = 0x7faf8991dc38, end = 0x7faf8993d848, prev = 0x0}
+</code></pre><h3 id=f>f</h3><p>切换当前的栈，一般来说，程序停止时，最顶层的栈就是当前栈</p><pre><code># 切换到1层级的栈
+(gdb) f 1
+#1  0x00007f701d60c317 in hp_execute_internal (execute_data=0x7f702940a858, fci=0x0, ret=1) at /home/apps/xhprof-master/extension/xhprof.c:1730
+1730	      ((zend_internal_function *) execute_data-&gt;function_state.function)-&gt;handler(
+
+# 查看当前栈信息
+(gdb) info f
+Stack level 1, frame at 0x7fff515e2090:
+ rip = 0x7f701d60c317 in hp_execute_internal (/home/apps/xhprof-master/extension/xhprof.c:1730); saved rip 0x888a15
+ called by frame at 0x7fff515e2150, caller of frame at 0x7fff515e2040
+ source language c.
+ Arglist at 0x7fff515e2038, args: execute_data=0x7f702940a858, fci=0x0, ret=1
+ Locals at 0x7fff515e2038, Previous frame's sp is 0x7fff515e2090
+ Saved registers:
+  rbx at 0x7fff515e2058, rbp at 0x7fff515e2060, r12 at 0x7fff515e2068, r13 at 0x7fff515e2070, r14 at 0x7fff515e2078, r15 at 0x7fff515e2080,
+  rip at 0x7fff515e2088
+</code></pre><h3 id=info>info</h3><p>查看信息</p><pre><code># 打印局部变量信息
+info locals
+# 打印全局和局部变量信息
+info variables 
+# 打印参数信息
+info args
+# 打印当前堆栈信息
+info f
+</code></pre><h2 id=php>php脚本调试命令</h2><p>使用php脚本调试命令，需要引入php源码中的脚本文件.gdbinit。</p><pre><code>(gdb) source /home/apps/php-5.6.10/.gdbinit 
+</code></pre><h3 id=zbacktrace>zbacktrace</h3><p>zbacktrace可以打印php的堆栈信息，不同于bt只打印c的堆栈信息。</p><pre><code>(gdb) zbacktrace
+[0x7faf8991db40] array_shift(array(2)[0x7faf756acc88]) /var/www/html/php-framework-benchmark/slim-2.6/vendor/slim/slim/Slim/Slim.php:441 
+[0x7faf8991da18] Slim\Slim-&gt;mapRoute(array(2)[0x7faf897a0590]) /var/www/html/php-framework-benchmark/slim-2.6/vendor/slim/slim/Slim/Slim.php:473 
+[0x7faf8991d910] Slim\Slim-&gt;get(&quot;/hello/index&quot;, object[0x7faf897a0510]) /var/www/html/php-framework-benchmark/slim-2.6/index.php:18 
+</code></pre><h3 id=print-cvs>print_cvs</h3><p>print_cvs打印当前执行命令下的所有php变量</p><h3 id=printzv>printzv</h3><p>打印zval变量信息，可指定zval的指针地址，如zbacktrace返回的函数参数地址</p><pre><code>(gdb) printzv 0x7faf756acc88
+[0x7faf756acc88] (refcount=2,is_ref) array(2): {
+    0 =&gt; [0x7faf8979ee40] (refcount=4) string(12): &quot;/hello/index&quot;
+    1 =&gt; [0x7faf897a0510] (refcount=3) objectYou can't do that without a process to debug.
+</code></pre><h3 id=print-ht>print_ht</h3><p>print_ht是用打印zval变量信息</p><h3 id=print-htptr>print_htptr</h3><p>print_htptr是用打印zval指针指向的变量信息</p><h3 id=print-htstr>print_htstr</h3><p>print_htstr用于打印string构成的Hashtable变量信息</p><h3 id=print-ft>print_ft</h3><p>print_ft用于打印function table (HashTable)</p><h3 id=zmemcheck>zmemcheck</h3><p>zmemcheck用于显示当前的内在分配状态信息</p><h2 id=phpexecutor-globals>php全局对象executor_globals</h2><p>php源码用有个用EG宏表示的全局对象executor_globals，它包含了php所有相关的执行信息，如当前执行的op_array，传递参数和函数名等信息。源码中的EG(v)实际是调用executor_globals->v。executor_globals包含的变量有很多，可以用命令：</p><pre><code>p executor_globals
+</code></pre><p>打印出来查看。</p><p>下面是比较重要的几个变量：</p><pre><code>argument_stack       : 传递给当前调用函数的参数堆栈，可以查看参数信息
+current_execute_data : 当前执行的命令信息，如当前执行函数信息，op_array，op_code等
+prev_execute_data    ：前一执行命令信息，相当于调用函数的上级函数
+active_op_array      : 当前正在执行的op_array
+exception            : 当前包含的异常信息
+</code></pre><p>查看示例：</p><pre><code>## 查看当前执行命令信息
+(gdb) p *executor_globals-&gt;current_execute_data
+$8 = {opline = 0x7faf76376fd0, function_state = {function = 0x1123720, arguments = 0x7faf8991dc30}, op_array = 0x7faf897bf9f8, object = 0x0, 
+  symbol_table = 0x0, prev_execute_data = 0x7faf8991da18, old_error_reporting = 0x0, nested = 0 '\000', original_return_value = 0x0, 
+  current_scope = 0x7faf8991da28, current_called_scope = 0x0, current_this = 0x0, fast_ret = 0x0, delayed_exception = 0x0, 
+  call_slots = 0x7faf8991dc08, call = 0x7faf8991dc08}
+  
+## 查看前一执行命令信息，相当于上级调用函数
+(gdb) p *executor_globals-&gt;current_execute_data-&gt;prev_execute_data
+$19 = {opline = 0x7faf763781e8, function_state = {function = 0x7faf897bf9f8, arguments = 0x7faf8991dad8}, op_array = 0x7faf897bf020, 
+  object = 0x7faf8978adf0, symbol_table = 0x0, prev_execute_data = 0x7faf8991d910, old_error_reporting = 0x0, nested = 0 '\000', 
+  original_return_value = 0x0, current_scope = 0x7faf897c2d48, current_called_scope = 0x7faf897c2d48, current_this = 0x7faf8978adf0, 
+  fast_ret = 0x7faf897c2d48, delayed_exception = 0x0, call_slots = 0x7faf8991dab0, call = 0x7faf8991dab0}
+</code></pre><h2 id=heading>扩展阅读</h2><p><a href=http://www.laruence.com/2011/06/23/2057.html>如何调试PHP的Core之获取基本信息</a><br><a href=http://www.php-internals.com/book/>TIPI: 深入理解PHP内核</a></p></section><div class=share><a href="http://www.facebook.com/sharer.php?src=bm&u=http%3a%2f%2fblog.tri-lib.com%2f2015%2f07%2f2015-using-gdb-to-debug-php-coredump%2f&t=%e4%bd%bf%e7%94%a8gdb%e8%b0%83%e8%af%95php%e7%9a%84coredump%e6%96%87%e4%bb%b6" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-facebook"></i></a><a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fblog.tri-lib.com%2f2015%2f07%2f2015-using-gdb-to-debug-php-coredump%2f&text=%e4%bd%bf%e7%94%a8gdb%e8%b0%83%e8%af%95php%e7%9a%84coredump%e6%96%87%e4%bb%b6&tw_p=tweetbutton" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-twitter"></i></a><a href="https://plus.google.com/share?url=http%3a%2f%2fblog.tri-lib.com%2f2015%2f07%2f2015-using-gdb-to-debug-php-coredump%2f" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-google-plus"></i></a><a href="http://getpocket.com/edit?url=http%3a%2f%2fblog.tri-lib.com%2f2015%2f07%2f2015-using-gdb-to-debug-php-coredump%2f&title=%e4%bd%bf%e7%94%a8gdb%e8%b0%83%e8%af%95php%e7%9a%84coredump%e6%96%87%e4%bb%b6" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-get-pocket"></i></a></div><div class=post-meta-code><div class=desc>public string description() {<div class=desc>val author = "
+cxfksword
+";</div><div class=desc>val categories = [
+<a href=http://blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF>"技术"</a>
+<a href=http://blog.tri-lib.com/categories/php>"php"</a>
+];</div>}</div><div class=desc>public string tags() {<div class=desc>val tags = [
+<a href=http://blog.tri-lib.comtags/php>"php"</a>
+];</div>}</div></div><div class=post-comment></div><div class="paging post-paging"><a class=left href=http://blog.tri-lib.com/2015/04/loop-redirect-cause-by-cookie-conflict/ rel=prev><i class="fa fa-caret-left" aria-hidden=true></i><span>解决cookie冲突导致的登录循环重定向</span></a>
+<a class=right href=http://blog.tri-lib.com/2018/02/the-summary-of-2017/ rel=next><span>The Summary of 2017</span> <i class="fa fa-caret-right" aria-hidden=true></i></a></div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>

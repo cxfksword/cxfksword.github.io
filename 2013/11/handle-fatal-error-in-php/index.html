@@ -1,0 +1,162 @@
+<!doctype html><html><head><meta charset=utf-8><title>捕捉php中的fatal error错误 &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/2013/11/handle-fatal-error-in-php/><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2013/11/handle-fatal-error-in-php/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>04 Nov 2013, 00:48</time><h1>捕捉php中的fatal error错误</h1></div></div></a><div class=post-toc><span class=title>Table of contents</span><nav id=TableOfContents></nav></div><section class=post-content><p>php中有三个函数与捕捉运行错误有关，分别是：</p><blockquote><p><a href=http://cn2.php.net/set_error_handler>set_error_handler</a>：运行错误处理函数，php内核执行代码出错时一般是触发error，而不是抛异常，抛异常是面向对象编程中用的</p></blockquote><blockquote><p><a href=http://cn2.php.net/set_exception_handler>set_exception_handler</a>：运行异常信息处理函数，当代码中throw的异常没有被try-catch捕获时，就会调用该函数。php中error和exception的区别可以看这篇回答：<a href=http://stackoverflow.com/questions/841500/php-exceptions-vs-errors>php-exceptions-vs-errors</a></p></blockquote><blockquote><p><a href=http://cn2.php.net/register_shutdown_function>register_shutdown_function</a>：脚本关闭执行函数，会在php脚本每次执行完成退出前运行。</p></blockquote><p>为了保证运行错误能被顺利捕捉到，必须保证在有错的程序执行前先注册了错误处理函数。
+一般错误处理代码结构如下：</p><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-php data-lang=php>function handle_normal_error($errno, $errstr,  $errfile, $errline)
+{
+    // 把error封装为异常，由异常处理函数统一处理
+	throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+
+	// don&#39;t execute php default exception action
+	return true;
+}
+set_error_handler(&#39;handle_normal_error&#39;, E_ALL | E_STRICT);
+
+
+function user_exception_handler($ex)
+{
+    switch ($errno)
+	{
+		case E_USER_ERROR:
+			send_error_to_log_server($msg);
+			break;
+		case E_USER_WARNING:
+			// do something
+			break;
+		default:
+			// do something
+			break;
+	}
+}
+set_exception_handler(&#39;user_exception_handler&#39;);
+
+
+function handle_fatal_error()
+{
+	$error = error_get_last();
+	if (isset($error[&#39;type&#39;]) <span style=color:#960050;background-color:#1e0010>&amp;</span><span style=color:#960050;background-color:#1e0010>&amp;</span> E_ERROR == $error[&#39;type&#39;]) {
+		send_error_to_log_server($msg);
+	}
+}
+register_shutdown_function(&#39;handle_fatal_error&#39;);
+
+</code></pre></div><p>在thinkphp 3.13中，已经做了全局导常处理，代码如下：
+{% codeblock Think.class.php %}</p><p>/**
+* 应用程序初始化
+* @access public
+* @return void
+*/
+static public function start() {
+// 设定错误和异常处理
+register_shutdown_function(array(&lsquo;Think&rsquo;,&lsquo;fatalError&rsquo;));
+set_error_handler(array(&lsquo;Think&rsquo;,&lsquo;appError&rsquo;));
+set_exception_handler(array(&lsquo;Think&rsquo;,&lsquo;appException&rsquo;));</p><pre><code>    ...
+}
+</code></pre><p>/**
+* 自定义异常处理
+* @access public
+* @param mixed $e 异常对象
+*/
+static public function appException($e) {
+$error = array();
+$error[&lsquo;message&rsquo;] = $e->getMessage();
+$trace = $e->getTrace();
+if(&lsquo;throw_exception'==$trace[0][&lsquo;function&rsquo;]) {
+$error[&lsquo;file&rsquo;] = $trace[0][&lsquo;file&rsquo;];
+$error[&lsquo;line&rsquo;] = $trace[0][&lsquo;line&rsquo;];
+}else{
+$error[&lsquo;file&rsquo;] = $e->getFile();
+$error[&lsquo;line&rsquo;] = $e->getLine();
+}
+Log::record($error[&lsquo;message&rsquo;],Log::ERR);
+halt($error);
+}</p><pre><code>/**
+ * 自定义错误处理
+ * @access public
+ * @param int $errno 错误类型
+ * @param string $errstr 错误信息
+ * @param string $errfile 错误文件
+ * @param int $errline 错误行数
+ * @return void
+ */
+static public function appError($errno, $errstr, $errfile, $errline) {
+  switch ($errno) {
+      case E_ERROR:
+      case E_PARSE:
+      case E_CORE_ERROR:
+      case E_COMPILE_ERROR:
+      case E_USER_ERROR:
+        ob_end_clean();
+        // 页面压缩输出支持
+        if(C('OUTPUT_ENCODE')){
+            $zlib = ini_get('zlib.output_compression');
+            if(empty($zlib)) ob_start('ob_gzhandler');
+        }
+        $errorStr = &quot;$errstr &quot;.$errfile.&quot; 第 $errline 行.&quot;;
+        if(C('LOG_RECORD')) Log::write(&quot;[$errno] &quot;.$errorStr,Log::ERR);
+        function_exists('halt')?halt($errorStr):exit('ERROR:'.$errorStr);
+        break;
+      case E_STRICT:
+      case E_USER_WARNING:
+      case E_USER_NOTICE:
+      default:
+        $errorStr = &quot;[$errno] $errstr &quot;.$errfile.&quot; 第 $errline 行.&quot;;
+        trace($errorStr,'','NOTIC');
+        break;
+  }
+}
+
+// 致命错误捕获
+static public function fatalError() {
+    // 保存日志记录
+    if(C('LOG_RECORD')) Log::save();
+    if ($e = error_get_last()) {
+        switch($e['type']){
+          case E_ERROR:
+          case E_PARSE:
+          case E_CORE_ERROR:
+          case E_COMPILE_ERROR:
+          case E_USER_ERROR:
+            ob_end_clean();
+            function_exists('halt')?halt($e):exit('ERROR:'.$e['message']. ' in &lt;b&gt;'.$e['file'].'&lt;/b&gt; on line &lt;b&gt;'.$e['line'].'&lt;/b&gt;');
+            break;
+        }
+    }
+}
+</code></pre><p>{% endcodeblock %}</p><p>{% codeblock functions.php %}</p><p>/**</p><ul><li>错误输出</li><li>@param mixed $error 错误</li><li>@return void
+*/
+function halt($error) {
+$e = array();
+if (APP_DEBUG) {
+//调试模式下输出错误信息
+if (!is_array($error)) {
+$trace = debug_backtrace();
+$e[&lsquo;message&rsquo;] = $error;
+$e[&lsquo;file&rsquo;] = $trace[0][&lsquo;file&rsquo;];
+$e[&lsquo;line&rsquo;] = $trace[0][&lsquo;line&rsquo;];
+ob_start();
+debug_print_backtrace();
+$e[&lsquo;trace&rsquo;] = ob_get_clean();
+} else {
+$e = $error;
+}
+} else {
+//否则定向到错误页面
+$error_page = C(&lsquo;ERROR_PAGE&rsquo;);
+if (!empty($error_page)) {
+redirect($error_page);
+} else {
+if (C(&lsquo;SHOW_ERROR_MSG&rsquo;))
+$e[&lsquo;message&rsquo;] = is_array($error) ? $error[&lsquo;message&rsquo;] : $error;
+else
+$e[&lsquo;message&rsquo;] = C(&lsquo;ERROR_MESSAGE&rsquo;);
+}
+}
+// 包含异常页面模板
+include C(&lsquo;TMPL_EXCEPTION_FILE&rsquo;);
+exit;
+}</li></ul><p>{% endcodeblock %}</p></section><div class=share><a href="http://www.facebook.com/sharer.php?src=bm&u=http%3a%2f%2fblog.tri-lib.com%2f2013%2f11%2fhandle-fatal-error-in-php%2f&t=%e6%8d%95%e6%8d%89php%e4%b8%ad%e7%9a%84fatal%20error%e9%94%99%e8%af%af" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-facebook"></i></a><a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fblog.tri-lib.com%2f2013%2f11%2fhandle-fatal-error-in-php%2f&text=%e6%8d%95%e6%8d%89php%e4%b8%ad%e7%9a%84fatal%20error%e9%94%99%e8%af%af&tw_p=tweetbutton" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-twitter"></i></a><a href="https://plus.google.com/share?url=http%3a%2f%2fblog.tri-lib.com%2f2013%2f11%2fhandle-fatal-error-in-php%2f" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-google-plus"></i></a><a href="http://getpocket.com/edit?url=http%3a%2f%2fblog.tri-lib.com%2f2013%2f11%2fhandle-fatal-error-in-php%2f&title=%e6%8d%95%e6%8d%89php%e4%b8%ad%e7%9a%84fatal%20error%e9%94%99%e8%af%af" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-get-pocket"></i></a></div><div class=post-meta-code><div class=desc>public string description() {<div class=desc>val author = "
+cxfksword
+";</div><div class=desc>val categories = [
+<a href=http://blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF>"技术"</a>
+<a href=http://blog.tri-lib.com/categories/php>"php"</a>
+];</div>}</div><div class=desc>public string tags() {<div class=desc>val tags = [
+];</div>}</div></div><div class=post-comment></div><div class="paging post-paging"><a class=left href=http://blog.tri-lib.com/2013/07/change-rubygem-source/ rel=prev><i class="fa fa-caret-left" aria-hidden=true></i><span>更改rubygems镜像源</span></a>
+<a class=right href=http://blog.tri-lib.com/2013/11/install-php-from-source-in-ubuntu/ rel=next><span>在ubuntu中编译安装php</span> <i class="fa fa-caret-right" aria-hidden=true></i></a></div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>

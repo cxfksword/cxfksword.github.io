@@ -1,0 +1,538 @@
+<!doctype html><html><head><meta charset=utf-8><title>WinDbg常用命令 &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/2012/02/windbg-useful-commands/><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2012/02/windbg-useful-commands/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>02 Feb 2012, 03:33</time><h1>WinDbg常用命令</h1></div></div></a><div class=post-toc><span class=title>Table of contents</span><nav id=TableOfContents></nav></div><section class=post-content><p><a href=2012/02/intro-to-windbg-for-dotnet-developers/>前一篇文章</a>介绍了WinDbg入门，本篇主要介绍WinDbg常用命令和用法。</p><p>调试程序的CPU满载问题，关键是要知道程序当前正在进行什么操作。假如我们在cpu满载时创建了一个dump文件，使用下面几个命令可以查看当前程序正在进行什么处理：
+<strong>.time</strong>
+运行.time命令会显示时间相关的信息，如系统运行时间，进程运行时间和CPU花费在内核态和用户态的时间。</p><pre><code>0:000&gt; .time
+Debug session time: Tue Oct 23 08:38:35.000 2007 (GMT+1)
+System Uptime: 4 days 17:48:01.906
+Process Uptime: 0 days 0:24:37.000
+  Kernel time: 0 days 0:04:23.000
+  User time: 0 days 0:03:28.000
+</code></pre><p>你可以看到系统已正常运行超过4天，进程运行了24分钟，CPU在内核态和用户态累积使用了8分钟。根据进程时间和CPU时间能大概估算出CPU使用率平均值是32.5%。</p><p><strong>!threadpool</strong></p><p>****通过!threadpool命令我们能准确知道创建dump时cpu的使用率。也能知道在队列中的待处理请求数，Completion Port(IOCP)线程数和定时器time数。</p><pre><code>0:000&gt; !threadpool
+CPU utilization 100%
+Worker Thread: Total: 5 Running: 4 Idle: 1 MaxLimit: 200 MinLimit: 2
+Work Request in Queue: 16
+Unknown Function: 6a2d945d  Context: 023ede30
+Unknown Function: 6a2d945d  Context: 023ee1e8
+AsyncTimerCallbackCompletion TimerInfo@11b53760
+Unknown Function: 6a2d945d  Context: 023ee3a8
+Unknown Function: 6a2d945d  Context: 023e3040
+Unknown Function: 6a2d945d  Context: 023ee178
+Unknown Function: 6a2d945d  Context: 023edfb0
+AsyncTimerCallbackCompletion TimerInfo@11b36428
+AsyncTimerCallbackCompletion TimerInfo@11b53868
+Unknown Function: 6a2d945d  Context: 023ee060
+Unknown Function: 6a2d945d  Context: 023ee290
+Unknown Function: 6a2d945d  Context: 023eded0
+Unknown Function: 6a2d945d  Context: 023edd88
+Unknown Function: 6a2d945d  Context: 023ede98
+Unknown Function: 6a2d945d  Context: 023ee258
+Unknown Function: 6a2d945d  Context: 023edfe8
+--------------------------------------
+Number of Timers: 9
+--------------------------------------
+Completion Port Thread:Total: 3 Free: 3 MaxFree: 4 CurrentLimit: 2 MaxLimit: 200 MinLimit: 2
+</code></pre><p>我们可以看到当前CPU已100%使用率，我们进入下一命令。</p><p><strong>!runaway</strong></p><p>这个命令用于显示所有正在运行的线程和它们的CPU使用率。这个命令对于查找高CPU使用率问题很有帮助！</p><pre><code>0:000&gt; !runaway
+User Mode Time
+  Thread       Time
+  25:1a94      0 days 0:00:39.937
+  16:1bc0      0 days 0:00:38.390
+  50:1e8c      0 days 0:00:08.859
+  52:1e40      0 days 0:00:08.687
+  20:1c2c      0 days 0:00:08.234
+  51:1340      0 days 0:00:08.171
+  21:1bcc      0 days 0:00:06.953
+  26:13ec      0 days 0:00:06.671
+  44:131c      0 days 0:00:03.906
+  22:d8c       0 days 0:00:03.375
+  33:78c       0 days 0:00:02.656
+  34:1a8c      0 days 0:00:00.906
+  29:1f5c      0 days 0:00:00.828
+   6:e28       0 days 0:00:00.625
+   5:1c78      0 days 0:00:00.546
+  23:14a4      0 days 0:00:00.484
+   4:5ac       0 days 0:00:00.437
+  45:5dc       0 days 0:00:00.421
+   3:13b4      0 days 0:00:00.421
+  47:19c8      0 days 0:00:00.375
+  28:1b6c      0 days 0:00:00.250
+  46:1dac      0 days 0:00:00.156
+   7:1dd8      0 days 0:00:00.109
+  48:cdc       0 days 0:00:00.093
+  49:1eac      0 days 0:00:00.062
+  15:1a64      0 days 0:00:00.062
+   0:1804      0 days 0:00:00.046
+  36:4a4       0 days 0:00:00.031
+  11:1eb4      0 days 0:00:00.031
+   1:10b4      0 days 0:00:00.031
+  31:16ac      0 days 0:00:00.015
+  14:4ac       0 days 0:00:00.015
+   2:186c      0 days 0:00:00.015
+  59:590       0 days 0:00:00.000
+  58:294       0 days 0:00:00.000
+  57:16d0      0 days 0:00:00.000
+  56:1578      0 days 0:00:00.000
+  55:1428      0 days 0:00:00.000
+  54:16d8      0 days 0:00:00.000
+  53:fd8       0 days 0:00:00.000
+  43:1b8c      0 days 0:00:00.000
+  42:1c24      0 days 0:00:00.000
+  41:1e2c      0 days 0:00:00.000
+  40:11b0      0 days 0:00:00.000
+  39:edc       0 days 0:00:00.000
+  38:1a08      0 days 0:00:00.000
+  37:171c      0 days 0:00:00.000
+  35:1254      0 days 0:00:00.000
+  32:1f9c      0 days 0:00:00.000
+  30:1ae8      0 days 0:00:00.000
+  27:190c      0 days 0:00:00.000
+  24:1d2c      0 days 0:00:00.000
+  19:1e38      0 days 0:00:00.000
+  18:ee4       0 days 0:00:00.000
+  17:fb8       0 days 0:00:00.000
+  13:1b54      0 days 0:00:00.000
+  12:1a48      0 days 0:00:00.000
+  10:f64       0 days 0:00:00.000
+   9:1024      0 days 0:00:00.000
+   8:1b78      0 days 0:00:00.000
+</code></pre><p>你可以看到运行线程的总时间和使用.time命令看到的总cpu使用时间并不相等。原因很简单，因为线程被重复使用或回收了。这也意味着一个线程的CPU使用时间可能是处理多个请求的结果。</p><p><strong>!threads</strong></p><p>!threads显示当前所有的托管线程信息。输出如下：</p><pre><code>0:000&gt; !threads
+ThreadCount: 48
+UnstartedThread: 0
+BackgroundThread: 29
+PendingThread: 0
+DeadThread: 19
+Hosted Runtime: no
+                                      PreEmptive   GC Alloc           Lock
+  ID    OSID ThreadOBJ    State     GC       Context         Domain   Count APT Exception
+  16    1 1bc0 001fccd0   1808220 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+  22    2  d8c 002016f0      b220 Enabled  00000000:00000000 0019daf0     0 MTA (Finalizer)
+  14    4  4ac 00242e58   880a220 Enabled  00000000:00000000 0019daf0     0 MTA (Threadpool Completion Port)
+  23    5 14a4 11b39f18    80a220 Enabled  00000000:00000000 0019daf0     0 MTA (Threadpool Completion Port)
+  24    6 1d2c 11b41ad8      1220 Enabled  00000000:00000000 0019daf0     0 Ukn
+  25    7 1a94 11b46c70   180b220 Enabled  27240c98:27241fd8 11b42540     1 MTA (Threadpool Worker)
+  26    9 13ec 12ce2888   200b220 Enabled  2a9f1434:2a9f33c0 11b42540     0 MTA
+  27    a 190c 12d85eb8   200b220 Enabled  00000000:00000000 11b42540     0 MTA
+  29    b 1f5c 13df6a50   200b220 Enabled  2ab1da6c:2ab1f1c0 11b42540     0 MTA
+  30    c 1ae8 12d44a58      b220 Enabled  00000000:00000000 11b42540     0 MTA
+  31    d 16ac 12e2e008   200b220 Enabled  2a81348c:2a8153c0 11b42540     1 MTA
+   5    e 1c78 12da2160       220 Enabled  00000000:00000000 0019daf0     0 Ukn
+  33    8  78c 11b674c8   200b220 Enabled  2707b818:2707c1d8 11b42540     0 MTA
+  34   12 1a8c 13f163c8       220 Enabled  00000000:00000000 0019daf0     0 Ukn
+  36   13  4a4 13eef718   200b220 Enabled  2a7db4a4:2a7dd3c0 11b42540     0 MTA
+   4   14  5ac 13ef2008       220 Enabled  00000000:00000000 0019daf0     0 Ukn
+  42   10 1c24 13f0e950   880b220 Enabled  00000000:00000000 0019daf0     0 MTA (Threadpool Completion Port)
+   6   11  e28 13f16008       220 Enabled  00000000:00000000 0019daf0     0 Ukn
+   3    f 13b4 13eba008       220 Enabled  00000000:00000000 0019daf0     0 Ukn
+  43   15 1b8c 140db008   880b220 Enabled  00000000:00000000 0019daf0     0 MTA (Threadpool Completion Port)
+  44   17 131c 140ceb28   200b220 Enabled  272288c8:27229fd8 11b42540     0 MTA
+  45   1d  5dc 140cd0a0       220 Enabled  00000000:00000000 0019daf0     0 Ukn
+  47   20 19c8 1651a008       220 Enabled  00000000:00000000 0019daf0     0 Ukn
+XXXX   24    0 16468880   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+  46   1f 1dac 1650ab48       220 Enabled  00000000:00000000 0019daf0     0 Ukn
+XXXX   1a    0 140d5008   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   16    0 140c5008   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+  50    3 1e8c 14064420   180b220 Enabled  27246f54:27247fd8 11b42540     1 MTA (Threadpool Worker)
+XXXX   35    0 1406e800   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+  51   36 1340 140df008   180b220 Enabled  2adec9cc:2aded1c0 11b42540     1 MTA (Threadpool Worker)
+XXXX   37    0 16566868   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+  48   38  cdc 16578840       220 Enabled  00000000:00000000 0019daf0     0 Ukn
+XXXX   39    0 16566c28   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   3b    0 1646b8b0   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   3c    0 16674008   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   3d    0 16676418   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   3e    0 16676fb8   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   3f    0 16674d48   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   40    0 1667de10   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   41    0 16680050   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   42    0 166812e8   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   43    0 16683e60   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+  52   44 1e40 165259e8   180b220 Enabled  2adf126c:2adf31c0 11b42540     1 MTA (Threadpool Worker)
+XXXX   45    0 165b7c08   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   46    0 165aa3d8   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   47    0 165242c8   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+XXXX   48    0 165e9500   1801820 Enabled  00000000:00000000 0019daf0     0 Ukn (Threadpool Worker)
+  49   3a 1eac 165676f0       220 Enabled  00000000:00000000 0019daf0     0 Ukn
+</code></pre><p>线程ID为XXXX表示该线程已结束，并在等待回收。我们也能看到线程ID为22的线程正在终结(finalizer)。假如我们使用!runaway命令时看到22线程有大量的cpu活动，可能我们的程序有终结(finalizer)问题。</p><p><strong>切换到指定线程</strong></p><p>要切换到指定的线程，可以使用下面的格式命令：~[thread id]s，假如我们要切换到50线程，命令如下：</p><pre><code>0:000&gt; ~50s
+</code></pre><p>现在我们已切换到线程50，可以使用很多其他有用的命令。</p><p><strong>!clrstack</strong>
+!clrstack显示当前线程的堆栈信息，通过指定“-p”参数，还能看到方法调用的参数和局部变量信息。
+下面是线程50的堆栈信息：</p><pre><code>0:050&gt; !clrstack
+OS Thread Id: 0x1e8c (50)
+ESP       EIP
+17a9e750 7d61c828 [NDirectMethodFrameSlim: 17a9e750] System.DirectoryServices.Protocols.Wldap32.ldap_bind_s(IntPtr, System.String, System.DirectoryServices.Protocols.SEC_WINNT_AUTH_IDENTITY_EX, System.DirectoryServices.Protocols.BindMethod)
+17a9e768 14df70f9 System.DirectoryServices.Protocols.LdapConnection.BindHelper(System.Net.NetworkCredential, Boolean)
+17a9e794 14df6de0 System.DirectoryServices.Protocols.LdapConnection.Bind()
+17a9e79c 14df59e9 System.DirectoryServices.Protocols.LdapConnection.SendRequestHelper(System.DirectoryServices.Protocols.DirectoryRequest, Int32 ByRef)
+17a9e8b8 14df56e8 System.DirectoryServices.Protocols.LdapConnection.SendRequest(System.DirectoryServices.Protocols.DirectoryRequest, System.TimeSpan)
+17a9e8bc 14df5657 [InlinedCallFrame: 17a9e8bc]
+</code></pre><p>从下向上看，我们能知道LdapConnection调用了SendRequest方法，而SendRequest又调用了SendRequestHelper方法等等。
+如果我们执行“!clrstack -p”命令，我们得到信息：</p><pre><code>0:050&gt; !clrstack -p
+OS Thread Id: 0x1e8c (50)
+ESP       EIP
+17a9e750 7d61c828 [NDirectMethodFrameSlim: 17a9e750] System.DirectoryServices.Protocols.Wldap32.ldap_bind_s(IntPtr, System.String, System.DirectoryServices.Protocols.SEC_WINNT_AUTH_IDENTITY_EX, System.DirectoryServices.Protocols.BindMethod)
+17a9e768 14df70f9 System.DirectoryServices.Protocols.LdapConnection.BindHelper(System.Net.NetworkCredential, Boolean)
+    PARAMETERS:
+        this = 0x271fdfe0
+        newCredential =
+        needSetCredential =
+
+17a9e794 14df6de0 System.DirectoryServices.Protocols.LdapConnection.Bind()
+    PARAMETERS:
+        this =
+
+17a9e79c 14df59e9 System.DirectoryServices.Protocols.LdapConnection.SendRequestHelper(System.DirectoryServices.Protocols.DirectoryRequest, Int32 ByRef)
+    PARAMETERS:
+        this = 0x271fdfe0
+        request = 0x27246e38
+        messageID = 0x17a9e8ec
+
+17a9e8b8 14df56e8 System.DirectoryServices.Protocols.LdapConnection.SendRequest(System.DirectoryServices.Protocols.DirectoryRequest, System.TimeSpan)
+    PARAMETERS:
+        this = 0x271fdfe0
+        request = 0x27246e38
+        requestTimeout =
+
+17a9e8bc 14df5657 [InlinedCallFrame: 17a9e8bc]
+</code></pre><p>我们可以看到DirectoryRequest参数传递给了SendRequest和SendRequestHelper，要查看DirectoryRequest的相关信息，我们只需复制它的地址（0x27246e38），并在下个命令中使用。</p><p><strong>!dumpobject (!do)</strong>
+这是另外一个重要的命令。Dumpobject会打印出指定地址的对象的相关信息。我们使用刚才的地址试下:</p><pre><code>0:050&gt; !do 0x27246e38
+Name: System.DirectoryServices.Protocols.SearchRequest
+MethodTable: 14b394c4
+EEClass: 14d97ce0
+Size: 52(0x34) bytes
+GC Generation: 0
+(C:\WINDOWS\assembly\GAC_MSIL\System.DirectoryServices.Protocols\2.0.0.0__b03f5f7f11d50a3a\System.DirectoryServices.Protocols.dll)
+Fields:
+      MT    Field   Offset                 Type VT     Attr    Value Name
+02c39310  4000102        4        System.String  0 instance 00000000 directoryRequestID
+14b398bc  4000103        8 ...ControlCollection  0 instance 27246e90 directoryControlCollection
+02c39310  4000111        c        System.String  0 instance 27246d00 dn
+12579f5c  4000112       10 ....StringCollection  0 instance 27246eb4 directoryAttributes
+02c36ca0  4000113       14        System.Object  0 instance 27246ddc directoryFilter
+14b39344  4000114       18         System.Int32  1 instance        1 directoryScope
+14b393fc  4000115       1c         System.Int32  1 instance        0 directoryRefAlias
+0fd3da00  4000116       20         System.Int32  1 instance        0 directorySizeLimit
+1202af88  4000117       28      System.TimeSpan  1 instance 27246e60 directoryTimeLimit
+120261c8  4000118       24       System.Boolean  1 instance        0 directoryTypesOnly
+</code></pre><p>通过打印的信息，可以知道它是System.DirectoryServices.Protocols.SearchRequest的一个对象，而显示的都是 System.DirectoryServices.Protocols.SearchRequest的属性值。要知道SearchRequest类的相关属性信息，可以<a href=http://msdn2.microsoft.com/en-us/library/system.directoryservices.protocols.searchrequest_properties.aspx>查看MSDN</a>。当前我们已有RequestId, Scope和DistinguishedName等等。
+所以，假如我们想知道SearchRequest对象的DistinguishedName属性值，即是上面列表中的dn，我们只需再复制它的地址（27246d00），并再次使用!dumpobject命令。因为DistinguishedName是System.String类型，所以输出结果很明显：</p><pre><code>0:050&gt; !do 27246d00
+Name: System.String
+MethodTable: 02c39310
+EEClass: 0fb610ac
+Size: 112(0x70) bytes
+GC Generation: 0
+(C:\WINDOWS\assembly\GAC_32\mscorlib\2.0.0.0__b77a5c561934e089\mscorlib.dll)
+String: CN=Dummy,CN=Accounts,CN=useradm,DC=dummy,DC=net
+Fields:
+      MT    Field   Offset                 Type VT     Attr    Value Name
+0fd3da00  4000096        4         System.Int32  1 instance       48 m_arrayLength
+0fd3da00  4000097        8         System.Int32  1 instance       47 m_stringLength
+0fb80010  4000098        c          System.Char  1 instance       43 m_firstChar
+02c39310  4000099       10        System.String  0   shared   static Empty
+    &gt;&gt; Domain:Value  0019daf0:03380310 11b42540:03380310 &lt;&lt; 0fb86d44  400009a       14        System.Char[]  0   shared   static WhitespaceChars     &gt;&gt; Domain:Value  0019daf0:03380324 11b42540:033855bc &lt;&lt;
+</code></pre><p>通过输出的信息我们很容易知道DistinguishedName属性的值是“CN=Dummy,CN=Accounts,CN=useradm,DC=dummy,DC=net”。如果我们想查看更多内容，只需继续使用!dumpobject命令即可。</p><p><strong>!dumpstackobjects (!dso)</strong>
+使用该命令我们可以查看到当前线程的堆栈引用的所有托管对象。打印信息如下：</p><pre><code>0:050&gt; !dso
+OS Thread Id: 0x1e8c (50)
+ESP/REG  Object   Name
+17a9e534 0741f860 System.RuntimeType
+17a9e6b8 271fdfe0 System.DirectoryServices.Protocols.LdapConnection
+17a9e6bc 27246f20 System.DirectoryServices.Protocols.SEC_WINNT_AUTH_IDENTITY_EX
+17a9e740 271fdfe0 System.DirectoryServices.Protocols.LdapConnection
+17a9e744 27246f20 System.DirectoryServices.Protocols.SEC_WINNT_AUTH_IDENTITY_EX
+17a9e764 27246f20 System.DirectoryServices.Protocols.SEC_WINNT_AUTH_IDENTITY_EX
+17a9e768 271fdfe0 System.DirectoryServices.Protocols.LdapConnection
+17a9e780 271fdfe0 System.DirectoryServices.Protocols.LdapConnection
+17a9e784 27246e38 System.DirectoryServices.Protocols.SearchRequest
+17a9e794 271fdf14 System.DirectoryServices.Protocols.LdapDirectoryIdentifier
+17a9e7a8 27246ef8 System.Collections.ArrayList
+17a9e7bc 27246ef8 System.Collections.ArrayList
+17a9e7c8 271fdfe0 System.DirectoryServices.Protocols.LdapConnection
+17a9e8a4 27246e38 System.DirectoryServices.Protocols.SearchRequest
+17a9e8d0 27246ed8 System.Object[]    (System.Object[])
+17a9e8e0 073ff6b8 System.String    cn
+17a9e8e4 271fdfe0 System.DirectoryServices.Protocols.LdapConnection
+17a9e8f4 27246d00 System.String    CN=Dummy,CN=Accounts,CN=useradm,DC=Dummy,DC=net
+17a9e8f8 271fdfe0 System.DirectoryServices.Protocols.LdapConnection
+17a9e8fc 27246e38 System.DirectoryServices.Protocols.SearchRequest
+17a9e910 03380310 System.String
+17a9e914 27246e24 System.Object[]    (System.String[])
+17a9e918 272399a8 System.String    CN=OID-Dummy-ABC123,CN=Dummy,CN=Accounts,CN=useradm,DC=Dummy,DC=net
+17a9e91c 27246ddc System.String    (CN=OID-Dummy-ABC123)
+...etc...
+</code></pre><p>这个命令对于查找当前线程引用了那些对象很有用。假如你想查看某一对象，只需复制[Object]字段的地址，并使用 !dumpobject命令：</p><pre><code>0:050&gt; !do 271fdfe0
+Name: System.DirectoryServices.Protocols.LdapConnection
+MethodTable: 14a2040c
+EEClass: 149daf08
+Size: 56(0x38) bytes
+(C:\WINDOWS\assembly\GAC_MSIL\System.DirectoryServices.Protocols\2.0.0.0__b03f5f7f11d50a3a\System.DirectoryServices.Protocols.dll)
+Fields:
+      MT    Field   Offset                 Type VT     Attr    Value Name
+14a2078c  40000c3        4 ...NetworkCredential  0 instance 00000000 directoryCredential
+14a2144c  40000c4        8 ...ificateCollection  0 instance 271fe018 certificatesCollection
+1202af88  40000c5       10      System.TimeSpan  1 instance 271fdff0 connectionTimeOut
+1466fe50  40000c6        c ...rectoryIdentifier  0 instance 271fdf14 directoryIdentifier
+14a2034c  4000236       24         System.Int32  0 instance        2 connectionAuthType
+14a223a4  4000237       18 ...dapSessionOptions  0 instance 271fe2d8 options
+0fb896d8  4000238       28        System.IntPtr  0 instance 564180944 ldapHandle
+120261c8  4000239       2c       System.Boolean  0 instance        0 disposed
+120261c8  400023a       2d       System.Boolean  0 instance        0 bounded
+120261c8  400023b       2e       System.Boolean  0 instance        0 needRebind
+14a22084  400023e       1c ...pResponseCallback  0 instance 271fe03c fd
+120261c8  4000243       2f       System.Boolean  0 instance        0 setFQDNDone
+120261c8  4000244       30       System.Boolean  0 instance        1 automaticBind
+120261c8  4000245       31       System.Boolean  0 instance        1 needDispose
+120261c8  4000246       32       System.Boolean  0 instance        1 connected
+14a2267c  4000247       20 ...s.QUERYCLIENTCERT  0 instance 271fe394 clientCertificateRoutine
+0fd314bc  400023c       20 ...ections.Hashtable  0   shared   static handleTable
+    &gt;&gt; Domain:Value  0019daf0:NotInit  11b42540:073fe504 &lt; &lt;
+02c36ca0  400023d       24        System.Object  0   shared   static objectLock
+    &gt;&gt; Domain:Value  0019daf0:NotInit  11b42540:073fe53c &lt; &lt;
+0fd314bc  400023f       28 ...ections.Hashtable  0   shared   static asyncResultTable
+    &gt;&gt; Domain:Value  0019daf0:NotInit  11b42540:073fe610 &lt; &lt;
+14a21864  4000240       2c ...lResultsProcessor  0   shared   static partialResultsProcessor
+    &gt;&gt; Domain:Value  0019daf0:NotInit  11b42540:073fe678 &lt; &lt;
+12305e94  4000241       30 ....ManualResetEvent  0   shared   static waitHandle
+    &gt;&gt; Domain:Value  0019daf0:NotInit  11b42540:073fe64c &lt; &lt;
+14a21954  4000242       34 ...lResultsRetriever  0   shared   static retriever
+    &gt;&gt; Domain:Value  0019daf0:NotInit  11b42540:073fe6a8 &lt; &lt;
+</code></pre><p><strong>!dumparray (!da)</strong>
+你可能已经注意到有很多对象数组在堆栈中，在上面的列表中查找System.Object[]类型就能找到。如果你对对象数组使用 !dumpobject命令，你只能看到数组信息，而不能看到数组的内容信息，要看到数组内容信息，就需要使用!dumparray命令，或简称!da:</p><pre><code>0:050&gt; !do 27239b98
+Name: System.Object[]
+MethodTable: 02c3896c
+EEClass: 02c388ec
+Size: 24(0x18) bytes
+Array: Rank 1, Number of elements 2, Type CLASS
+Element Type: System.String
+Fields:
+None
+
+0:050&gt; !da 27239b98
+Name: System.String[]
+MethodTable: 02c3896c
+EEClass: 02c388ec
+Size: 24(0x18) bytes
+Array: Rank 1, Number of elements 2, Type CLASS
+Element Methodtable: 02c39310
+[0] 272399a8
+[1] 27239a44
+</code></pre><p>通过!dumparray命令我们能知道该数组对象是字符串数组，并给出了数组项的地址。再使用!dumpobject命令我们就能看到数组项的具体内容。</p><p><strong>!objsize</strong>
+如果你查看上面打印的信息，可以看到对象的大小是24字节。从某方面来说，这是对的，24字节是System.Object[]数组对象本身大小，但并不包括数组内容的大小!要获得整个对象的大小，就要使用到 !objsize命令:</p><pre><code>0:050&gt; !objsize 27239b98
+sizeof(27239b98) =          348 (       0x15c) bytes (System.Object[])
+</code></pre><p>!objsize会遍历对象引用的所有子对象，并计算出总的大小。如上面数组对象和它的内容的总大小是348字节。
+如果对象有引用很多子对象，那么!objsize会花费较多的时间计算出总大小。</p><p><strong>!dumpheap</strong>
+这是另一个较频繁使用的命令。!dumpheap会打印出所有在托管堆中的对象信息。直接执行该命令会打印出大量的信息，所以一般使用时都至少带上一个参数。加上-stat参数后会输出总结后的信息，如下面是截取的是!dumpheap -stat命令输出的一部分:</p><pre><code>0:050&gt; !dumpheap -stat
+------------------------------
+Heap 0
+total 2754508 objects
+------------------------------
+Heap 1
+total 2761329 objects
+------------------------------
+total 5515837 objects
+Statistics:
+      MT    Count    TotalSize Class Name
+16e0a6d8        1           12 System.Collections.Generic.ObjectEqualityComparer`1[[System.Data.ProviderBase.DbConnectionInternal, System.Data]]
+16d9cd9c        1           12 System.Xml.Serialization.Configuration.DateTimeSerializationSection+DateTimeSerializationMode
+16d9bf30        1           12 System.Diagnostics.OrdinalCaseInsensitiveComparer
+16d9112c        1           12 System.Xml.Serialization.NameTable
+16d7f664        1           12 System.Xml.Serialization.TempAssemblyCache
+163ea85c        1           12 System.Data.Res
+1501e4c4        1           12 System.Collections.Generic.ObjectEqualityComparer`1[[System.Web.UI.Control, System.Web]]
+14efb138        1           12 System.Net.TimeoutValidator
+14ef9964        1           12 System.Net.Cache.HttpRequestCacheLevel
+14ef77a8        1           12 Microsoft.Win32.WinInetCache
+14ef68e4        1           12 System.Net.WebRequest+WebProxyWrapper
+14ef658c        1           12 System.Net.Configuration.ProxyElement+BypassOnLocalValues
+14ef63d8        1           12 System.Net.Configuration.ProxyElement+AutoDetectValues
+14ef5b68        1           12 System.Net.CaseInsensitiveAscii
+14ef5610        1           12 System.Net.HeaderInfoTable
+14ef4718        1           12 System.Net.HttpRequestCreator
+14db6710        1           12 System.Web.Configuration.MachineKeyValidationConverter
+14db3140        1           12 System.Collections.Generic.ObjectEqualityComparer`1[[System.Runtime.Serialization.MemberHolder, mscorlib]]
+14b3f4d8        1           12 System.Web.UI.SupportsEventValidationAttribute
+...etc...
+14a276a8    19578       704808 System.DirectoryServices.Interop.AdsValueHelper
+14a2ea24     9196       735680 System.Web.UI.WebControls.Label
+14a2e51c    16862       741928 System.Web.UI.WebControls.Style
+125778ec    48015       768240 System.Collections.Specialized.NameObjectCollectionBase+NameObjectEntry
+120261c8    65842       790104 System.Boolean
+14a2ee7c     9198       809424 System.Web.UI.WebControls.Table
+14b311c4     9647       810348 System.Web.UI.WebControls.Image
+13a2b7dc    34913       837912 System.Web.HttpServerVarsCollectionEntry
+14b303a4    10605       848400 System.Web.UI.WebControls.HyperLink
+14d8e3d4    77748       932976 Microsoft.Web.UI.WebControls.BaseChildNodeCollection+ActionType
+14db90ac    81372       976464 System.Web.UI.WebControls.FontInfo
+14b30694    28648      1031328 System.Web.UI.WebControls.TableRow+CellControlCollection
+14d8fdbc    38912      1089536 Microsoft.Web.UI.WebControls.TreeNodeCollection
+14b3d0bc    86592      1385472 System.Web.UI.Pair
+1466c5c4    39305      1414980 System.Web.UI.ControlCollection
+14d8e48c    77748      1865952 Microsoft.Web.UI.WebControls.BaseChildNodeCollection+Action
+1545061c    38874      2176944 Microsoft.Web.UI.WebControls.TreeNode
+14b30eec    52668      2317392 System.Web.UI.WebControls.TableItemStyle
+14a2f804    28515      2395260 System.Web.UI.WebControls.TableRow
+14a2be6c    40894      2453640 System.Web.UI.LiteralControl
+0fd3da00   228792      2745504 System.Int32
+14b3e3ac   244793      2937516 System.Web.UI.IndexedString
+14a2de94   198580      3177280 System.Web.UI.StateBag
+1466c454    80512      3542528 System.Web.UI.Control+OccasionalFields
+12302c2c   205849      4116980 System.Collections.Specialized.HybridDictionary
+14b30024    52934      4446456 System.Web.UI.WebControls.TableCell
+12302f2c   178294      4992232 System.Collections.Specialized.ListDictionary
+14a2e284   412762      6604192 System.Web.UI.StateItem
+14d8ce64   117078      7024680 Microsoft.Web.UI.WebControls.CssCollection
+0fd314bc   132065      7395640 System.Collections.Hashtable
+1230319c   422580      8451600 System.Collections.Specialized.ListDictionary+DictionaryNode
+1202a58c   380438      9130512 System.Collections.ArrayList
+0fd32050   133000     22582944 System.Collections.Hashtable+bucket[]
+02c3896c   649842     23275900 System.Object[]
+0fd3c12c     3471     36385536 System.Byte[]
+001fee20      338     65409920      Free
+02c39310   683083    161821000 System.String
+Total 5515837 objects
+Fragmented blocks larger than 0.5 MB:
+    Addr     Size      Followed by
+2adf31cc    2.0MB         2aff85d8 System.String
+2b006a2c   20.3MB         2c4530d8 System.Net.SocketAddress
+</code></pre><p>输出信息按对象类型的总大小升序排序，你一般可以在列表的最下面找到string对象的大小，因为字符串在程序中一般是最常用的。
+其他比较有用的参数是-type和-mt（MethodTable的意思）。使用它们你可以查看指定对象类型的详细信息，例如假如我们想查看System.Net.HttpRequestCreator类型的具体信息，可以复制上面列表中它的MT字段地址（14ef4718），然后使用 !dumpheap -mt命令：</p><pre><code>0:050&gt; !dumpheap -mt 14ef4718
+------------------------------
+Heap 0
+Address       MT     Size
+0342ccf8 14ef4718       12
+total 1 objects
+------------------------------
+Heap 1
+Address       MT     Size
+total 0 objects
+------------------------------
+total 1 objects
+Statistics:
+      MT    Count    TotalSize Class Name
+14ef4718        1           12 System.Net.HttpRequestCreator
+</code></pre><p>上面列出了所有System.Net.HttpRequestCreator类型的对象的地址，假如我们想查看指定对象的信息，再使用!dumpobject命令就可以了。
+!dumpheap -type可以根据字符串来匹配对应的对象类型。如我们输入命令“!dumpheap -type System.Web”，是指显示所有类名包含有“System.Web”字符串的对象信息。
+其他参数-min和-max是接受表示对象大小的最大值和最小值（单位字节），命令会只列出大于指定值或小于指定值的对象信息。这两个参数对于查找滥用字符串问题很有帮助。</p><p><strong>实战训练</strong>
+<strong>查明缓存使用的大小</strong>
+为了知道在System.Web.Caching.Cache类型中有多少数据，我执行了“ !dumpheap -stat -type System.Web.Caching.Cache”命令。注意，我用了-stat参数，否则我会得到一个包含有System.Web.Caching.CacheKeys和System.Web.Caching.CacheEntrys对象的很长的列表。下面的执行结果：</p><pre><code>0:050&gt; !dumpheap -type System.Web.Caching.Cache -stat
+------------------------------
+Heap 0
+total 665 objects
+------------------------------
+Heap 1
+total 1084 objects
+------------------------------
+total 1749 objects
+Statistics:
+      MT    Count    TotalSize Class Name
+123056f8        1           12 System.Web.Caching.CacheKeyComparer
+1230494c        1           12 System.Web.Caching.Cache
+1230500c        1           24 System.Web.Caching.CacheMultiple
+1230514c        1           32 System.Web.Caching.CacheMemoryStats
+123053b4        1           36 System.Web.Caching.CacheMemoryTotalMemoryPressure
+123059bc        2           40 System.Web.Caching.CacheUsage
+12304bdc        1           48 System.Web.Caching.CacheCommon
+123054f4        1           52 System.Web.Caching.CacheMemoryPrivateBytesPressure
+12305874        2           64 System.Web.Caching.CacheExpires
+12304e64        2          200 System.Web.Caching.CacheSingle
+1255b594       85         1360 System.Web.Caching.CacheDependency+DepFileInfo
+123046c4       40         1440 System.Web.Caching.CacheDependency
+123042ec       47         1504 System.Web.Caching.CacheItemRemovedCallback
+123063fc      832        16640 System.Web.Caching.CacheKey
+12306820      732        52704 System.Web.Caching.CacheEntry
+Total 1749 objects
+</code></pre><p>很明显System.Web.Caching.Cache的方法列表地址（MethodTable）是1230494c，再使用!dumpheap命令我就能看到它的所有对象信息，如下：</p><pre><code>0:050&gt; !dumpheap -mt 1230494c
+------------------------------
+Heap 0
+Address       MT     Size
+03392d20 1230494c       12
+total 1 objects
+------------------------------
+Heap 1
+Address       MT     Size
+total 0 objects
+------------------------------
+total 1 objects
+Statistics:
+      MT    Count    TotalSize Class Name
+1230494c        1           12 System.Web.Caching.Cache
+Total 1 objects
+</code></pre><p>可以看到System.Web.Caching.Cache类型只有一个对象，地址是03392d20，再通过!objsize命令就能计算出它的大小。因为缓存对象很复杂，并包含有大量的子对象，要计算出总大小需要花些时间：</p><pre><code>0:050&gt; !objsize 03392d20
+sizeof(03392d20) =    266640828 (   0xfe49dbc) bytes (System.Web.Caching.Cache)
+</code></pre><p>所以缓存的总大小是 266 MB。</p><p><strong>缓存了什么东西？</strong>
+为了弄清缓存中保存了什么内容，我查看了System.Web.Caching.CacheEntry的对象信息。通过之前的信息可以知道System.Web.Caching.CacheEntry类型的方法列表(MethodTable)是12306820。执行!dumpheap命令取CacheEntry的所有对象信息：</p><pre><code>0:050&gt; !dumpheap -mt 12306820
+------------------------------
+Heap 0
+Address       MT     Size
+033950bc 12306820       72
+033a20d8 12306820       72
+033ac79c 12306820       72
+033da21c 12306820       72
+033f04c4 12306820       72
+03428ec8 12306820       72
+0344dab4 12306820       72
+03815d00 12306820       72
+038265d8 12306820       72
+....etc...
+03af7010 12306820       72
+03b291bc 12306820       72
+03b2c674 12306820       72
+03b6dca0 12306820       72
+03b797dc 12306820       72
+03b85318 12306820       72
+03ba9150 12306820       72
+03c258cc 12306820       72
+03de43c8 12306820       72
+03e160f8 12306820       72
+total 382 objects
+------------------------------
+total 732 objects
+</code></pre><p>要显示上面的信息，也可以使用“!dumpheap -type System.Web.Caching.CacheEntry”命令。
+有了所有CacheEntry对象的地址信息，我随机拿了一个地址查看它的内容：</p><pre><code>0:050&gt; !do 03b2c674
+Name: System.Web.Caching.CacheEntry
+MethodTable: 12306820
+EEClass: 122f6470
+Size: 72(0x48) bytes
+(C:\WINDOWS\assembly\GAC_32\System.Web\2.0.0.0__b03f5f7f11d50a3a\System.Web.dll)
+Fields:
+      MT    Field   Offset                 Type VT     Attr    Value Name
+02c39310  4001327        4        System.String  0 instance 03b2c600 _key
+0fb8f1f8  4001328        c          System.Byte  0 instance        2 _bits
+0fd3da00  4001329        8         System.Int32  0 instance -1314181915 _hashCode
+02c36ca0  4001330       10        System.Object  0 instance 03b2c644 _value
+120219d0  4001331       1c      System.DateTime  1 instance 03b2c690 _utcCreated
+120219d0  4001332       24      System.DateTime  1 instance 03b2c698 _utcExpires
+1202af88  4001333       2c      System.TimeSpan  1 instance 03b2c6a0 _slidingExpiration
+0fb8f1f8  4001334        d          System.Byte  0 instance        7 _expiresBucket
+123062d8  4001335       34 ...g.ExpiresEntryRef  1 instance 03b2c6a8 _expiresEntryRef
+0fb8f1f8  4001336        e          System.Byte  0 instance 4294967295 _usageBucket
+12306738  4001337       38 ...ing.UsageEntryRef  1 instance 03b2c6ac _usageEntryRef
+120219d0  4001338       3c      System.DateTime  1 instance 03b2c6b0 _utcLastUpdate
+123046c4  4001339       14 ...g.CacheDependency  0 instance 00000000 _dependency
+02c36ca0  400133a       18        System.Object  0 instance 033d8344 _onRemovedTargets
+120219d0  400132d      1bc      System.DateTime  1   shared   static NoAbsoluteExpiration
+    &gt;&gt; Domain:Value  0019daf0:NotInit  11b42540:03395104 &lt; &lt;
+1202af88  400132e      1c0      System.TimeSpan  1   shared   static NoSlidingExpiration
+    &gt;&gt; Domain:Value  0019daf0:NotInit  11b42540:03395114 &lt; &lt;
+1202af88  400132f      1c4      System.TimeSpan  1   shared   static OneYear
+    &gt;&gt; Domain:Value  0019daf0:NotInit  11b42540:03395124 &lt; &lt;
+</code></pre><p>输出的是CacheEntry的属性信息，里面最重要的是_value属性。我复制它的地址（03b2c644），再用!dumpobject命令查看：</p><pre><code>0:000&gt; !do 03e160c8
+Name: System.Web.SessionState.InProcSessionState
+MethodTable: 14dbad5c
+EEClass: 14e43af8
+Size: 48(0x30) bytes
+(C:\WINDOWS\assembly\GAC_32\System.Web\2.0.0.0__b03f5f7f11d50a3a\System.Web.dll)
+Fields:
+      MT    Field   Offset                 Type VT     Attr    Value Name
+1466c9d8  4001d89        4 ...ateItemCollection  0 instance 1a7f5438 _sessionItems
+1292672c  4001d8a        8 ...ObjectsCollection  0 instance 00000000 _staticObjects
+0fd3da00  4001d8b        c         System.Int32  0 instance       20 _timeout
+120261c8  4001d8c       18       System.Boolean  0 instance        0 _locked
+120219d0  4001d8d       1c      System.DateTime  1 instance 03e160e4 _utcLockDate
+0fd3da00  4001d8e       10         System.Int32  0 instance        1 _lockCookie
+1202bf60  4001d8f       24 ...ReadWriteSpinLock  1 instance 03e160ec _spinLock
+0fd3da00  4001d90       14         System.Int32  0 instance        0 _flags
+</code></pre><p>可以看到缓存的是一个InProcSessionState对象。</p><p><strong>参考文章：</strong>
+<a href=http://blogs.msdn.com/b/johan/archive/2007/11/26/getting-started-with-windbg-part-ii.aspx>Getting started with windbg - part I</a></p><p><a href=http://blogs.msdn.com/b/johan/archive/2007/11/26/getting-started-with-windbg-part-ii.aspx>Getting started with windbg - part II</a></p></section><div class=share><a href="http://www.facebook.com/sharer.php?src=bm&u=http%3a%2f%2fblog.tri-lib.com%2f2012%2f02%2fwindbg-useful-commands%2f&t=WinDbg%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-facebook"></i></a><a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f02%2fwindbg-useful-commands%2f&text=WinDbg%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4&tw_p=tweetbutton" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-twitter"></i></a><a href="https://plus.google.com/share?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f02%2fwindbg-useful-commands%2f" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-google-plus"></i></a><a href="http://getpocket.com/edit?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f02%2fwindbg-useful-commands%2f&title=WinDbg%e5%b8%b8%e7%94%a8%e5%91%bd%e4%bb%a4" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-get-pocket"></i></a></div><div class=post-meta-code><div class=desc>public string description() {<div class=desc>val author = "
+cxfksword
+";</div><div class=desc>val categories = [
+<a href=http://blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF>"技术"</a>
+];</div>}</div><div class=desc>public string tags() {<div class=desc>val tags = [
+<a href=http://blog.tri-lib.comtags/windbg>"WinDbg"</a>
+];</div>}</div></div><div class=post-comment></div><div class="paging post-paging"><a class=left href=http://blog.tri-lib.com/2012/02/intro-to-windbg-for-dotnet-developers/ rel=prev><i class="fa fa-caret-left" aria-hidden=true></i><span>面向.NET开发人员的WinDbg入门教程</span></a>
+<a class=right href=http://blog.tri-lib.com/2012/02/molas-isolation-framework/ rel=next><span>Molas——.NET依赖分离框架</span> <i class="fa fa-caret-right" aria-hidden=true></i></a></div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>

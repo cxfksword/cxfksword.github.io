@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset=utf-8><title>Mono &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/tags/mono/><link href=http://blog.tri-lib.com/tags/mono/index.xml rel=alternate type=application/rss+xml title=Mono><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2012/05/use-mono-cecil-to-change-dll-attribute/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>12 May 2012, 08:31</time><h1>使用Mono.Cecil更改程序集dll特性</h1></div></div></a><div class=summary-content><p>工作中发现一个公共组件因为某个类不带有[Serializable]特性，导致保存到memcache时出错。刚好负责的同事请假不在，尝试了iLSpy反编译方法后，最后决定使用Mono.Cecil直接修改现成的程序集dll解决。</p><p>示例代码如下：</p><pre><code>class Program
+    {
+        static void Main(string[] args)
+        {
+            var asmFile = &quot;TestDll.dll&quot;;  // 程序集名
+            Console.WriteLine(&quot;add serializable attribute for '{0}'.&quot;, asmFile);
+
+            var asmDef = AssemblyDefinition.ReadAssembly(asmFile, new ReaderParameters
+            {
+                ReadSymbols = true        // 标识是否读取修改pdb文件
+            });
+
+            // 取类名中包含&quot;Entity&quot;字符串的类
+            var types = asmDef.Modules
+                .SelectMany(m =&gt; m.Types)
+                .Where(t =&gt; t.Name.Contains(&quot;Entity&quot;));
+
+            // 设置类为可序列化
+            foreach (var type in types)
+            {
+                type.IsSerializable = true;
+            }
+
+            // 重新保存dll
+            var newAsmFileName = &quot;TestDll_new.dll&quot;;
+            asmDef.Write(newAsmFileName, new WriterParameters
+            {
+                WriteSymbols = true
+            });
+
+            Console.WriteLine(&quot;new dll has save as {0}.&quot;, newAsmFileName);
+        }
+    }
+</code></pre><p>Mono.Cecil除了可以更改特性，还能把sealed类更改为public类，功能非常强大。</p><a href=http://blog.tri-lib.com/2012/05/use-mono-cecil-to-change-dll-attribute/ class=summary-more>READ MORE</a></div><hr class=summary-sep><div class=paging>PAGE 1 / 1</div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>

@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset=utf-8><title>解决cookie冲突导致的登录循环重定向 &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/2015/04/loop-redirect-cause-by-cookie-conflict/><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2015/04/loop-redirect-cause-by-cookie-conflict/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>02 Apr 2015, 00:21</time><h1>解决cookie冲突导致的登录循环重定向</h1></div></div></a><div class=post-toc><span class=title>Table of contents</span><nav id=TableOfContents></nav></div><section class=post-content><p>近排开发的一个后台系统（域名：admin.test.test.com）在接入公司统一SSO时，遇到了cookie冲突引起的登录循环重定向的bug。</p><p>公司有一个统一的SSO登录页面，我们开发的系统是跳转到该页面实现登录验证的。有用户反映登录不了，浏览器提示循环重定向了，查看用户浏览器发现有两个相同名称的session cookie：</p><pre><code>PHPSESSID=token1; path=/; expired=/; domain=.test.com  
+PHPSESSID=token2; path=/; expired=/; domain=.test.test.com
+</code></pre><p>显然这两个cookie的domain因为都是admin.test.test.com的根域名，使浏览器都发送到php后台系统了。第一个是后台系统（admin.test.test.com）写入的，是正确的session id，而第二个是由未知系统写入的。测试打印**$_COOKIE[&lsquo;PHPSESSID&rsquo;]**发现输出是：</p><pre><code>token2
+</code></pre><p>很明显php读取到了错误的session id，所以导致系统读取不到保存在session中的登录信息，而误判用户为未登录，之后再把用户跳转回SSO登录页面，跳转回SSO系统后，SSO系统知道用户已登录过，再跳转回系统。。。这样就一直循环下去了=。=</p><p>为什么PHP会读取到错误的session id呢？打印全局变量**$_SERVER[&lsquo;HTTP_COOKIES&rsquo;]**出来查看：</p><pre><code>PHPSESSID=token2;PHPSESSID=token1
+</code></pre><p>发现PHP是能接收到两个同名COOKIE的，但只取了第一个当真正的session id！！<br>查看php源码，在文件php_variables.c的220行，有注释出php对同名cookie的处理规则：</p><blockquote><p><a href=https://github.com/php/php-src/blob/e10e151e9b92313a7085272c85bebf6c82017fce/main/php_variables.c>https://github.com/php/php-src/blob/e10e151e9b92313a7085272c85bebf6c82017fce/main/php_variables.c</a> #220</p></blockquote><div class=highlight><pre style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-c data-lang=c>    <span style=color:#75715e>/*
+</span><span style=color:#75715e>     * According to rfc2965, more specific paths are listed above the less specific ones.
+</span><span style=color:#75715e>     * If we encounter a duplicate cookie name, we should skip it, since it is not possible
+</span><span style=color:#75715e>     * to have the same (plain text) cookie name for the same path and we should not overwrite
+</span><span style=color:#75715e>     * more specific cookies with the less specific ones.
+</span><span style=color:#75715e>     */</span>
+    <span style=color:#66d9ef>if</span> (Z_TYPE(PG(http_globals)[TRACK_VARS_COOKIE]) <span style=color:#f92672>!</span><span style=color:#f92672>=</span> IS_UNDEF <span style=color:#f92672>&amp;</span><span style=color:#f92672>&amp;</span>
+    	symtable1 <span style=color:#f92672>=</span><span style=color:#f92672>=</span> Z_ARRVAL(PG(http_globals)[TRACK_VARS_COOKIE]) <span style=color:#f92672>&amp;</span><span style=color:#f92672>&amp;</span>
+    	zend_symtable_str_exists(symtable1, index, index_len)) {
+    	zval_ptr_dtor(<span style=color:#f92672>&amp;</span>gpc_element);
+    } <span style=color:#66d9ef>else</span> {
+    	gpc_element_p <span style=color:#f92672>=</span> zend_symtable_str_update_ind(symtable1, index, index_len, <span style=color:#f92672>&amp;</span>gpc_element);
+    }
+</code></pre></div><p>意思是当php遇到相同名称的cookie时，只会保留**$_SERVER[&lsquo;HTTP_COOKIES&rsquo;]**中的第一个cookie，而余下同名的会忽略跳过。</p><p>很明显，只要浏览器传cookie给php时，把token1的session id放在最前面，这样就能正确判断登录成功了！
+那么浏览器传递cookie顺序是如何的呢？参考<a href=http://www.rfc-editor.org/rfc/rfc6265.txt>RFC6265 HTTP State Management Mechanism</a>，可以发现：</p><pre><code>4.2.2
+
+   In particular,if the Cookie header contains two cookies with the same name (e.g.,
+   that were set with different Path or Domain attributes), servers
+   SHOULD NOT rely upon the order in which these cookies appear in the
+   header.
+5.3.  Storage Model
+
+  2.  The user agent SHOULD sort the cookie-list in the following
+       order:
+
+       *  Cookies with longer paths are listed before cookies with
+          shorter paths.
+
+       *  Among cookies that have equal-length path fields, cookies with
+          earlier creation-times are listed before cookies with later
+          creation-times.
+
+       NOTE: Not all user agents sort the cookie-list in this order, but
+       this order reflects common practice when this document was
+       written, and, historically, there have been servers that
+       (erroneously) depended on this order.
+</code></pre><p>大概意思就是：</p><ol><li>path越长的说明匹配越精确，顺序越靠前</li><li>假如path相同，cookie创建时间越早的，顺序越靠前</li><li>顺序与domain没关系<br>RFC同时也说明并不是所有的浏览器都遵守这个，并且服务器也不应该依赖于cookie出现的顺序。</li></ol><p>最后通过更改保存的session id名称来避免冲突解决问题，不过倒让我加深了cookie的了解。</p></section><div class=share><a href="http://www.facebook.com/sharer.php?src=bm&u=http%3a%2f%2fblog.tri-lib.com%2f2015%2f04%2floop-redirect-cause-by-cookie-conflict%2f&t=%e8%a7%a3%e5%86%b3cookie%e5%86%b2%e7%aa%81%e5%af%bc%e8%87%b4%e7%9a%84%e7%99%bb%e5%bd%95%e5%be%aa%e7%8e%af%e9%87%8d%e5%ae%9a%e5%90%91" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-facebook"></i></a><a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fblog.tri-lib.com%2f2015%2f04%2floop-redirect-cause-by-cookie-conflict%2f&text=%e8%a7%a3%e5%86%b3cookie%e5%86%b2%e7%aa%81%e5%af%bc%e8%87%b4%e7%9a%84%e7%99%bb%e5%bd%95%e5%be%aa%e7%8e%af%e9%87%8d%e5%ae%9a%e5%90%91&tw_p=tweetbutton" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-twitter"></i></a><a href="https://plus.google.com/share?url=http%3a%2f%2fblog.tri-lib.com%2f2015%2f04%2floop-redirect-cause-by-cookie-conflict%2f" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-google-plus"></i></a><a href="http://getpocket.com/edit?url=http%3a%2f%2fblog.tri-lib.com%2f2015%2f04%2floop-redirect-cause-by-cookie-conflict%2f&title=%e8%a7%a3%e5%86%b3cookie%e5%86%b2%e7%aa%81%e5%af%bc%e8%87%b4%e7%9a%84%e7%99%bb%e5%bd%95%e5%be%aa%e7%8e%af%e9%87%8d%e5%ae%9a%e5%90%91" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-get-pocket"></i></a></div><div class=post-meta-code><div class=desc>public string description() {<div class=desc>val author = "
+cxfksword
+";</div><div class=desc>val categories = [
+<a href=http://blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF>"技术"</a>
+];</div>}</div><div class=desc>public string tags() {<div class=desc>val tags = [
+<a href=http://blog.tri-lib.comtags/php>"php"</a>
+<a href=http://blog.tri-lib.comtags/http>"http"</a>
+];</div>}</div></div><div class=post-comment></div><div class="paging post-paging"><a class=left href=http://blog.tri-lib.com/star/ rel=prev><i class="fa fa-caret-left" aria-hidden=true></i><span>Github收藏开源项目</span></a>
+<a class=right href=http://blog.tri-lib.com/2015/07/2015-using-gdb-to-debug-php-coredump/ rel=next><span>使用gdb调试php的coredump文件</span> <i class="fa fa-caret-right" aria-hidden=true></i></a></div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>

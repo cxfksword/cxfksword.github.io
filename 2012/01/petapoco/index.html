@@ -1,0 +1,48 @@
+<!doctype html><html><head><meta charset=utf-8><title>小巧方便的ORM类库——PetaPoco &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/2012/01/petapoco/><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2012/01/petapoco/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>09 Jan 2012, 05:11</time><h1>小巧方便的ORM类库——PetaPoco</h1></div></div></a><div class=post-toc><span class=title>Table of contents</span><nav id=TableOfContents></nav></div><section class=post-content><p><a href=http://www.toptensoftware.com/petapoco/>PetaPoco</a>是一个简单轻巧的orm开源类库，全部功能只有一个文件，可以很方便集成到项目中。代替SqlHelper辅助类的不二选择。。。</p><pre><code>主要功能包括：
+- 映射实体类，支持enum，Nullable等类型，可同时映射多个实例。
+- 支持分页
+- 以@0等占位符代替SqlParameter，传参更方便
+- 带有sql字符串构造器，构造条件查询sql非常方便
+- update支持指定字段更新
+- 支持T4模板
+</code></pre><p><strong>使用示例：</strong>
+使用前需要先new一个数据库实例：</p><pre><code>var db = new PetaPoco.Database(&quot;ConnectionName&quot;);
+</code></pre><p>可以放心地把db实例设为static，因为实例中没有SqlConnection的引用，连接每次执行完后，会自动关闭。
+发现有人反映在web上使用static的db实例还是会有问题，具体可看链接(<a href=https://github.com/toptensoftware/PetaPoco/issues/103>Link1</a>)，StackOverflow中推荐web中每个请求使用一个单独的db实例(<a href=http://stackoverflow.com/questions/7052350/how-to-create-a-dal-using-petapoco/9995413#9995413>Link2</a>).
+1、取一条记录</p><pre><code>var a = db.SingleOrDefault&lt;article&gt;(&quot;SELECT * FROM articles WHERE article_id=@0&quot;, 123));&lt;/article&gt;
+</code></pre><p>2、分页</p><pre><code>// 分页实质在内部是用Row_Number()重写了sql，支持join
+var result=db.Page&lt;article&gt;(1, 20, &quot;SELECT * FROM articles WHERE category=@0 ORDER BY date_created DESC&quot;, &quot;coolstuff&quot;);&lt;/article&gt;
+</code></pre><p>上面的分页sql，会被改写为sql：</p><pre><code>SELECT * FROM (
+    SELECT ROW_NUMBER() OVER (ORDER BY date_created DESC) peta_rn, * FROM articles WHERE category=@0 ) peta_paged
+WHERE peta_rn&gt;@1 AND peta_rn
+</code></pre><p>3、部分更新</p><pre><code>db.Update(&quot;articles&quot;, &quot;article_id&quot;, new { title=&quot;New title&quot; }, 123);
+</code></pre><p>4、sql条件构造</p><pre><code>var sql = PetaPoco.Sql.Builder
+    .Append(&quot;SELECT * FROM articles&quot;)
+    .Append(&quot;WHERE article_id=@0&quot;, id)
+    .Append(&quot;WHERE date_created&gt;=@0&quot;, start_date.Value)
+    .Append(&quot;WHERE date_created
+</code></pre><p>5、直接执行sql</p><pre><code>db.Execute(&quot;DELETE FROM articles WHERE draft&lt;&gt;0&quot;);
+</code></pre><p>6、调用存储过程</p><pre><code>//调用存储过程
+db.Execute(&quot;exec procSomeHandler @0, @1&quot;, 3, &quot;2011-10-01&quot;);
+
+//调用带输出(OUTPUT)参数的存储过程, 写的sql语句，@0参数后的“output”是关键
+var param = new SqlParameter() { Direction = ParameterDirection.Output, SqlDbType = SqlDbType.Int };
+db.Execute(&quot;exec procSomeHandler @0 OUTPUT&quot;, param);
+</code></pre><p>7、代替返回值DataTable
+有时，我们并不想每条执行的sql都需要创建对应的实体类，这样会导致项目中存在过多的实体类，有方法能做到DataTable这样灵活就最好了。在.net4.0中，PetaPoco可以返回dynamic类型，可以很好地解决这个问题，而在.net3.5中就没办法，不过可以通过修改PetaPoco代码，实现使用Dictionary类型来代替dynamic动态类型的功能。改动代码如下：<a href=https://github.com/cxfksword/PetaPoco/commit/e07746c06977f09ef8e7a0f81b718e520b4513ed>https://github.com/cxfksword/PetaPoco/commit/e07746c06977f09ef8e7a0f81b718e520b4513ed</a></p><pre><code>var list = db.Fetch&gt;(&quot;select article_id,date_created from articles&quot;);
+</code></pre><p>使用petapoco时有点需要注意，就是当数据库字段数据类型是varchar等非unicode字符类型时，petapoco传参需要把string转换为AnsiString类型，否则会有性能问题。</p><pre><code>Ansi String Support
+
+DBA guru Rob Sullivan yesterday pointed out that SQL Server has pretty severe performance overhead if you try to query an index with varchar column using a unicode string parameter. To fix this the parameter needs to be bound as DbType.AnsiString. To facilitate this you can now wrap such string parameters in a new AnsiString class:
+
+var a = db.SingleOrDefault&lt;article&gt;(&quot;WHERE title=@0&quot;, new PetaPoco.AnsiString(&quot;blah&quot;));&lt;/article&gt;
+</code></pre><p>参考资料：
+<a href=http://code.google.com/p/dapper-dot-net/>http://code.google.com/p/dapper-dot-net/</a>
+<a href=http://www.toptensoftware.com/petapoco/>http://www.toptensoftware.com/petapoco/</a></p></section><div class=share><a href="http://www.facebook.com/sharer.php?src=bm&u=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fpetapoco%2f&t=%e5%b0%8f%e5%b7%a7%e6%96%b9%e4%be%bf%e7%9a%84ORM%e7%b1%bb%e5%ba%93%e2%80%94%e2%80%94PetaPoco" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-facebook"></i></a><a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fpetapoco%2f&text=%e5%b0%8f%e5%b7%a7%e6%96%b9%e4%be%bf%e7%9a%84ORM%e7%b1%bb%e5%ba%93%e2%80%94%e2%80%94PetaPoco&tw_p=tweetbutton" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-twitter"></i></a><a href="https://plus.google.com/share?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fpetapoco%2f" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-google-plus"></i></a><a href="http://getpocket.com/edit?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fpetapoco%2f&title=%e5%b0%8f%e5%b7%a7%e6%96%b9%e4%be%bf%e7%9a%84ORM%e7%b1%bb%e5%ba%93%e2%80%94%e2%80%94PetaPoco" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-get-pocket"></i></a></div><div class=post-meta-code><div class=desc>public string description() {<div class=desc>val author = "
+cxfksword
+";</div><div class=desc>val categories = [
+<a href=http://blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF>"技术"</a>
+];</div>}</div><div class=desc>public string tags() {<div class=desc>val tags = [
+<a href=http://blog.tri-lib.comtags/orm>"ORM"</a>
+<a href=http://blog.tri-lib.comtags/petapoco>"PetaPoco"</a>
+];</div>}</div></div><div class=post-comment></div><div class="paging post-paging"><a class=left href=http://blog.tri-lib.com/2012/01/summarize2011/ rel=prev><i class="fa fa-caret-left" aria-hidden=true></i><span>2011总结</span></a>
+<a class=right href=http://blog.tri-lib.com/2012/01/smartthreadpool/ rel=next><span>开源线程池组件SmartThreadPool</span> <i class="fa fa-caret-right" aria-hidden=true></i></a></div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>

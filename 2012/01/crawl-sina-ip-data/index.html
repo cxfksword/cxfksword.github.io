@@ -1,0 +1,55 @@
+<!doctype html><html><head><meta charset=utf-8><title>通过新浪接口抓取ip库 &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/2012/01/crawl-sina-ip-data/><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2012/01/crawl-sina-ip-data/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>09 Jan 2012, 07:23</time><h1>通过新浪接口抓取ip库</h1></div></div></a><div class=post-toc><span class=title>Table of contents</span><nav id=TableOfContents></nav></div><section class=post-content><p>新浪有开放ip查询的接口（<a href="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=123.124.2.85">http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&ip=123.124.2.85</a>），通过不断查询就能抓取到ip信息。不过要遍历所有的ip地址不现实，数据存储和查询都是问题，一般我们面对的是中国的用户，只需要遍历抓取下中国范围的ip信息就行，而且ip地址最后一位的256个ip一般分配到同一地区，所以最后一位只需遍历.0的ip就可以了。
+目前ip4地址已经分配完，中国的ip段可以在以下网址找到：
+<a href=https://www.countryipblocks.net/e_country_data/CN_range.txt>https://www.countryipblocks.net/e_country_data/CN_range.txt</a>
+首先需要处理，把上面的ip段转换为具体的ip地址：</p><p>private static List HandleIpRange()
+{
+var list = new List();
+var lines = File.ReadAllLines(&ldquo;CN_range.txt&rdquo;);
+var pattern = @"(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})\s-\s(\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3})";
+foreach (var line in lines)
+{
+var match = Regex.Match(line, pattern, RegexOptions.IgnoreCase);
+if (match.Success)
+{
+var begin = match.Groups[1].Value;
+var end = match.Groups[2].Value;</p><pre><code>                    var beginInt = Ip3ToInt(begin);
+                    var endInt = Ip3ToInt(end);
+
+                    while (beginInt &lt;= endInt)
+                    {
+                        list.Add(IntToIp3(beginInt));
+                        beginInt += 1;
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        private static int Ip3ToInt(string ip4)
+        {
+            var arr = ip4.Split('.');
+            var p0 = int.Parse(arr[0]);
+            var p1 = int.Parse(arr[1]);
+            var p2 = int.Parse(arr[2]);
+
+            return (p0 &lt;&lt; 16) | (p1 &lt;&lt; 8) | p2;
+        }
+
+        private static string IntToIp3(int s)
+        {
+            var p0 = s &gt;&gt; 16 &amp; 0xFF;
+            var p1 = s &gt;&gt; 8 &amp; 0xFF;
+            var p2 = s &amp; 0xFF;
+            return string.Format(&quot;{0}.{1}.{2}.0&quot;, p0, p1, p2);
+        }
+</code></pre><p>剩下只需用多线程请求新浪接口，把结果保存到数据库就可以了。</p><p><strong>数据修正：</strong>
+从新浪接口查询回来的数据，有一部分国家和省市都是空的，还有一部分国家是美国等，这部分数据需要修正下。数据修正可以查询ip138网站，它的数据来源是APNIC，比较新，请求地址如下（<a href="http://www.ip138.com/ips8.asp?action=2&ip=223.72.166.0">http://www.ip138.com/ips8.asp?action=2&ip=223.72.166.0</a>）。把请求回来的内容用正则解析并update到数据库就可以了。</p><p><strong>进一步减少数据大小：</strong>
+新浪接口返回的内容都会带有start和end的ip段，表示ip段中的ip都是属于同一地区。可以把start和end的ip转换为int值，再把int表示的ip段和地区信息保存到另一张表中。查询用户ip所属时，只需把用户ip也转换为int值，再找出int值所在的ip段对应的地区就可以了。</p></section><div class=share><a href="http://www.facebook.com/sharer.php?src=bm&u=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fcrawl-sina-ip-data%2f&t=%e9%80%9a%e8%bf%87%e6%96%b0%e6%b5%aa%e6%8e%a5%e5%8f%a3%e6%8a%93%e5%8f%96ip%e5%ba%93" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-facebook"></i></a><a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fcrawl-sina-ip-data%2f&text=%e9%80%9a%e8%bf%87%e6%96%b0%e6%b5%aa%e6%8e%a5%e5%8f%a3%e6%8a%93%e5%8f%96ip%e5%ba%93&tw_p=tweetbutton" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-twitter"></i></a><a href="https://plus.google.com/share?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fcrawl-sina-ip-data%2f" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-google-plus"></i></a><a href="http://getpocket.com/edit?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fcrawl-sina-ip-data%2f&title=%e9%80%9a%e8%bf%87%e6%96%b0%e6%b5%aa%e6%8e%a5%e5%8f%a3%e6%8a%93%e5%8f%96ip%e5%ba%93" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-get-pocket"></i></a></div><div class=post-meta-code><div class=desc>public string description() {<div class=desc>val author = "
+cxfksword
+";</div><div class=desc>val categories = [
+<a href=http://blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF>"技术"</a>
+];</div>}</div><div class=desc>public string tags() {<div class=desc>val tags = [
+<a href=http://blog.tri-lib.comtags/ip>"ip"</a>
+];</div>}</div></div><div class=post-comment></div><div class="paging post-paging"><a class=left href=http://blog.tri-lib.com/2012/01/smartthreadpool/ rel=prev><i class="fa fa-caret-left" aria-hidden=true></i><span>开源线程池组件SmartThreadPool</span></a>
+<a class=right href=http://blog.tri-lib.com/2012/01/get-client-ip/ rel=next><span>获取客户端的真实ip代码改进</span> <i class="fa fa-caret-right" aria-hidden=true></i></a></div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>

@@ -1,0 +1,15 @@
+<!doctype html><html><head><meta charset=utf-8><title>Linux &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/categories/linux/><link href=http://blog.tri-lib.com/categories/linux/index.xml rel=alternate type=application/rss+xml title=Linux><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2012/10/ubuntu-daily/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>30 Oct 2012, 15:14</time><h1>ubuntu日常操作</h1></div></div></a><div class=summary-content><p>工作用电脑将会切换到ubuntu上了，记录下ubuntu常用操作。</p><h3 id=php54>===升级到php5.4===</h3><pre><code>For Ubuntu 11.10/12.04:
+sudo add-apt-repository ppa:ondrej/php5
+sudo apt-get update
+sudo apt-get install php5
+For Ubuntu 10.04 LTS, run the following commands (Thanks to Ivan Castellanos for the extra tip):
+
+sudo echo &quot;deb http://ppa.launchpad.net/ondrej/php5/ubuntu lucid main&quot; &gt;&gt; /etc/apt/sources.list
+sudo echo &quot;deb-src http://ppa.launchpad.net/ondrej/php5/ubuntu lucid main&quot; &gt;&gt; /etc/apt/sources.list
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C
+sudo apt-get update
+sudo apt-get install php5
+You can check if PHP 5.4.x is successfully installed with this command:
+
+php5 -v
+</code></pre><p><a href=http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu>http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu</a></p><a href=http://blog.tri-lib.com/2012/10/ubuntu-daily/ class=summary-more>READ MORE</a></div><hr class=summary-sep><div class=paging>PAGE 1 / 1</div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>

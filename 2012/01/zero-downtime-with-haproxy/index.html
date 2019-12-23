@@ -1,0 +1,68 @@
+<!doctype html><html><head><meta charset=utf-8><title>利用HAProxy实现零停机更新维护 &#183; cxfksword's notes</title><link rel=icon href=http://blog.tri-lib.com/favicon.ico type=image/x-icon><link rel=canonical href=http://blog.tri-lib.com/2012/01/zero-downtime-with-haproxy/><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css><link rel=stylesheet href=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/dracula.min.css><link rel=stylesheet href=http://blog.tri-lib.com/css/styles.css><script src=//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js></script><script>hljs.initHighlightingOnLoad();</script></head><body><div class=navbar><ul><li><a href=http://blog.tri-lib.com/>HOME</a></li><li><a href=http://blog.tri-lib.com/categories>CATEGORIES</a></li><li><a href=http://blog.tri-lib.com/tags>TAGS</a></li><li><a href=http://blog.tri-lib.com/about class=logo-title>ABOUT</a></li></ul></div><div class=container><div class=title><a href=http://blog.tri-lib.com/><img src=http://blog.tri-lib.com/images/logo.png width=260px height=48px></a></div><a href=http://blog.tri-lib.com/2012/01/zero-downtime-with-haproxy/><div class=post-title><img src=http://blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>21 Jan 2012, 08:04</time><h1>利用HAProxy实现零停机更新维护</h1></div></div></a><div class=post-toc><span class=title>Table of contents</span><nav id=TableOfContents><ul><li><a href=#heading>问题起因</a></li><li><a href=#haproxy>HAProxy部署测试</a><ul><li><a href=#haproxy-1>安装HAProxy</a></li><li><a href=#haproxy-2>配置HAProxy</a></li><li><a href=#haproxy-3>运行HAProxy</a></li><li><a href=#heading-1>创建测试站点</a></li><li><a href=#heading-2>测试</a></li></ul></li></ul></nav></div><section class=post-content><p><a href=http://haproxy.1wt.eu/>HAProxy</a>是linux平台上的负载均衡软件，有完善的服务器健康检测和会话(session)保持功能，性能高，支持tcp和http网络连接分发。</p><h2 id=heading><strong>问题起因</strong></h2><p>入公司一年，我发现在ASP.NET网站上部署更新时，经常会遇到下面这样的烦恼：</p><ol><li><p>假如更新到bin文件夹下的dll文件，会引起iis的应用程序池重启，从而导致更新这段时间内，用户访问网站会非常缓慢，甚至出现页面超时。</p></li><li><p>部署更新时要小心翼翼，祈祷上帝没少拷了什么文件，假如更新后网站出错，就只能心跳加速地快速还原系统</p></li><li><p>编辑经常提一些需求只是简单更改下页面文字，而为了不使这种简单的更改引起应用程序池重启，一般部署网站时都是采用copy方式发布，而网站也工作在debug模式下，而不是更优化速度更快的release模式</p></li></ol><p>上面几种情况都很影响用户体验，也让每次更新时肾上激素上升。
+要解决上面的烦恼，需要满足下面几个条件：</p><ol><li><p>有至少两个以上的相同功能站点，当一个站点下线维护时，后续的请求能自动交给另一个站点处理</p></li><li><p>有站点健康检测功能，可以一个个轮流地下线站点和上线站点，这过程中对用户的访问完全不受影响
+应用HAProxy的负载均衡和服务器检测特性可以很好地解决上面的问题，最简单的负载均衡框架如下：</p></li></ol><pre><code>                 192.168.1.2:8001
+IP=192.168.1.1   192.168.1.2:8002   192.168.1.3
+-------+-------------+-------+-----------+----
+       |             |       |          _|_db
+    +--+--+        +-+-+   +-+-+       (___)
+    |  LB |        | A |   | B |       (___)
+    +-----+        +---+   +---+       (___)
+    haproxy       2 cheap web sites
+    keepalived
+</code></pre><p>192.168.1.1是一台linux服务器，运行着HAProxy。
+192.168.1.2是一台windows服务器，iis上运行着两个相同的站点，端口分别设为8001/8002
+192.168.1.3是数据库服务器</p><h2 id=haproxy><strong>HAProxy部署测试</strong></h2><h3 id=haproxy-1><strong>安装HAProxy</strong></h3><p>在ubuntu中安装HAProxy很简单，执行下面的命令就能自动下载安装：</p><pre><code>sudo apt-get install haproxy
+</code></pre><p>假如ubuntu服务器上的不是最新版，你想安装最新版，可以到官网下载最新的tar压缩包，解压后进入该目录，执行下面的命令：</p><pre><code>make install
+</code></pre><h3 id=haproxy-2><strong>配置HAProxy</strong></h3><p>创建配置文件haproxy.cfg</p><pre><code>mkdir /etc/haproxy
+vim /etc/haproxy/haproxy.cfg
+</code></pre><p>HAProxy提供了两种零停机维护方案，一种是定时检测指定文件的请求是否成功，不成功超过指定次数后，可认为服务器已停机，新进入的连接会自动分发到其他机器，另一种是使用备份服务器，下面只介绍最简单的第一种。
+HAProxy实现服务器检测和负载均衡的简单配置如下：</p><pre><code># this config needs haproxy-1.1.28 or haproxy-1.2.1
+
+global
+maxconn 4096
+uid 99
+gid 99
+daemon
+
+defaults
+mode    http
+timeout connect 5000ms
+timeout client 50000ms
+timeout server 50000ms
+option redispatch
+
+listen  http-in
+bind *:80
+balance roundrobin
+option httpchk HEAD /deploy.txt HTTP/1.0
+server server1 192.168.1.2:8001 check inter 2000 rise 2 fall 2
+server server2 192.168.1.2:8002 check inter 2000 rise 2 fall 2
+</code></pre><p>下面说下主要的几个配置项：
+option redispatch：当之前连接的服务器宕机后，自动把连接分发到其他服务器
+bind：监听指定的端口
+balance roundrobin：以轮询的方式分发连接
+option httpchk HEAD /deploy.txt HTTP/1.0：通过请求/deploy.txt文件来确定服务器健康情况
+server server1 192.168.1.2:8001：指定分发的站点，server1可以是任意名称，在写log时使用
+check inter 2000：表示服务器检测的间隔时间，2000指2秒，单位是毫秒
+rise 2：表示服务器检测请求成功2次后，可认为站点已恢复，连接可以重新分发给它
+fall 2：表示服务检测请求失败2次后，可认为站点已宕机，之后不会再分发连接给它</p><p>详细的配置说明可以看<a href=http://haproxy.1wt.eu/download/1.4/doc/configuration.txt>HAProxy配置文档</a></p><h3 id=haproxy-3><strong>运行HAProxy</strong></h3><p>执行下面的命令检查配置是否正确：</p><pre><code>haproxy -f /etc/haproxy/haproxy.cfg -c
+</code></pre><p>运行haproxy：</p><pre><code>haproxy -f /etc/haproxy/haproxy.cfg
+</code></pre><h3 id=heading-1><strong>创建测试站点</strong></h3><p>在服务器192.168.1.2中，创建站点server1，server2，端口分别是8001，8002。
+<img src=http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q1bvyxggj20a906b0td.jpg alt=HAProxy>
+server1中创建default.htm网页，并输出内容：
+<img src=http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q1cqu34rj209101h742.jpg alt=HAProxy>
+server2中创建default.htm网页，并输出内容：
+<img src=hhttp://ww3.sinaimg.cn/large/7ce4a9f6gw1e5q1d9w628j207q01fwea.jpg alt=HAProxy>
+在server1和server2根目录都创建一个空白的deploy.txt文本文件，以便haproxy用来检测服务器健康情况.</p><h3 id=heading-2><strong>测试</strong></h3><p>在浏览器中访问linux服务器的<a href=http://192.168.1.1/>http://192.168.1.1</a>地址，就能看到server1和server2的站点内容，每次刷新网页会轮流显示server1和server2的default.htm内容，因为现在是以轮询方式分发请求连接的。
+尝试把server1中的deploy.txt文件重命名为deploy1.txt，重命名后因为haproxy检测deploy.txt时返回404，haproxy会认为是服务器有问题，当经过4秒后，重新刷新网页，可以看到网页只显示server2的网页内容。
+重新把server1的deploy1.txt改回deploy.txt，静待4秒后再刷新网页，可以看到又能显示server1的网页内容了。</p><p>参考资料：
+<a href="http://www.igvita.com/2008/12/02/zero-downtime-restarts-with-haproxy/?utm_source=feedburner&utm_campaign=Feed%3A+igvita+%28igvita.com%29&utm_content=feed">Zero-Downtime Restarts with HAProxy</a>
+<a href=http://haproxy.1wt.eu/download/1.3/doc/architecture.txt>HAProxy Architecture  Guide</a></p></section><div class=share><a href="http://www.facebook.com/sharer.php?src=bm&u=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fzero-downtime-with-haproxy%2f&t=%e5%88%a9%e7%94%a8HAProxy%e5%ae%9e%e7%8e%b0%e9%9b%b6%e5%81%9c%e6%9c%ba%e6%9b%b4%e6%96%b0%e7%bb%b4%e6%8a%a4" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-facebook"></i></a><a href="http://twitter.com/intent/tweet?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fzero-downtime-with-haproxy%2f&text=%e5%88%a9%e7%94%a8HAProxy%e5%ae%9e%e7%8e%b0%e9%9b%b6%e5%81%9c%e6%9c%ba%e6%9b%b4%e6%96%b0%e7%bb%b4%e6%8a%a4&tw_p=tweetbutton" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-twitter"></i></a><a href="https://plus.google.com/share?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fzero-downtime-with-haproxy%2f" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-google-plus"></i></a><a href="http://getpocket.com/edit?url=http%3a%2f%2fblog.tri-lib.com%2f2012%2f01%2fzero-downtime-with-haproxy%2f&title=%e5%88%a9%e7%94%a8HAProxy%e5%ae%9e%e7%8e%b0%e9%9b%b6%e5%81%9c%e6%9c%ba%e6%9b%b4%e6%96%b0%e7%bb%b4%e6%8a%a4" onclick="window.open(this.href,'PCwindow','width=550, height=350, menubar=no, toolbar=no, scrollbars=yes');return false;"><i class="fa fa-get-pocket"></i></a></div><div class=post-meta-code><div class=desc>public string description() {<div class=desc>val author = "
+cxfksword
+";</div><div class=desc>val categories = [
+<a href=http://blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF>"技术"</a>
+];</div>}</div><div class=desc>public string tags() {<div class=desc>val tags = [
+<a href=http://blog.tri-lib.comtags/haproxy>"haproxy"</a>
+<a href=http://blog.tri-lib.comtags/loadbalance>"loadbalance"</a>
+];</div>}</div></div><div class=post-comment></div><div class="paging post-paging"><a class=left href=http://blog.tri-lib.com/2012/01/use-eclipse-scala-develop-android/ rel=prev><i class="fa fa-caret-left" aria-hidden=true></i><span>利用Eclipse+Scala搭建android开发环境</span></a>
+<a class=right href=http://blog.tri-lib.com/2012/02/intro-to-windbg-for-dotnet-developers/ rel=next><span>面向.NET开发人员的WinDbg入门教程</span> <i class="fa fa-caret-right" aria-hidden=true></i></a></div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG</a>. ALL RIGHTS RESERVED.<p>Hosted by <a href=https://pages.coding.me style=font-weight:700>Coding Pages</a></p></footer></body></html>
