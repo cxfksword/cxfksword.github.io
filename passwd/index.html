@@ -1,0 +1,339 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>
+        passwd - Simple Password Generator
+    </title>
+    <link href="http://cdn.bootcss.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/hint.css/2.1.0/hint.min.css" rel="stylesheet">
+    <style>
+        body {
+            color: #4f545e;
+            background-color: #282c34;
+            font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
+            margin: 0px;
+            padding: 0px 10px;
+        }
+        input[type=password],
+        input[type=text],
+        textarea {
+            background-color: #282c34;
+            border: 1px solid #6a6f7a;
+            box-shadow: inset 0 1px 3px hsla(0, 0%, 7%, .06);
+            border-radius: 1px;
+            box-sizing: border-box;
+            margin-bottom: .75em;
+            padding: .5em;
+            transition: border-color .15s ease;
+            width: 100%;
+            font-size: 22px;
+            margin-bottom: 0;
+            color: #4f545e;
+        }
+        input:focus {
+            color: white
+        }
+        button {
+            border: 1px solid #528bff;
+            background-color: #528bff;
+            color: #d7dae0;
+            appearance: none;
+            border-radius: 1px;
+            cursor: pointer;
+            display: inline-block;
+            font-size: 12px;
+            -webkit-font-smoothing: antialiased;
+            font-weight: 600;
+            line-height: 1;
+            padding: .75em 1.5em;
+            text-decoration: none;
+            transition: background-color border-color .15s ease;
+            user-select: none;
+            vertical-align: middle;
+            white-space: nowrap;
+            outline: none;
+            min-width: 80px;
+        }
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            margin: 12px 0;
+            padding: 0
+        }
+        input[type=range]:focus {
+            outline: none
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 1px;
+            cursor: pointer;
+            border-radius: 1px;
+            border: none
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            background: #ffeae9
+        }
+        input[type=range]::-webkit-slider-thumb {
+            border: none;
+            height: 14px;
+            width: 14px;
+            border-radius: 14px;
+            cursor: pointer;
+            -webkit-appearance: none;
+            margin-top: -6.5px
+        }
+        input[type=range]::-webkit-slider-thumb {
+            background: #ffeae9
+        }
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 1px;
+            cursor: pointer;
+            border-radius: 1px;
+            border: none
+        }
+        input[type=range]::-moz-range-track {
+            background: #ffeae9
+        }
+        input[type=range]::-moz-range-thumb {
+            border: none;
+            height: 14px;
+            width: 14px;
+            border-radius: 14px;
+            cursor: pointer
+        }
+        input[type=range]::-moz-range-thumb {
+            background: #ffeae9
+        }
+        input[type=range]::-moz-focus-outer {
+            border: 0
+        }
+        input[type=range]::-ms-track {
+            width: 100%;
+            height: 1px;
+            cursor: pointer;
+            background: transparent;
+            border-color: transparent;
+            border-width: 14px 0;
+            color: transparent
+        }
+        input[type=range]::-ms-tooltip {
+            display: none
+        }
+        button:hover {
+            border-color: #426fcc;
+            background-color: #426fcc;
+        }
+        ul {
+            padding: 0px;
+        }
+        ul li {
+            display: inline;
+            margin-right: 20px;
+            color: #ccc;
+        }
+        li>label:before {
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            content: "\f096";
+            display: inline-block;
+            width: 1.3em;
+        }
+        li>label[checked]:before {
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            content: "\f046";
+            display: inline-block;
+            width: 1.3em;
+        }
+        #container {
+            margin: 0 auto;
+            text-align: center;
+            width: 500px;
+            padding-top: 250px;
+        }
+        .group {
+            margin-bottom: 20px;
+        }
+        .toolbar {
+            position: relative;
+        }
+        #result {
+            background-color: #2c3038;
+            height: 50px;
+            color: #fff;
+            padding-top: 30px;
+            width: 100%;
+        }
+        #clip {
+            position: absolute;
+            top: 0px;
+            right: 15px;
+            width: 40px;
+            font-size: 20px;
+            color: #fff;
+            padding-top: 5px;
+        }
+        .group-range {
+            position: relative;
+            text-align: left;
+        }
+        .group-range span {
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            color: #fff;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        .group-range input {
+            width: 90%;
+        }
+        @media only screen and (max-device-width: 600px) {
+            #container {
+                width: 100%;
+                padding-top: 10%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="group">
+            <ul>
+                <li>
+                    <label checked data-id="upper">
+                        ABC
+                    </label>
+                </li>
+                <li>
+                    <label checked data-id="lower">
+                        abc
+                    </label>
+                </li>
+                <li>
+                    <label checked data-id="digits">
+                        123
+                    </label>
+                </li>
+                <li>
+                    <label checked data-id="special">
+                        !@#
+                    </label>
+                </li>
+            </ul>
+        </div>
+        <div class="group group-range">
+            <span>
+                    16
+                </span>
+            <input type="range" value="16" min="8" max="25">
+        </div>
+        <div class="group">
+            <input type="password" id="secret" placeholder="Your secret key..." required>
+        </div>
+        <div class="group">
+            <input type="text" id="website" placeholder="Website..." required>
+        </div>
+        <div class="toolbar">
+            <div id="result">
+            </div>
+            <span id="clip" data-clipboard-action="copy" data-clipboard-text="" class="hint--top  hint--bounce" data-hint="Click to copy">
+                    <i class="fa fa-files-o">
+                    </i>
+                </span>
+        </div>
+    </div>
+    <script src="http://cdn.bootcss.com/jquery/2.2.1/jquery.min.js">
+    </script>
+    <script src="http://cdn.bootcss.com/clipboard.js/1.5.9/clipboard.min.js">
+    </script>
+    <script src="http://cdn.bootcss.com/blueimp-md5/2.3.0/js/md5.min.js">
+    </script>
+    <script>
+        $(document).ready(function () {
+            var clipboard = new Clipboard('#clip');
+            clipboard.on('error',
+                function (e) {
+                    $('#clip').attr('data-hint', 'Not support!');
+                });
+
+            $('ul label').click(function () {
+                var checked = $(this).attr('checked');
+                if (checked) {
+                    $(this).removeAttr('checked');
+                } else {
+                    $(this).attr('checked', true);
+                }
+                generate();
+            });
+            $('input[type=range]').on("change mousemove touchmove",
+                function () {
+                    $('.group-range>span').html($(this).val());
+                    generate();
+                });
+            $('input[type=text],input[type=password]').on("keyup",
+                function () {
+                    generate();
+                });
+            $('#clip').click(function () {
+                $(this).attr('data-hint', 'Copied!');
+            }).mouseout(function () {
+                var $this = $(this);
+                setTimeout(function () {
+                        $this.attr('data-hint', 'Click to copy');
+                    },
+                    1000);
+            });;
+        });
+
+        function generate() {
+            var charRanges = {
+                upper: 'ABCDEFGHJKLMNPQRSTUVWXYZ',
+                lower: 'abcdefghijkmnpqrstuvwxyz',
+                digits: '0123456789',
+                special: '!@#$%^&*_+-=()'
+            };
+            var secret_key = $('#secret').val();
+            var website = $('#website').val();
+            var len = $('input[type=range]').val();
+            var ranges = [];
+            $('ul label[checked]').each(function () {
+                ranges.push(charRanges[$(this).attr('data-id')]);
+            });
+            if (!secret_key || !website || ranges.length <= 0) {
+                return;
+            }
+
+            var str = secret_key + '@' + website;
+            var hash = md5(str);
+            var chars = [];
+            for (var i = 0; i < len; i++) {
+                var range = ranges[i % ranges.length];
+                var rand = hash.charAt(i).charCodeAt(0);
+                chars.push(range[rand % range.length]);
+            }
+            var password = chars.join('');
+            var sub_len = Math.ceil(password.length / 4);
+
+            // replace char to asterisk "*"
+            var left_pass = password.substr(0, sub_len);
+            var right_pass = password.substr(password.length - sub_len);
+            var asterisk = new Array(password.length - left_pass.length - right_pass.length + 1).join('*');
+            var asterisk_pass = left_pass + asterisk + right_pass;
+            $('#result').html(password);
+            $('#clip').attr('data-clipboard-text', password);
+        }
+    </script>
+</body>
+
+</html>
