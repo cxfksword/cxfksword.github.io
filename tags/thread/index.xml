@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Thread on cxfksword's notes</title><link>http://blog.tri-lib.com/tags/thread/</link><description>Recent content in Thread on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Mon, 09 Jan 2012 07:11:38 +0000</lastBuildDate><atom:link href="http://blog.tri-lib.com/tags/thread/index.xml" rel="self" type="application/rss+xml"/><item><title>开源线程池组件SmartThreadPool</title><link>http://blog.tri-lib.com/2012/01/smartthreadpool/</link><pubDate>Mon, 09 Jan 2012 07:11:38 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>http://blog.tri-lib.com/2012/01/smartthreadpool/</guid><description>&lt;p>1、为什么需要使用线程池(Thread Pool）&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>**减少线程间上下文切换。**线程执行一定的时间片后，系统会自动把cpu切换给另一个线程使用，这时还需要保存当前的线程上下文状态，并加载新线程的上下文状态。当程序中有大量的线程时，每个线程分得的时间片会越来越少，可能会出现线程未处理多少操作，就需要切换到另一线程，这样频繁的线程间上下文切换会花费大量的cpu时间。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>**减少内存占用。**系统每创建一条物理线程，需要大概花费1MB的内存空间，许多程序喜欢先创建多条物理线程，并周期轮询来处理各自的任务，这样既消耗了线程上下文切换的时间，还浪费了内存。这些任务可能只需要一条线程就能满足要求。假如某一任务需要执行较长的周期，线程池还可以自动增加线程，并在空闲时，销毁线程，释放占用的内存。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;p>2、为什么不使用.Net默认的线程池&lt;/p></description></item></channel></rss>

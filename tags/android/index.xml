@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>android on cxfksword's notes</title><link>http://blog.tri-lib.com/tags/android/</link><description>Recent content in android on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Thu, 12 Apr 2012 16:06:07 +0000</lastBuildDate><atom:link href="http://blog.tri-lib.com/tags/android/index.xml" rel="self" type="application/rss+xml"/><item><title>增加Android模拟器的"Internal Storage"容量</title><link>http://blog.tri-lib.com/2012/04/android-internal-storage-space/</link><pubDate>Thu, 12 Apr 2012 16:06:07 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>http://blog.tri-lib.com/2012/04/android-internal-storage-space/</guid><description>&lt;p>android模拟器默认的内部存储空间只有几十m，随便安装几个app就满了，google了下，发现AVD管理器是没有增加内部存储空间的设置的，要增加需要使用命令行来启动模拟器，命令如下：&lt;/p>
+&lt;pre>&lt;code>emulator -partition-size &amp;lt;size&amp;gt; -avd &amp;lt;virtual device name&amp;gt;
+&lt;/code>&lt;/pre>
+&lt;p>可以把命令保存到批处理bat文件中，以方便以后直接启动。&lt;/p>
+&lt;p>&lt;strong>使用命令行启动模拟器是不能使用snapshot功能的，创建的avd之前有启动的话，需要先关闭。&lt;/strong>
+&lt;img src="http://ww2.sinaimg.cn/large/7ce4a9f6gw1e5q1sdhdhnj20as05w3yp.jpg" alt="android avd">&lt;/p></description></item><item><title>利用Eclipse+Scala搭建android开发环境</title><link>http://blog.tri-lib.com/2012/01/use-eclipse-scala-develop-android/</link><pubDate>Sat, 21 Jan 2012 07:06:00 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>http://blog.tri-lib.com/2012/01/use-eclipse-scala-develop-android/</guid><description>&lt;p>&lt;strong>1、安装JAVA SDK&lt;/strong>&lt;/p>
+&lt;p>到官网（&lt;a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html&lt;/a> ）下载最新的javase sdk，推荐安装1.6版。安装完成后，在windows环境变量中添加[JAVA_HOME]，并把路径指向java sdk的安装根目录。&lt;/p>
+&lt;p>&lt;img src="http://images.cnblogs.com/cnblogs_com/vento/scala-android-1.jpg" alt="">&lt;/p>
+&lt;p>&lt;strong>2、安装Scala&lt;/strong>&lt;/p>
+&lt;p>从scala官网（&lt;a href="http://www.scala-lang.org/downloads">http://www.scala-lang.org/downloads&lt;/a> ）下载windows版的压缩包，推荐2.8.1 final版，直接解压到相应目录中，假设为c:\scala-2.8.1.final\，再添加下面两个环境变量：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>新增环境变量SCALA_HOME，并设为c:\scala-2.8.1.final&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在已有环境变量Path中，追加值c:\scala-2.8.1.final\bin&lt;/p>
+&lt;/li>
+&lt;/ul></description></item></channel></rss>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>HTTP on cxfksword's notes</title><link>http://blog.tri-lib.com/tags/http/</link><description>Recent content in HTTP on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Thu, 02 Apr 2015 00:21:00 +0000</lastBuildDate><atom:link href="http://blog.tri-lib.com/tags/http/index.xml" rel="self" type="application/rss+xml"/><item><title>解决cookie冲突导致的登录循环重定向</title><link>http://blog.tri-lib.com/2015/04/loop-redirect-cause-by-cookie-conflict/</link><pubDate>Thu, 02 Apr 2015 00:21:00 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>http://blog.tri-lib.com/2015/04/loop-redirect-cause-by-cookie-conflict/</guid><description>&lt;p>近排开发的一个后台系统（域名：admin.test.test.com）在接入公司统一SSO时，遇到了cookie冲突引起的登录循环重定向的bug。&lt;/p>
+&lt;p>公司有一个统一的SSO登录页面，我们开发的系统是跳转到该页面实现登录验证的。有用户反映登录不了，浏览器提示循环重定向了，查看用户浏览器发现有两个相同名称的session cookie：&lt;/p>
+&lt;pre>&lt;code>PHPSESSID=token1; path=/; expired=/; domain=.test.com
+PHPSESSID=token2; path=/; expired=/; domain=.test.test.com
+&lt;/code>&lt;/pre>&lt;p>显然这两个cookie的domain因为都是admin.test.test.com的根域名，使浏览器都发送到php后台系统了。第一个是后台系统（admin.test.test.com）写入的，是正确的session id，而第二个是由未知系统写入的。测试打印**$_COOKIE[&amp;lsquo;PHPSESSID&amp;rsquo;]**发现输出是：&lt;/p>
+&lt;pre>&lt;code>token2
+&lt;/code>&lt;/pre>&lt;p>很明显php读取到了错误的session id，所以导致系统读取不到保存在session中的登录信息，而误判用户为未登录，之后再把用户跳转回SSO登录页面，跳转回SSO系统后，SSO系统知道用户已登录过，再跳转回系统。。。这样就一直循环下去了=。=&lt;/p></description></item><item><title>了解IIS的主机名(Host Headers)配置项</title><link>http://blog.tri-lib.com/2012/03/understanding-iis-host-headers/</link><pubDate>Sat, 03 Mar 2012 17:00:18 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>http://blog.tri-lib.com/2012/03/understanding-iis-host-headers/</guid><description>&lt;p>IIS可以在一台服务器上配置多个web站点，每个站点通过ip地址、端口(port)和主机名(host)结合的标识符(ServerBindings Metabase)进行区分。标识字符串的格式如下：&lt;/p>
+&lt;pre>&lt;code>IP:Port:Hostname
+&lt;/code>&lt;/pre>
+&lt;p>上面的IP和Hostname是可选项，假如设定站点时不指定，表示匹配所有。&lt;/p>
+&lt;h3 id="host-headershttp">主机名(Host Headers)是HTTP消息的一部分&lt;/h3>
+&lt;p>浏览器和web服务器之间是通过http协议通信的。http发送的请求头部(headers)部分包含有很多信息，如Content-Length, Referer, &lt;strong>Host&lt;/strong>等等。&lt;/p></description></item></channel></rss>

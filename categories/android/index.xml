@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>android on cxfksword's notes</title><link>http://blog.tri-lib.com/categories/android/</link><description>Recent content in android on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Sun, 30 Jun 2013 15:41:00 +0800</lastBuildDate><atom:link href="http://blog.tri-lib.com/categories/android/index.xml" rel="self" type="application/rss+xml"/><item><title>使用scala+scaloid+IntelliJ IDEA 12开发android应用</title><link>http://blog.tri-lib.com/2013/06/develop-android-with-intellij-idea-12-and-scaloid/</link><pubDate>Sun, 30 Jun 2013 15:41:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>http://blog.tri-lib.com/2013/06/develop-android-with-intellij-idea-12-and-scaloid/</guid><description>&lt;h3 id="heading">软件环境&lt;/h3>
+&lt;p>继续下面的示例前，需要保证安装了下面的软件：&lt;/p>
+&lt;ul>
+&lt;li>JDK 1.6&lt;/li>
+&lt;li>Android SDK&lt;/li>
+&lt;li>IntelliJ IDEA 12&lt;/li>
+&lt;li>Scala 2.10.2&lt;/li>
+&lt;li>Maven 3&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>IntelliJ IDEA 12正常也可以换为Android Studio，不过因为Android Studio是基于IntelliJ IDEA 13 EAP开发的，当前scala plugin还不支持13 EAP，所以还是建议使用IntelliJ IDEA 12，等scala plugin支持最新版后，再换为Android Studio进行开发。&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="heading-1">示例项目&lt;/h3>
+&lt;p>&lt;a href="https://github.com/pocorall/hello-scaloid-maven">hello-scaloid-maven&lt;/a>是一个完全使用maven编译的示例项目,借助&lt;a href="http://code.google.com/p/maven-android-plugin/">android maven plugin&lt;/a>插件可以把代码编译为android的apk文件。&lt;/p></description></item></channel></rss>

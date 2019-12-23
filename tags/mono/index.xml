@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Mono on cxfksword's notes</title><link>http://blog.tri-lib.com/tags/mono/</link><description>Recent content in Mono on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Sat, 12 May 2012 08:31:49 +0000</lastBuildDate><atom:link href="http://blog.tri-lib.com/tags/mono/index.xml" rel="self" type="application/rss+xml"/><item><title>使用Mono.Cecil更改程序集dll特性</title><link>http://blog.tri-lib.com/2012/05/use-mono-cecil-to-change-dll-attribute/</link><pubDate>Sat, 12 May 2012 08:31:49 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>http://blog.tri-lib.com/2012/05/use-mono-cecil-to-change-dll-attribute/</guid><description>&lt;p>工作中发现一个公共组件因为某个类不带有[Serializable]特性，导致保存到memcache时出错。刚好负责的同事请假不在，尝试了iLSpy反编译方法后，最后决定使用Mono.Cecil直接修改现成的程序集dll解决。&lt;/p>
+&lt;p>示例代码如下：&lt;/p>
+&lt;pre>&lt;code>class Program
+{
+static void Main(string[] args)
+{
+var asmFile = &amp;quot;TestDll.dll&amp;quot;; // 程序集名
+Console.WriteLine(&amp;quot;add serializable attribute for '{0}'.&amp;quot;, asmFile);
+var asmDef = AssemblyDefinition.ReadAssembly(asmFile, new ReaderParameters
+{
+ReadSymbols = true // 标识是否读取修改pdb文件
+});
+// 取类名中包含&amp;quot;Entity&amp;quot;字符串的类
+var types = asmDef.Modules
+.SelectMany(m =&amp;gt; m.Types)
+.Where(t =&amp;gt; t.Name.Contains(&amp;quot;Entity&amp;quot;));
+// 设置类为可序列化
+foreach (var type in types)
+{
+type.IsSerializable = true;
+}
+// 重新保存dll
+var newAsmFileName = &amp;quot;TestDll_new.dll&amp;quot;;
+asmDef.Write(newAsmFileName, new WriterParameters
+{
+WriteSymbols = true
+});
+Console.WriteLine(&amp;quot;new dll has save as {0}.&amp;quot;, newAsmFileName);
+}
+}
+&lt;/code>&lt;/pre>
+&lt;p>Mono.Cecil除了可以更改特性，还能把sealed类更改为public类，功能非常强大。&lt;/p></description></item></channel></rss>
