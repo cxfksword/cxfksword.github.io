@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on cxfksword's notes</title><link>https://blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Wed, 08 Jul 2015 01:33:35 +0800</lastBuildDate><atom:link href="https://blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>使用gdb调试php的coredump文件</title><link>https://blog.tri-lib.com/2015/07/2015-using-gdb-to-debug-php-coredump/</link><pubDate>Wed, 08 Jul 2015 01:33:35 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2015/07/2015-using-gdb-to-debug-php-coredump/</guid><description>&lt;p>使用xhprof测试slim框架的性能时，发现php抛了Segment Fault错误，试着使用gdb查看是什么导致的。&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on cxfksword's notes</title><link>//blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Wed, 08 Jul 2015 01:33:35 +0800</lastBuildDate><atom:link href="//blog.tri-lib.com/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>使用gdb调试php的coredump文件</title><link>//blog.tri-lib.com/2015/07/2015-using-gdb-to-debug-php-coredump/</link><pubDate>Wed, 08 Jul 2015 01:33:35 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2015/07/2015-using-gdb-to-debug-php-coredump/</guid><description>&lt;p>使用xhprof测试slim框架的性能时，发现php抛了Segment Fault错误，试着使用gdb查看是什么导致的。&lt;/p>
 &lt;h2 id="coredump">生成coredump文件&lt;/h2>
 &lt;p>要生成php的coredump文件需要对系统进行一些配置，具体查看：&lt;a href="https://rtcamp.com/tutorials/php/core-dump-php5-fpm/">Generating core-dump for php5-fpm&lt;/a>&lt;/p>
 &lt;h2 id="gdbcoredump">使用gdb调试coredump文件&lt;/h2>
 &lt;p>执行gdb命令，因为coredump是php-fpm进程生成的，还需要指定php-fpm的路径，要不查看不了具体的代码执行信息。&lt;/p>
 &lt;pre>&lt;code>$ gdb /usr/local/php5/sbin/php-fpm -c /tmp/core-php-fpm.1567
-&lt;/code>&lt;/pre></description></item><item><title>解决cookie冲突导致的登录循环重定向</title><link>https://blog.tri-lib.com/2015/04/loop-redirect-cause-by-cookie-conflict/</link><pubDate>Thu, 02 Apr 2015 00:21:00 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2015/04/loop-redirect-cause-by-cookie-conflict/</guid><description>&lt;p>近排开发的一个后台系统（域名：admin.test.test.com）在接入公司统一SSO时，遇到了cookie冲突引起的登录循环重定向的bug。&lt;/p>
+&lt;/code>&lt;/pre></description></item><item><title>解决cookie冲突导致的登录循环重定向</title><link>//blog.tri-lib.com/2015/04/loop-redirect-cause-by-cookie-conflict/</link><pubDate>Thu, 02 Apr 2015 00:21:00 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2015/04/loop-redirect-cause-by-cookie-conflict/</guid><description>&lt;p>近排开发的一个后台系统（域名：admin.test.test.com）在接入公司统一SSO时，遇到了cookie冲突引起的登录循环重定向的bug。&lt;/p>
 &lt;p>公司有一个统一的SSO登录页面，我们开发的系统是跳转到该页面实现登录验证的。有用户反映登录不了，浏览器提示循环重定向了，查看用户浏览器发现有两个相同名称的session cookie：&lt;/p>
 &lt;pre>&lt;code>PHPSESSID=token1; path=/; expired=/; domain=.test.com
 PHPSESSID=token2; path=/; expired=/; domain=.test.test.com
 &lt;/code>&lt;/pre>&lt;p>显然这两个cookie的domain因为都是admin.test.test.com的根域名，使浏览器都发送到php后台系统了。第一个是后台系统（admin.test.test.com）写入的，是正确的session id，而第二个是由未知系统写入的。测试打印**$_COOKIE[&amp;lsquo;PHPSESSID&amp;rsquo;]**发现输出是：&lt;/p>
 &lt;pre>&lt;code>token2
-&lt;/code>&lt;/pre>&lt;p>很明显php读取到了错误的session id，所以导致系统读取不到保存在session中的登录信息，而误判用户为未登录，之后再把用户跳转回SSO登录页面，跳转回SSO系统后，SSO系统知道用户已登录过，再跳转回系统。。。这样就一直循环下去了=。=&lt;/p></description></item><item><title>在ubuntu中编译安装php</title><link>https://blog.tri-lib.com/2013/11/install-php-from-source-in-ubuntu/</link><pubDate>Tue, 12 Nov 2013 01:07:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2013/11/install-php-from-source-in-ubuntu/</guid><description>&lt;h3 id="heading">预装编译环境&lt;/h3>
+&lt;/code>&lt;/pre>&lt;p>很明显php读取到了错误的session id，所以导致系统读取不到保存在session中的登录信息，而误判用户为未登录，之后再把用户跳转回SSO登录页面，跳转回SSO系统后，SSO系统知道用户已登录过，再跳转回系统。。。这样就一直循环下去了=。=&lt;/p></description></item><item><title>在ubuntu中编译安装php</title><link>//blog.tri-lib.com/2013/11/install-php-from-source-in-ubuntu/</link><pubDate>Tue, 12 Nov 2013 01:07:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2013/11/install-php-from-source-in-ubuntu/</guid><description>&lt;h3 id="heading">预装编译环境&lt;/h3>
 &lt;p>在ubuntu中执行下面命令安装编译依赖软件&lt;/p>
 &lt;pre>&lt;code>&amp;gt; sudo apt-get install \
 libxml2-dev \
@@ -24,7 +24,7 @@ libicu-dev \
 libfreetype6-dev \
 libldap2-dev \
 libxslt-dev
-&lt;/code>&lt;/pre></description></item><item><title>捕捉php中的fatal error错误</title><link>https://blog.tri-lib.com/2013/11/handle-fatal-error-in-php/</link><pubDate>Mon, 04 Nov 2013 00:48:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2013/11/handle-fatal-error-in-php/</guid><description>&lt;p>php中有三个函数与捕捉运行错误有关，分别是：&lt;/p>
+&lt;/code>&lt;/pre></description></item><item><title>捕捉php中的fatal error错误</title><link>//blog.tri-lib.com/2013/11/handle-fatal-error-in-php/</link><pubDate>Mon, 04 Nov 2013 00:48:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2013/11/handle-fatal-error-in-php/</guid><description>&lt;p>php中有三个函数与捕捉运行错误有关，分别是：&lt;/p>
 &lt;blockquote>
 &lt;p>&lt;a href="http://cn2.php.net/set_error_handler">set_error_handler&lt;/a>：运行错误处理函数，php内核执行代码出错时一般是触发error，而不是抛异常，抛异常是面向对象编程中用的&lt;/p>
 &lt;/blockquote>
@@ -35,11 +35,11 @@ libxslt-dev
 &lt;p>&lt;a href="http://cn2.php.net/register_shutdown_function">register_shutdown_function&lt;/a>：脚本关闭执行函数，会在php脚本每次执行完成退出前运行。&lt;/p>
 &lt;/blockquote>
 &lt;p>为了保证运行错误能被顺利捕捉到，必须保证在有错的程序执行前先注册了错误处理函数。
-一般错误处理代码结构如下：&lt;/p></description></item><item><title>更改rubygems镜像源</title><link>https://blog.tri-lib.com/2013/07/change-rubygem-source/</link><pubDate>Mon, 15 Jul 2013 00:15:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2013/07/change-rubygem-source/</guid><description>&lt;p>由于国内网络的原因，在安装ruby相关软件时，经常会在请求&lt;strong>rubygems.org&lt;/strong>下载时一直卡着不动，这时可以切换到淘宝的镜像源，速度嗖嗖的。&lt;/p>
+一般错误处理代码结构如下：&lt;/p></description></item><item><title>更改rubygems镜像源</title><link>//blog.tri-lib.com/2013/07/change-rubygem-source/</link><pubDate>Mon, 15 Jul 2013 00:15:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2013/07/change-rubygem-source/</guid><description>&lt;p>由于国内网络的原因，在安装ruby相关软件时，经常会在请求&lt;strong>rubygems.org&lt;/strong>下载时一直卡着不动，这时可以切换到淘宝的镜像源，速度嗖嗖的。&lt;/p>
 &lt;blockquote>
 &lt;p>&lt;a href="http://ruby.taobao.org/">http://ruby.taobao.org/&lt;/a>&lt;/p>
 &lt;/blockquote>
-&lt;p>详细的更改方法可以访问上面的网址，假如项目下有GemFile文件，还需要更改GemFile文件的配置源地址。&lt;/p></description></item><item><title>使用scala+scaloid+IntelliJ IDEA 12开发android应用</title><link>https://blog.tri-lib.com/2013/06/develop-android-with-intellij-idea-12-and-scaloid/</link><pubDate>Sun, 30 Jun 2013 15:41:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2013/06/develop-android-with-intellij-idea-12-and-scaloid/</guid><description>&lt;h3 id="heading">软件环境&lt;/h3>
+&lt;p>详细的更改方法可以访问上面的网址，假如项目下有GemFile文件，还需要更改GemFile文件的配置源地址。&lt;/p></description></item><item><title>使用scala+scaloid+IntelliJ IDEA 12开发android应用</title><link>//blog.tri-lib.com/2013/06/develop-android-with-intellij-idea-12-and-scaloid/</link><pubDate>Sun, 30 Jun 2013 15:41:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2013/06/develop-android-with-intellij-idea-12-and-scaloid/</guid><description>&lt;h3 id="heading">软件环境&lt;/h3>
 &lt;p>继续下面的示例前，需要保证安装了下面的软件：&lt;/p>
 &lt;ul>
 &lt;li>JDK 1.6&lt;/li>
@@ -52,7 +52,7 @@ libxslt-dev
 &lt;p>IntelliJ IDEA 12正常也可以换为Android Studio，不过因为Android Studio是基于IntelliJ IDEA 13 EAP开发的，当前scala plugin还不支持13 EAP，所以还是建议使用IntelliJ IDEA 12，等scala plugin支持最新版后，再换为Android Studio进行开发。&lt;/p>
 &lt;/blockquote>
 &lt;h3 id="heading-1">示例项目&lt;/h3>
-&lt;p>&lt;a href="https://github.com/pocorall/hello-scaloid-maven">hello-scaloid-maven&lt;/a>是一个完全使用maven编译的示例项目,借助&lt;a href="http://code.google.com/p/maven-android-plugin/">android maven plugin&lt;/a>插件可以把代码编译为android的apk文件。&lt;/p></description></item><item><title>ubuntu日常操作</title><link>https://blog.tri-lib.com/2012/10/ubuntu-daily/</link><pubDate>Tue, 30 Oct 2012 15:14:22 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/10/ubuntu-daily/</guid><description>&lt;p>工作用电脑将会切换到ubuntu上了，记录下ubuntu常用操作。&lt;/p>
+&lt;p>&lt;a href="https://github.com/pocorall/hello-scaloid-maven">hello-scaloid-maven&lt;/a>是一个完全使用maven编译的示例项目,借助&lt;a href="http://code.google.com/p/maven-android-plugin/">android maven plugin&lt;/a>插件可以把代码编译为android的apk文件。&lt;/p></description></item><item><title>ubuntu日常操作</title><link>//blog.tri-lib.com/2012/10/ubuntu-daily/</link><pubDate>Tue, 30 Oct 2012 15:14:22 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/10/ubuntu-daily/</guid><description>&lt;p>工作用电脑将会切换到ubuntu上了，记录下ubuntu常用操作。&lt;/p>
 &lt;h3 id="php54">===升级到php5.4===&lt;/h3>
 &lt;pre>&lt;code>For Ubuntu 11.10/12.04:
 sudo add-apt-repository ppa:ondrej/php5
@@ -67,7 +67,7 @@ sudo apt-get install php5
 You can check if PHP 5.4.x is successfully installed with this command:
 php5 -v
 &lt;/code>&lt;/pre>
-&lt;p>&lt;a href="http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu">http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu&lt;/a>&lt;/p></description></item><item><title>利用IDA Pro反汇编程序</title><link>https://blog.tri-lib.com/2012/05/disassembly-with-ida-pro/</link><pubDate>Wed, 16 May 2012 16:30:16 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/05/disassembly-with-ida-pro/</guid><description>&lt;p>&lt;a href="http://www.hex-rays.com/products/ida/index.shtml">IDA Pro&lt;/a>是一款强大的反汇编软件，特有的IDA视图和交叉引用，可以方便理解程序逻辑和快速定位代码片断，以方便修改。
+&lt;p>&lt;a href="http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu">http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu&lt;/a>&lt;/p></description></item><item><title>利用IDA Pro反汇编程序</title><link>//blog.tri-lib.com/2012/05/disassembly-with-ida-pro/</link><pubDate>Wed, 16 May 2012 16:30:16 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/05/disassembly-with-ida-pro/</guid><description>&lt;p>&lt;a href="http://www.hex-rays.com/products/ida/index.shtml">IDA Pro&lt;/a>是一款强大的反汇编软件，特有的IDA视图和交叉引用，可以方便理解程序逻辑和快速定位代码片断，以方便修改。
 &lt;img src="http://ww3.sinaimg.cn/large/7ce4a9f6gw1e5q1vme0mij20ly0ihdil.jpg" alt="IDA视图">&lt;/p>
 &lt;h3 id="heading">示例程序&lt;/h3>
 &lt;p>下面会通过修改示例程序的输出字符串，来讲解如何使用IDA Pro。&lt;/p>
@@ -82,7 +82,7 @@ else
 printf(&amp;quot;n &amp;lt; 0&amp;quot;);
 }
 &lt;/code>&lt;/pre>
-&lt;p>编译后的程序下载：&lt;a href="http://cxfksword.me/wp-content/uploads/2012/05/test.zip">demo&lt;/a>&lt;/p></description></item><item><title>使用Mono.Cecil更改程序集dll特性</title><link>https://blog.tri-lib.com/2012/05/use-mono-cecil-to-change-dll-attribute/</link><pubDate>Sat, 12 May 2012 08:31:49 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/05/use-mono-cecil-to-change-dll-attribute/</guid><description>&lt;p>工作中发现一个公共组件因为某个类不带有[Serializable]特性，导致保存到memcache时出错。刚好负责的同事请假不在，尝试了iLSpy反编译方法后，最后决定使用Mono.Cecil直接修改现成的程序集dll解决。&lt;/p>
+&lt;p>编译后的程序下载：&lt;a href="http://cxfksword.me/wp-content/uploads/2012/05/test.zip">demo&lt;/a>&lt;/p></description></item><item><title>使用Mono.Cecil更改程序集dll特性</title><link>//blog.tri-lib.com/2012/05/use-mono-cecil-to-change-dll-attribute/</link><pubDate>Sat, 12 May 2012 08:31:49 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/05/use-mono-cecil-to-change-dll-attribute/</guid><description>&lt;p>工作中发现一个公共组件因为某个类不带有[Serializable]特性，导致保存到memcache时出错。刚好负责的同事请假不在，尝试了iLSpy反编译方法后，最后决定使用Mono.Cecil直接修改现成的程序集dll解决。&lt;/p>
 &lt;p>示例代码如下：&lt;/p>
 &lt;pre>&lt;code>class Program
 {
@@ -113,19 +113,19 @@ Console.WriteLine(&amp;quot;new dll has save as {0}.&amp;quot;, newAsmFileName);
 }
 }
 &lt;/code>&lt;/pre>
-&lt;p>Mono.Cecil除了可以更改特性，还能把sealed类更改为public类，功能非常强大。&lt;/p></description></item><item><title>WinDbg入门</title><link>https://blog.tri-lib.com/2012/04/windbg-tutorial/</link><pubDate>Tue, 24 Apr 2012 15:52:37 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/04/windbg-tutorial/</guid><description>&lt;p>这是准备在每周技术分享会中分享的内容，但因为团队都忙于各种需求和服务器迁移，分享就一直搁置了。&lt;/p>
+&lt;p>Mono.Cecil除了可以更改特性，还能把sealed类更改为public类，功能非常强大。&lt;/p></description></item><item><title>WinDbg入门</title><link>//blog.tri-lib.com/2012/04/windbg-tutorial/</link><pubDate>Tue, 24 Apr 2012 15:52:37 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/04/windbg-tutorial/</guid><description>&lt;p>这是准备在每周技术分享会中分享的内容，但因为团队都忙于各种需求和服务器迁移，分享就一直搁置了。&lt;/p>
 &lt;p>这个ppt还是有用心做的，如ppt的背景，和debug流程的箭头都是使用photoshop偷下来的= =！&lt;/p>
 &lt;!-- raw HTML omitted -->
-&lt;p>示例程序：&lt;a href="http://cxfksword.me/wp-content/uploads/2012/04/WindbgTestExample.zip">Download Example&lt;/a>&lt;/p></description></item><item><title>增加Android模拟器的"Internal Storage"容量</title><link>https://blog.tri-lib.com/2012/04/android-internal-storage-space/</link><pubDate>Thu, 12 Apr 2012 16:06:07 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/04/android-internal-storage-space/</guid><description>&lt;p>android模拟器默认的内部存储空间只有几十m，随便安装几个app就满了，google了下，发现AVD管理器是没有增加内部存储空间的设置的，要增加需要使用命令行来启动模拟器，命令如下：&lt;/p>
+&lt;p>示例程序：&lt;a href="http://cxfksword.me/wp-content/uploads/2012/04/WindbgTestExample.zip">Download Example&lt;/a>&lt;/p></description></item><item><title>增加Android模拟器的"Internal Storage"容量</title><link>//blog.tri-lib.com/2012/04/android-internal-storage-space/</link><pubDate>Thu, 12 Apr 2012 16:06:07 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/04/android-internal-storage-space/</guid><description>&lt;p>android模拟器默认的内部存储空间只有几十m，随便安装几个app就满了，google了下，发现AVD管理器是没有增加内部存储空间的设置的，要增加需要使用命令行来启动模拟器，命令如下：&lt;/p>
 &lt;pre>&lt;code>emulator -partition-size &amp;lt;size&amp;gt; -avd &amp;lt;virtual device name&amp;gt;
 &lt;/code>&lt;/pre>
 &lt;p>可以把命令保存到批处理bat文件中，以方便以后直接启动。&lt;/p>
 &lt;p>&lt;strong>使用命令行启动模拟器是不能使用snapshot功能的，创建的avd之前有启动的话，需要先关闭。&lt;/strong>
-&lt;img src="http://ww2.sinaimg.cn/large/7ce4a9f6gw1e5q1sdhdhnj20as05w3yp.jpg" alt="android avd">&lt;/p></description></item><item><title>WSGI处理流程图</title><link>https://blog.tri-lib.com/2012/03/a-diagram-to-explain-wsgi/</link><pubDate>Mon, 26 Mar 2012 15:41:54 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/03/a-diagram-to-explain-wsgi/</guid><description>&lt;p>StackOverflow上看到的解释WSGI如何工作的图（一图胜千言）：
+&lt;img src="http://ww2.sinaimg.cn/large/7ce4a9f6gw1e5q1sdhdhnj20as05w3yp.jpg" alt="android avd">&lt;/p></description></item><item><title>WSGI处理流程图</title><link>//blog.tri-lib.com/2012/03/a-diagram-to-explain-wsgi/</link><pubDate>Mon, 26 Mar 2012 15:41:54 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/03/a-diagram-to-explain-wsgi/</guid><description>&lt;p>StackOverflow上看到的解释WSGI如何工作的图（一图胜千言）：
 &lt;img src="http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q1rcz9d8j21kw0pzjwx.jpg" alt="">&lt;/p>
 &lt;p>相关：
 &lt;a href="http://stackoverflow.com/questions/1303118/looking-for-a-diagram-to-explain-wsgi">http://stackoverflow.com/questions/1303118/looking-for-a-diagram-to-explain-wsgi&lt;/a>
-&lt;a href="http://stackoverflow.com/questions/1303118/looking-for-a-diagram-to-explain-wsgi">http://www.python.org/dev/peps/pep-0333/&lt;/a>&lt;/p></description></item><item><title>linux常用命令</title><link>https://blog.tri-lib.com/2012/03/linux-useful-commands/</link><pubDate>Sat, 17 Mar 2012 09:42:44 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/03/linux-useful-commands/</guid><description>&lt;p>在微博上发现已有同学整理了一个不错的linux命令文档：&lt;a href="http://115.com/file/c2rzrvw3#Unix-Linux">http://115.com/file/c2rzrvw3#Unix-Linux&lt;/a>
+&lt;a href="http://stackoverflow.com/questions/1303118/looking-for-a-diagram-to-explain-wsgi">http://www.python.org/dev/peps/pep-0333/&lt;/a>&lt;/p></description></item><item><title>linux常用命令</title><link>//blog.tri-lib.com/2012/03/linux-useful-commands/</link><pubDate>Sat, 17 Mar 2012 09:42:44 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/03/linux-useful-commands/</guid><description>&lt;p>在微博上发现已有同学整理了一个不错的linux命令文档：&lt;a href="http://115.com/file/c2rzrvw3#Unix-Linux">http://115.com/file/c2rzrvw3#Unix-Linux&lt;/a>
 这篇文章等遇到好的命令再继续更新。。。&lt;/p>
 &lt;p>文件命令 | 程序命令 | 网络命令 | 系统命令&lt;/p>
 &lt;h3 id="heading">文件&lt;/h3>
@@ -140,18 +140,18 @@ Console.WriteLine(&amp;quot;new dll has save as {0}.&amp;quot;, newAsmFileName);
 &lt;/code>&lt;/pre>
 &lt;p>删除一个目录&lt;/p>
 &lt;pre>&lt;code>rm -r dirname
-&lt;/code>&lt;/pre></description></item><item><title>如何查看哪些进程和服务器正在使用数据库</title><link>https://blog.tri-lib.com/2012/03/find-who-connect-to-database/</link><pubDate>Sat, 17 Mar 2012 09:33:03 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/03/find-who-connect-to-database/</guid><description>&lt;p>工作中有时会碰到需要迁移数据库的时候，如更换机房，更换新服务器等。迁移数据库最重要是要确保正在运行的程序不会因为漏更改连接字符串而导致程序报错。但有时维护的项目可能老旧，没有相关维护文档，还有一些使用该数据库的windows服务也可能遍布在其他服务器上，这时我们该如何找到所有正在使用该数据库的服务呢？&lt;/p>
+&lt;/code>&lt;/pre></description></item><item><title>如何查看哪些进程和服务器正在使用数据库</title><link>//blog.tri-lib.com/2012/03/find-who-connect-to-database/</link><pubDate>Sat, 17 Mar 2012 09:33:03 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/03/find-who-connect-to-database/</guid><description>&lt;p>工作中有时会碰到需要迁移数据库的时候，如更换机房，更换新服务器等。迁移数据库最重要是要确保正在运行的程序不会因为漏更改连接字符串而导致程序报错。但有时维护的项目可能老旧，没有相关维护文档，还有一些使用该数据库的windows服务也可能遍布在其他服务器上，这时我们该如何找到所有正在使用该数据库的服务呢？&lt;/p>
 &lt;p>下面以windows服务器和Sql Server数据库为例，数据库服务器的ip是192.168.6.189，linux平台的思路差不多，只是命令有变化。&lt;/p>
 &lt;h3 id="1sql-serverid">1、查看Sql Server进程ID&lt;/h3>
 &lt;p>打开任务管理器，点击“&lt;strong>查看&lt;/strong>-&amp;gt;&lt;strong>选择列&lt;/strong>”，勾选“&lt;strong>PID(进程标识符)&lt;/strong>”
 &lt;img src="http://ww1.sinaimg.cn/large/7ce4a9f6gw1e5q1p9zo5yj20b70bkabs.jpg" alt="sql server">
 &lt;img src="http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q1pyu9epj205k07ywf2.jpg" alt="sql server">&lt;/p>
-&lt;p>进程名称为“&lt;strong>sqlservr.exe&lt;/strong>”的PID就是Sql Server的进程ID，当前是&lt;strong>1800&lt;/strong>。&lt;/p></description></item><item><title>了解IIS的主机名(Host Headers)配置项</title><link>https://blog.tri-lib.com/2012/03/understanding-iis-host-headers/</link><pubDate>Sat, 03 Mar 2012 17:00:18 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/03/understanding-iis-host-headers/</guid><description>&lt;p>IIS可以在一台服务器上配置多个web站点，每个站点通过ip地址、端口(port)和主机名(host)结合的标识符(ServerBindings Metabase)进行区分。标识字符串的格式如下：&lt;/p>
+&lt;p>进程名称为“&lt;strong>sqlservr.exe&lt;/strong>”的PID就是Sql Server的进程ID，当前是&lt;strong>1800&lt;/strong>。&lt;/p></description></item><item><title>了解IIS的主机名(Host Headers)配置项</title><link>//blog.tri-lib.com/2012/03/understanding-iis-host-headers/</link><pubDate>Sat, 03 Mar 2012 17:00:18 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/03/understanding-iis-host-headers/</guid><description>&lt;p>IIS可以在一台服务器上配置多个web站点，每个站点通过ip地址、端口(port)和主机名(host)结合的标识符(ServerBindings Metabase)进行区分。标识字符串的格式如下：&lt;/p>
 &lt;pre>&lt;code>IP:Port:Hostname
 &lt;/code>&lt;/pre>
 &lt;p>上面的IP和Hostname是可选项，假如设定站点时不指定，表示匹配所有。&lt;/p>
 &lt;h3 id="host-headershttp">主机名(Host Headers)是HTTP消息的一部分&lt;/h3>
-&lt;p>浏览器和web服务器之间是通过http协议通信的。http发送的请求头部(headers)部分包含有很多信息，如Content-Length, Referer, &lt;strong>Host&lt;/strong>等等。&lt;/p></description></item><item><title>如何在ubuntu server 10.04中安装vmware tools</title><link>https://blog.tri-lib.com/2012/02/how-to-install-vmware-tools-in-ubuntu-server/</link><pubDate>Sun, 19 Feb 2012 08:07:01 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/02/how-to-install-vmware-tools-in-ubuntu-server/</guid><description>&lt;p>本人的ubuntu server版本是10.04.4，安装在免费的vmware player 4.0中。
+&lt;p>浏览器和web服务器之间是通过http协议通信的。http发送的请求头部(headers)部分包含有很多信息，如Content-Length, Referer, &lt;strong>Host&lt;/strong>等等。&lt;/p></description></item><item><title>如何在ubuntu server 10.04中安装vmware tools</title><link>//blog.tri-lib.com/2012/02/how-to-install-vmware-tools-in-ubuntu-server/</link><pubDate>Sun, 19 Feb 2012 08:07:01 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/02/how-to-install-vmware-tools-in-ubuntu-server/</guid><description>&lt;p>本人的ubuntu server版本是10.04.4，安装在免费的vmware player 4.0中。
 安装vmware-tools需要gcc和对应的linux-headers进行编译，需先执行下面两个命令进行安装：&lt;/p>
 &lt;pre>&lt;code>sudo apt-get gcc
 sudo apt-get install build-essential linux-headers-$(uname -r)
@@ -160,9 +160,9 @@ sudo apt-get install build-essential linux-headers-$(uname -r)
 1、把安装光盘绑定到一个文件夹：&lt;/p>
 &lt;pre>&lt;code>mkdir /mnt/cdrom
 sudo mount /dev/cdrom /mnt/cdrom
-&lt;/code>&lt;/pre></description></item><item><title>Molas——.NET依赖分离框架</title><link>https://blog.tri-lib.com/2012/02/molas-isolation-framework/</link><pubDate>Tue, 14 Feb 2012 17:29:51 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/02/molas-isolation-framework/</guid><description>&lt;p>&lt;img src="http://research.microsoft.com/en-us/projects/pex/pexweb.png" alt="">&lt;a href="http://research.microsoft.com/en-us/projects/moles/">Moles&lt;/a>是由微软研究院(&lt;a href="http://research.microsoft.com">Microsoft Research&lt;/a>)开发的.NET依赖分离框架，它实现了使用自定义的委托(delegate)方法来替换原有类中的方法，以达到分离依赖，方便单元测试的目的。Moles在功能和用法上与开源的IoC框架Moq很像，但Moles有一些Moq实现不了功能，如替换静态方法，去掉静态构造函数，突破访问限制等。Molas非常有利于对ASP.NET WebForm构建的网站和依赖第三方类库的程序进行单元测试。&lt;/p>
+&lt;/code>&lt;/pre></description></item><item><title>Molas——.NET依赖分离框架</title><link>//blog.tri-lib.com/2012/02/molas-isolation-framework/</link><pubDate>Tue, 14 Feb 2012 17:29:51 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/02/molas-isolation-framework/</guid><description>&lt;p>&lt;img src="http://research.microsoft.com/en-us/projects/pex/pexweb.png" alt="">&lt;a href="http://research.microsoft.com/en-us/projects/moles/">Moles&lt;/a>是由微软研究院(&lt;a href="http://research.microsoft.com">Microsoft Research&lt;/a>)开发的.NET依赖分离框架，它实现了使用自定义的委托(delegate)方法来替换原有类中的方法，以达到分离依赖，方便单元测试的目的。Moles在功能和用法上与开源的IoC框架Moq很像，但Moles有一些Moq实现不了功能，如替换静态方法，去掉静态构造函数，突破访问限制等。Molas非常有利于对ASP.NET WebForm构建的网站和依赖第三方类库的程序进行单元测试。&lt;/p>
 &lt;h2 id="heading">下载和安装&lt;/h2>
-&lt;p>&lt;a href="http://research.microsoft.com/en-us/projects/pex/downloads.aspx">下载Moles&lt;/a>后直接安装就可以了，里面集成有VS2010的插件，安装成功后，VS2010右键菜单中会集成Moles功能菜单。&lt;/p></description></item><item><title>WinDbg常用命令</title><link>https://blog.tri-lib.com/2012/02/windbg-useful-commands/</link><pubDate>Thu, 02 Feb 2012 03:33:37 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/02/windbg-useful-commands/</guid><description>&lt;p>&lt;a href="2012/02/intro-to-windbg-for-dotnet-developers/">前一篇文章&lt;/a>介绍了WinDbg入门，本篇主要介绍WinDbg常用命令和用法。&lt;/p>
+&lt;p>&lt;a href="http://research.microsoft.com/en-us/projects/pex/downloads.aspx">下载Moles&lt;/a>后直接安装就可以了，里面集成有VS2010的插件，安装成功后，VS2010右键菜单中会集成Moles功能菜单。&lt;/p></description></item><item><title>WinDbg常用命令</title><link>//blog.tri-lib.com/2012/02/windbg-useful-commands/</link><pubDate>Thu, 02 Feb 2012 03:33:37 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/02/windbg-useful-commands/</guid><description>&lt;p>&lt;a href="2012/02/intro-to-windbg-for-dotnet-developers/">前一篇文章&lt;/a>介绍了WinDbg入门，本篇主要介绍WinDbg常用命令和用法。&lt;/p>
 &lt;p>调试程序的CPU满载问题，关键是要知道程序当前正在进行什么操作。假如我们在cpu满载时创建了一个dump文件，使用下面几个命令可以查看当前程序正在进行什么处理：
 &lt;strong>.time&lt;/strong>
 运行.time命令会显示时间相关的信息，如系统运行时间，进程运行时间和CPU花费在内核态和用户态的时间。&lt;/p>
@@ -173,11 +173,11 @@ Process Uptime: 0 days 0:24:37.000
 Kernel time: 0 days 0:04:23.000
 User time: 0 days 0:03:28.000
 &lt;/code>&lt;/pre>
-&lt;p>你可以看到系统已正常运行超过4天，进程运行了24分钟，CPU在内核态和用户态累积使用了8分钟。根据进程时间和CPU时间能大概估算出CPU使用率平均值是32.5%。&lt;/p></description></item><item><title>面向.NET开发人员的WinDbg入门教程</title><link>https://blog.tri-lib.com/2012/02/intro-to-windbg-for-dotnet-developers/</link><pubDate>Wed, 01 Feb 2012 08:28:43 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/02/intro-to-windbg-for-dotnet-developers/</guid><description>&lt;p>原文：&lt;a href="http://blogs.msdn.com/b/kaevans/archive/2011/04/11/intro-to-windbg-for-net-developers.aspx">http://blogs.msdn.com/b/kaevans/archive/2011/04/11/intro-to-windbg-for-net-developers.aspx
+&lt;p>你可以看到系统已正常运行超过4天，进程运行了24分钟，CPU在内核态和用户态累积使用了8分钟。根据进程时间和CPU时间能大概估算出CPU使用率平均值是32.5%。&lt;/p></description></item><item><title>面向.NET开发人员的WinDbg入门教程</title><link>//blog.tri-lib.com/2012/02/intro-to-windbg-for-dotnet-developers/</link><pubDate>Wed, 01 Feb 2012 08:28:43 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/02/intro-to-windbg-for-dotnet-developers/</guid><description>&lt;p>原文：&lt;a href="http://blogs.msdn.com/b/kaevans/archive/2011/04/11/intro-to-windbg-for-net-developers.aspx">http://blogs.msdn.com/b/kaevans/archive/2011/04/11/intro-to-windbg-for-net-developers.aspx
 &lt;/a> 翻译：cxfksword&lt;/p>
 &lt;p>当你的代码发布为产品后，无论是在其他人的电脑中运行，还是部署到服务器中，你通常不再能访问到它的程序文件，也不能观察到代码的当前运行情况和运行环境。当你的代码在新的环境运行时，有很多因素会影响到程序的运行情况，如服务器系统打了更新补丁，网络策略改变，防火墙规则限制，磁盘权限配置等等。当代码运行不正常时，你可能只能靠代码中各处输出的日志来判断运行情况。但只靠输出日志，你有时还是不能判断故障出现的原因。&lt;/p>
 &lt;p>在不浪费客户时间的同时做故障排除对你是个很大的挑战，因为不会有客户喜欢被一个搞技术的家伙不断问是点了那个按钮操作了哪些步骤导致程序出错的。boss也不会给你几天甚至几周的时间让你慢慢排除故障，你必须现在就知道到底发生了什么。&lt;/p>
-&lt;p>理想情况下，你应该能看到堆栈跟踪，能查看到当前的变量值，能调试代码。事实证明你可以做到这点。。。而且不需要附加到客户环境中！&lt;/p></description></item><item><title>利用HAProxy实现零停机更新维护</title><link>https://blog.tri-lib.com/2012/01/zero-downtime-with-haproxy/</link><pubDate>Sat, 21 Jan 2012 08:04:49 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/01/zero-downtime-with-haproxy/</guid><description>&lt;p>&lt;a href="http://haproxy.1wt.eu/">HAProxy&lt;/a>是linux平台上的负载均衡软件，有完善的服务器健康检测和会话(session)保持功能，性能高，支持tcp和http网络连接分发。&lt;/p>
+&lt;p>理想情况下，你应该能看到堆栈跟踪，能查看到当前的变量值，能调试代码。事实证明你可以做到这点。。。而且不需要附加到客户环境中！&lt;/p></description></item><item><title>利用HAProxy实现零停机更新维护</title><link>//blog.tri-lib.com/2012/01/zero-downtime-with-haproxy/</link><pubDate>Sat, 21 Jan 2012 08:04:49 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/01/zero-downtime-with-haproxy/</guid><description>&lt;p>&lt;a href="http://haproxy.1wt.eu/">HAProxy&lt;/a>是linux平台上的负载均衡软件，有完善的服务器健康检测和会话(session)保持功能，性能高，支持tcp和http网络连接分发。&lt;/p>
 &lt;h2 id="heading">&lt;strong>问题起因&lt;/strong>&lt;/h2>
 &lt;p>入公司一年，我发现在ASP.NET网站上部署更新时，经常会遇到下面这样的烦恼：&lt;/p>
 &lt;ol>
@@ -190,7 +190,7 @@ User time: 0 days 0:03:28.000
 &lt;li>
 &lt;p>编辑经常提一些需求只是简单更改下页面文字，而为了不使这种简单的更改引起应用程序池重启，一般部署网站时都是采用copy方式发布，而网站也工作在debug模式下，而不是更优化速度更快的release模式&lt;/p>
 &lt;/li>
-&lt;/ol></description></item><item><title>利用Eclipse+Scala搭建android开发环境</title><link>https://blog.tri-lib.com/2012/01/use-eclipse-scala-develop-android/</link><pubDate>Sat, 21 Jan 2012 07:06:00 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/01/use-eclipse-scala-develop-android/</guid><description>&lt;p>&lt;strong>1、安装JAVA SDK&lt;/strong>&lt;/p>
+&lt;/ol></description></item><item><title>利用Eclipse+Scala搭建android开发环境</title><link>//blog.tri-lib.com/2012/01/use-eclipse-scala-develop-android/</link><pubDate>Sat, 21 Jan 2012 07:06:00 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/01/use-eclipse-scala-develop-android/</guid><description>&lt;p>&lt;strong>1、安装JAVA SDK&lt;/strong>&lt;/p>
 &lt;p>到官网（&lt;a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">http://www.oracle.com/technetwork/java/javase/downloads/index.html&lt;/a> ）下载最新的javase sdk，推荐安装1.6版。安装完成后，在windows环境变量中添加[JAVA_HOME]，并把路径指向java sdk的安装根目录。&lt;/p>
 &lt;p>&lt;img src="http://images.cnblogs.com/cnblogs_com/vento/scala-android-1.jpg" alt="">&lt;/p>
 &lt;p>&lt;strong>2、安装Scala&lt;/strong>&lt;/p>
@@ -202,7 +202,7 @@ User time: 0 days 0:03:28.000
 &lt;li>
 &lt;p>在已有环境变量Path中，追加值c:\scala-2.8.1.final\bin&lt;/p>
 &lt;/li>
-&lt;/ul></description></item><item><title>使windows服务安装名称可配置</title><link>https://blog.tri-lib.com/2012/01/config-windows-services-install-name/</link><pubDate>Thu, 12 Jan 2012 07:42:04 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/01/config-windows-services-install-name/</guid><description>&lt;p>有时，我们安装的windows服务可能是个框架，在同一服务器上可能服务于不同的系统，为了使服务名称不冲突，需要把服务名称更改为可配置。
+&lt;/ul></description></item><item><title>使windows服务安装名称可配置</title><link>//blog.tri-lib.com/2012/01/config-windows-services-install-name/</link><pubDate>Thu, 12 Jan 2012 07:42:04 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/01/config-windows-services-install-name/</guid><description>&lt;p>有时，我们安装的windows服务可能是个框架，在同一服务器上可能服务于不同的系统，为了使服务名称不冲突，需要把服务名称更改为可配置。
 因为ServiceInstaller能直接设置安装服务的名称和描述，所以很容易就能写出下面的代码：&lt;/p>
 &lt;pre>&lt;code>serviceInstaller.ServiceName = ConfigurationManager.AppSetting[&amp;quot;ServiceName&amp;quot;];
 serviceInstaller.Description = ConfigurationManager.AppSetting[&amp;quot;ServiceDescription&amp;quot;];
@@ -210,7 +210,7 @@ serviceInstaller.Description = ConfigurationManager.AppSetting[&amp;quot;Service
 &lt;p>编译执行安装，可惜抛出了异常，安装失败了。
 &lt;a href="http://cxfksword.me/wp-content/uploads/2012/01/QQ%E4%BA%94%E7%AC%94%E6%88%AA%E5%9B%BE%E6%9C%AA%E5%91%BD%E5%90%8D.png">&lt;img src="http://cxfksword.me/wp-content/uploads/2012/01/QQ%E4%BA%94%E7%AC%94%E6%88%AA%E5%9B%BE%E6%9C%AA%E5%91%BD%E5%90%8D.png" alt="">&lt;/a>
 失败的原因是，执行安装服务的程序是InstallUtil.exe，安装阶段不会自动加载服务的app.config配置文件，只会加载全局的machine.config，需改为手动加载app.config并读取。
-确定解决思路后，我写出了下面的代码：&lt;/p></description></item><item><title>获取客户端的真实ip代码改进</title><link>https://blog.tri-lib.com/2012/01/get-client-ip/</link><pubDate>Mon, 09 Jan 2012 07:39:49 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/01/get-client-ip/</guid><description>&lt;p>现在系统中常用的获取客户端真实ip的代码如下：&lt;/p>
+确定解决思路后，我写出了下面的代码：&lt;/p></description></item><item><title>获取客户端的真实ip代码改进</title><link>//blog.tri-lib.com/2012/01/get-client-ip/</link><pubDate>Mon, 09 Jan 2012 07:39:49 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/01/get-client-ip/</guid><description>&lt;p>现在系统中常用的获取客户端真实ip的代码如下：&lt;/p>
 &lt;pre>&lt;code>// 获取IP地址
 protected string GetIPAddress()
 {
@@ -236,10 +236,10 @@ return result;
 }
 &lt;/code>&lt;/pre>
 &lt;p>这段代码有两个问题：
-1、根据&lt;a href="http://www.openinfo.co.uk/apache/index.html">这篇文章&lt;/a>说明，当请求经常多个代理时，HTTP_X_FORWARDED_FOR可能会附加上多个服务器ip，格式如下：&lt;/p></description></item><item><title>通过新浪接口抓取ip库</title><link>https://blog.tri-lib.com/2012/01/crawl-sina-ip-data/</link><pubDate>Mon, 09 Jan 2012 07:23:24 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/01/crawl-sina-ip-data/</guid><description>&lt;p>新浪有开放ip查询的接口（&lt;a href="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&amp;amp;ip=123.124.2.85">http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&amp;amp;ip=123.124.2.85&lt;/a>），通过不断查询就能抓取到ip信息。不过要遍历所有的ip地址不现实，数据存储和查询都是问题，一般我们面对的是中国的用户，只需要遍历抓取下中国范围的ip信息就行，而且ip地址最后一位的256个ip一般分配到同一地区，所以最后一位只需遍历.0的ip就可以了。
+1、根据&lt;a href="http://www.openinfo.co.uk/apache/index.html">这篇文章&lt;/a>说明，当请求经常多个代理时，HTTP_X_FORWARDED_FOR可能会附加上多个服务器ip，格式如下：&lt;/p></description></item><item><title>通过新浪接口抓取ip库</title><link>//blog.tri-lib.com/2012/01/crawl-sina-ip-data/</link><pubDate>Mon, 09 Jan 2012 07:23:24 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/01/crawl-sina-ip-data/</guid><description>&lt;p>新浪有开放ip查询的接口（&lt;a href="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&amp;amp;ip=123.124.2.85">http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&amp;amp;ip=123.124.2.85&lt;/a>），通过不断查询就能抓取到ip信息。不过要遍历所有的ip地址不现实，数据存储和查询都是问题，一般我们面对的是中国的用户，只需要遍历抓取下中国范围的ip信息就行，而且ip地址最后一位的256个ip一般分配到同一地区，所以最后一位只需遍历.0的ip就可以了。
 目前ip4地址已经分配完，中国的ip段可以在以下网址找到：
 &lt;a href="https://www.countryipblocks.net/e_country_data/CN_range.txt">https://www.countryipblocks.net/e_country_data/CN_range.txt&lt;/a>
-首先需要处理，把上面的ip段转换为具体的ip地址：&lt;/p></description></item><item><title>开源线程池组件SmartThreadPool</title><link>https://blog.tri-lib.com/2012/01/smartthreadpool/</link><pubDate>Mon, 09 Jan 2012 07:11:38 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/01/smartthreadpool/</guid><description>&lt;p>1、为什么需要使用线程池(Thread Pool）&lt;/p>
+首先需要处理，把上面的ip段转换为具体的ip地址：&lt;/p></description></item><item><title>开源线程池组件SmartThreadPool</title><link>//blog.tri-lib.com/2012/01/smartthreadpool/</link><pubDate>Mon, 09 Jan 2012 07:11:38 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/01/smartthreadpool/</guid><description>&lt;p>1、为什么需要使用线程池(Thread Pool）&lt;/p>
 &lt;ul>
 &lt;li>
 &lt;p>**减少线程间上下文切换。**线程执行一定的时间片后，系统会自动把cpu切换给另一个线程使用，这时还需要保存当前的线程上下文状态，并加载新线程的上下文状态。当程序中有大量的线程时，每个线程分得的时间片会越来越少，可能会出现线程未处理多少操作，就需要切换到另一线程，这样频繁的线程间上下文切换会花费大量的cpu时间。&lt;/p>
@@ -248,7 +248,7 @@ return result;
 &lt;p>**减少内存占用。**系统每创建一条物理线程，需要大概花费1MB的内存空间，许多程序喜欢先创建多条物理线程，并周期轮询来处理各自的任务，这样既消耗了线程上下文切换的时间，还浪费了内存。这些任务可能只需要一条线程就能满足要求。假如某一任务需要执行较长的周期，线程池还可以自动增加线程，并在空闲时，销毁线程，释放占用的内存。&lt;/p>
 &lt;/li>
 &lt;/ul>
-&lt;p>2、为什么不使用.Net默认的线程池&lt;/p></description></item><item><title>小巧方便的ORM类库——PetaPoco</title><link>https://blog.tri-lib.com/2012/01/petapoco/</link><pubDate>Mon, 09 Jan 2012 05:11:52 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2012/01/petapoco/</guid><description>&lt;p>&lt;a href="http://www.toptensoftware.com/petapoco/">PetaPoco&lt;/a>是一个简单轻巧的orm开源类库，全部功能只有一个文件，可以很方便集成到项目中。代替SqlHelper辅助类的不二选择。。。&lt;/p>
+&lt;p>2、为什么不使用.Net默认的线程池&lt;/p></description></item><item><title>小巧方便的ORM类库——PetaPoco</title><link>//blog.tri-lib.com/2012/01/petapoco/</link><pubDate>Mon, 09 Jan 2012 05:11:52 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/01/petapoco/</guid><description>&lt;p>&lt;a href="http://www.toptensoftware.com/petapoco/">PetaPoco&lt;/a>是一个简单轻巧的orm开源类库，全部功能只有一个文件，可以很方便集成到项目中。代替SqlHelper辅助类的不二选择。。。&lt;/p>
 &lt;pre>&lt;code>主要功能包括：
 - 映射实体类，支持enum，Nullable等类型，可同时映射多个实例。
 - 支持分页
@@ -260,13 +260,13 @@ return result;
 &lt;p>&lt;strong>使用示例：&lt;/strong>
 使用前需要先new一个数据库实例：&lt;/p>
 &lt;pre>&lt;code>var db = new PetaPoco.Database(&amp;quot;ConnectionName&amp;quot;);
-&lt;/code>&lt;/pre></description></item><item><title>门户网站的ip查询接口</title><link>https://blog.tri-lib.com/2011/12/ip-lookup/</link><pubDate>Sun, 25 Dec 2011 06:09:12 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2011/12/ip-lookup/</guid><description>&lt;p>腾讯：&lt;a href="http://ip.qq.com/cgi-bin/searchip?searchip1=121.236.225.37">http://ip.qq.com/cgi-bin/searchip?searchip1=121.236.225.37&lt;/a>
+&lt;/code>&lt;/pre></description></item><item><title>门户网站的ip查询接口</title><link>//blog.tri-lib.com/2011/12/ip-lookup/</link><pubDate>Sun, 25 Dec 2011 06:09:12 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2011/12/ip-lookup/</guid><description>&lt;p>腾讯：&lt;a href="http://ip.qq.com/cgi-bin/searchip?searchip1=121.236.225.37">http://ip.qq.com/cgi-bin/searchip?searchip1=121.236.225.37&lt;/a>
 现在只能通过解析页面内容到取得&lt;/p>
 &lt;p>新浪：&lt;a href="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&amp;amp;ip=123.124.2.85">http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&amp;amp;ip=123.124.2.85&lt;/a>&lt;/p>
 &lt;p>网易： &lt;a href="http://www.youdao.com/smartresult-xml/search.s?type=ip&amp;amp;q=123.124.2.85">http://www.youdao.com/smartresult-xml/search.s?type=ip&amp;amp;q=123.124.2.85&lt;/a>&lt;/p>
 &lt;p>ip地址在各个国家的分配情况表：
 &lt;a href="http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest">http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest&lt;/a>
-&lt;a href="http://www.countryipblocks.net/country-blocks/ip-range-format/">http://www.countryipblocks.net/country-blocks/ip-range-format/&lt;/a>&lt;/p></description></item><item><title>GoAgent翻了个墙</title><link>https://blog.tri-lib.com/2011/12/open-the-doo/</link><pubDate>Sat, 10 Dec 2011 09:19:25 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2011/12/open-the-doo/</guid><description>&lt;p>GoAgent是个很强的Appspot代理程序，看youtube毫无压力=w=，chrome+SwitchySharp也很好用，下面是个简单的部署步骤：
+&lt;a href="http://www.countryipblocks.net/country-blocks/ip-range-format/">http://www.countryipblocks.net/country-blocks/ip-range-format/&lt;/a>&lt;/p></description></item><item><title>GoAgent翻了个墙</title><link>//blog.tri-lib.com/2011/12/open-the-doo/</link><pubDate>Sat, 10 Dec 2011 09:19:25 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2011/12/open-the-doo/</guid><description>&lt;p>GoAgent是个很强的Appspot代理程序，看youtube毫无压力=w=，chrome+SwitchySharp也很好用，下面是个简单的部署步骤：
 1、到http://code.google.com/p/goagent/下载最新版的GoAgent
 2、首选dns要设为8.8.8.8
 3、到http://code.google.com/p/smarthosts/下载最新程序更新下hosts
@@ -275,11 +275,11 @@ return result;
 &lt;img src="http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q178g3ouj20ol03g0t4.jpg" alt="switchsharp rule setting">
 6、have fun!&lt;/p>
 &lt;p>更详细教程：
-&lt;a href="http://maolihui.com/goagent-detailed-version-of-the-tutorial.html">http://maolihui.com/goagent-detailed-version-of-the-tutorial.html&lt;/a>&lt;/p></description></item><item><title>Lucene实践</title><link>https://blog.tri-lib.com/2011/12/lucene-knowledge/</link><pubDate>Wed, 07 Dec 2011 15:51:09 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2011/12/lucene-knowledge/</guid><description>&lt;p>这是内部技术分享的ppt&lt;/p>
-&lt;!-- raw HTML omitted --></description></item><item><title>xp3中运行s60 v3模拟器，出现闪退问题的解决方法</title><link>https://blog.tri-lib.com/2011/11/s60emulator-run-terminate/</link><pubDate>Mon, 28 Nov 2011 14:02:21 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/2011/11/s60emulator-run-terminate/</guid><description>&lt;p>在我的xp3上安装S60_3rd_FP2_SDK_v1.1版本模块器，在运行时会出现闪退的问题（在xp2上好像没这问题)，解决方法如下：&lt;/p>
+&lt;a href="http://maolihui.com/goagent-detailed-version-of-the-tutorial.html">http://maolihui.com/goagent-detailed-version-of-the-tutorial.html&lt;/a>&lt;/p></description></item><item><title>Lucene实践</title><link>//blog.tri-lib.com/2011/12/lucene-knowledge/</link><pubDate>Wed, 07 Dec 2011 15:51:09 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2011/12/lucene-knowledge/</guid><description>&lt;p>这是内部技术分享的ppt&lt;/p>
+&lt;!-- raw HTML omitted --></description></item><item><title>xp3中运行s60 v3模拟器，出现闪退问题的解决方法</title><link>//blog.tri-lib.com/2011/11/s60emulator-run-terminate/</link><pubDate>Mon, 28 Nov 2011 14:02:21 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2011/11/s60emulator-run-terminate/</guid><description>&lt;p>在我的xp3上安装S60_3rd_FP2_SDK_v1.1版本模块器，在运行时会出现闪退的问题（在xp2上好像没这问题)，解决方法如下：&lt;/p>
 &lt;p>进入“我的电脑-》属性-》高级-》性能（设置）-》数据执行保护”，把epoc.exe程序加入例外中就可以了：
 &lt;img src="http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q0qq4u7hj20el0fuabm.jpg" alt="nokia s60 v3 fp1">&lt;/p>
-&lt;p>假如你想查看nokia模拟器运行日志，可以在运行中打开“%temp%”当前用户临时文件夹，再搜索“epocwind.out”就是了&lt;/p></description></item><item><title>关于</title><link>https://blog.tri-lib.com/abouts/</link><pubDate>Fri, 24 Dec 2010 00:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/abouts/</guid><description>在广州工作的大龄程序员。。。毕业后一直从事程序开发工作，接触的技术比较多，如.NET/PHP/JAVA/Javascript等等，现在喜欢 Go 语言。</description></item><item><title>项目</title><link>https://blog.tri-lib.com/projects/</link><pubDate>Fri, 24 Dec 2010 00:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/projects/</guid><description>施工中。。。</description></item><item><title>Github收藏开源项目</title><link>https://blog.tri-lib.com/star/</link><pubDate>Tue, 09 Feb 2010 17:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>https://blog.tri-lib.com/star/</guid><description>.Net Westwind.ApplicationConfiguration
+&lt;p>假如你想查看nokia模拟器运行日志，可以在运行中打开“%temp%”当前用户临时文件夹，再搜索“epocwind.out”就是了&lt;/p></description></item><item><title>关于</title><link>//blog.tri-lib.com/abouts/</link><pubDate>Fri, 24 Dec 2010 00:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/abouts/</guid><description>在广州工作的大龄程序员。。。毕业后一直从事程序开发工作，接触的技术比较多，如.NET/PHP/JAVA/Javascript等等，现在喜欢 Go 语言。</description></item><item><title>项目</title><link>//blog.tri-lib.com/projects/</link><pubDate>Fri, 24 Dec 2010 00:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/projects/</guid><description>施工中。。。</description></item><item><title>Github收藏开源项目</title><link>//blog.tri-lib.com/star/</link><pubDate>Tue, 09 Feb 2010 17:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/star/</guid><description>.Net Westwind.ApplicationConfiguration
 Strongly typed, code-first configuration classes for .NET applications
 pythonnet
 Python for .NET is a package that gives Python programmers nearly seamless integration with the .NET Common Language Runtime (CLR) and provides a powerful application scripting tool for .NET developers. http://pythonnet.github.io
