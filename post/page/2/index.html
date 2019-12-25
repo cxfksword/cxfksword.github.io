@@ -2,7 +2,21 @@
 gtag('js',new Date());gtag('config','UA-154973579-1');</script><script type=text/javascript>function toggle_visibility(id){var e=document.getElementById(id);if(e.className==='menu')
 e.className='menu hidden';else
 e.className='menu';}</script></head><body><div class=navbar><div class=logo><a href=//blog.tri-lib.com/><img src=//blog.tri-lib.com/images/logo.png height=34px></a></div><div class=burger><button onclick="toggle_visibility('menu')">
-<i class="fa fa-bars" aria-hidden=true></i>Menu</button></div><div id=menu class="menu hidden"><ul><li><a href=//blog.tri-lib.com/>#Home</a></li><li><a href=//blog.tri-lib.com/categories>#Categories</a></li><li><a href=//blog.tri-lib.com/tags>#Tags</a></li><li><a href=//blog.tri-lib.com/projects>#Projects</a></li><li><a href=//blog.tri-lib.com/star>#Star</a></li><li><a href=//blog.tri-lib.com/abouts>#Abouts</a></li></ul><input class=search id=search-input type=search placeholder=Keyword></div></div><div class=container><div class=container><div class=post><div class=post-title><a href=//blog.tri-lib.com/2012/05/disassembly-with-ida-pro/ title="利用IDA Pro反汇编程序"><img src=//blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>Wednesday, 2012年5月16号 16:30</time><h1>利用IDA Pro反汇编程序</h1></div></a></div><div><p><a href=http://www.hex-rays.com/products/ida/index.shtml>IDA Pro</a>是一款强大的反汇编软件，特有的IDA视图和交叉引用，可以方便理解程序逻辑和快速定位代码片断，以方便修改。
+<i class="fa fa-bars" aria-hidden=true></i>Menu</button></div><div id=menu class="menu hidden"><ul><li><a href=//blog.tri-lib.com/>#Home</a></li><li><a href=//blog.tri-lib.com/categories>#Categories</a></li><li><a href=//blog.tri-lib.com/tags>#Tags</a></li><li><a href=//blog.tri-lib.com/projects>#Projects</a></li><li><a href=//blog.tri-lib.com/star>#Star</a></li><li><a href=//blog.tri-lib.com/abouts>#Abouts</a></li></ul><input class=search id=search-input type=search placeholder=Keyword></div></div><div class=container><div class=container><div class=post><div class=post-title><a href=//blog.tri-lib.com/2012/10/ubuntu-daily/ title=ubuntu日常操作><img src=//blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>Tuesday, 2012年10月30号 15:14</time><h1>ubuntu日常操作</h1></div></a></div><div><p>工作用电脑将会切换到ubuntu上了，记录下ubuntu常用操作。</p><h3 id=php54>===升级到php5.4===</h3><pre><code>For Ubuntu 11.10/12.04:
+sudo add-apt-repository ppa:ondrej/php5
+sudo apt-get update
+sudo apt-get install php5
+For Ubuntu 10.04 LTS, run the following commands (Thanks to Ivan Castellanos for the extra tip):
+
+sudo echo &quot;deb http://ppa.launchpad.net/ondrej/php5/ubuntu lucid main&quot; &gt;&gt; /etc/apt/sources.list
+sudo echo &quot;deb-src http://ppa.launchpad.net/ondrej/php5/ubuntu lucid main&quot; &gt;&gt; /etc/apt/sources.list
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C
+sudo apt-get update
+sudo apt-get install php5
+You can check if PHP 5.4.x is successfully installed with this command:
+
+php5 -v
+</code></pre><p><a href=http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu>http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu</a></p><a href=//blog.tri-lib.com/2012/10/ubuntu-daily/ class=summary-more>More</a></div></div><hr class=summary-sep><div class=post><div class=post-title><a href=//blog.tri-lib.com/2012/05/disassembly-with-ida-pro/ title="利用IDA Pro反汇编程序"><img src=//blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>Wednesday, 2012年5月16号 16:30</time><h1>利用IDA Pro反汇编程序</h1></div></a></div><div><p><a href=http://www.hex-rays.com/products/ida/index.shtml>IDA Pro</a>是一款强大的反汇编软件，特有的IDA视图和交叉引用，可以方便理解程序逻辑和快速定位代码片断，以方便修改。
 <img src=http://ww3.sinaimg.cn/large/7ce4a9f6gw1e5q1vme0mij20ly0ihdil.jpg alt=IDA视图></p><h3 id=heading>示例程序</h3><p>下面会通过修改示例程序的输出字符串，来讲解如何使用IDA Pro。</p><pre><code>#include
 
 main()
@@ -68,6 +82,6 @@ sudo apt-get install build-essential linux-headers-$(uname -r)
 1、把安装光盘绑定到一个文件夹：</p><pre><code>mkdir /mnt/cdrom
 
 sudo mount /dev/cdrom /mnt/cdrom
-</code></pre><a href=//blog.tri-lib.com/2012/02/how-to-install-vmware-tools-in-ubuntu-server/ class=summary-more>More</a></div></div><hr class=summary-sep><div class=post><div class=post-title><a href=//blog.tri-lib.com/2012/02/molas-isolation-framework/ title=Molas——.NET依赖分离框架><img src=//blog.tri-lib.com/images/post-title-icon.png><div class=post-meta><time>Tuesday, 2012年2月14号 17:29</time><h1>Molas——.NET依赖分离框架</h1></div></a></div><div><p><img src=http://research.microsoft.com/en-us/projects/pex/pexweb.png alt><a href=http://research.microsoft.com/en-us/projects/moles/>Moles</a>是由微软研究院(<a href=http://research.microsoft.com>Microsoft Research</a>)开发的.NET依赖分离框架，它实现了使用自定义的委托(delegate)方法来替换原有类中的方法，以达到分离依赖，方便单元测试的目的。Moles在功能和用法上与开源的IoC框架Moq很像，但Moles有一些Moq实现不了功能，如替换静态方法，去掉静态构造函数，突破访问限制等。Molas非常有利于对ASP.NET WebForm构建的网站和依赖第三方类库的程序进行单元测试。</p><h2 id=heading>下载和安装</h2><p><a href=http://research.microsoft.com/en-us/projects/pex/downloads.aspx>下载Moles</a>后直接安装就可以了，里面集成有VS2010的插件，安装成功后，VS2010右键菜单中会集成Moles功能菜单。</p><a href=//blog.tri-lib.com/2012/02/molas-isolation-framework/ class=summary-more>More</a></div></div><hr class=summary-sep></div><div class=paging><a href=//blog.tri-lib.com/post/ rel=prev>Prev
+</code></pre><a href=//blog.tri-lib.com/2012/02/how-to-install-vmware-tools-in-ubuntu-server/ class=summary-more>More</a></div></div><hr class=summary-sep></div><div class=paging><a href=//blog.tri-lib.com/post/ rel=prev>Prev
 <i class="fa fa-caret-left" aria-hidden=true></i></a><span class=page>Page 2 / 4</span>
 <a href=//blog.tri-lib.com/post/page/3/ rel=next><i class="fa fa-caret-right" aria-hidden=true></i></a></div><div class=go-top><a href=# class=go-top-button><i class="fa fa-angle-double-up"></i><span>Top</span></a></div><footer class=footer>COPYRIGHT (C) <a href=https://blog.lulab.net>DONGGEUN,BANG (LUBANG).</a><br>ALL RIGHTS RESERVED.</footer></body></html>
