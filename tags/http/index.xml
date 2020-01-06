@@ -8,5 +8,5 @@ PHPSESSID=token2; path=/; expired=/; domain=.test.test.com
 &lt;pre>&lt;code>IP:Port:Hostname
 &lt;/code>&lt;/pre>
 &lt;p>上面的IP和Hostname是可选项，假如设定站点时不指定，表示匹配所有。&lt;/p>
-&lt;h3 id="host-headershttp">主机名(Host Headers)是HTTP消息的一部分&lt;/h3>
+&lt;h3 id="主机名host-headers是http消息的一部分">主机名(Host Headers)是HTTP消息的一部分&lt;/h3>
 &lt;p>浏览器和web服务器之间是通过http协议通信的。http发送的请求头部(headers)部分包含有很多信息，如Content-Length, Referer, &lt;strong>Host&lt;/strong>等等。&lt;/p></description></item></channel></rss>
