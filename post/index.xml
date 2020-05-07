@@ -1,4 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on cxfksword's notes</title><link>//blog.tri-lib.com/post/</link><description>Recent content in Posts on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Mon, 30 Dec 2019 11:27:10 +0800</lastBuildDate><atom:link href="//blog.tri-lib.com/post/index.xml" rel="self" type="application/rss+xml"/><item><title>一加7 pro使用 pn532 复制手机加密门禁卡</title><link>//blog.tri-lib.com/2019/12/use-pn532-copy-encryption-card-in-oneplus7pro/</link><pubDate>Mon, 30 Dec 2019 11:27:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2019/12/use-pn532-copy-encryption-card-in-oneplus7pro/</guid><description>&lt;p>入住万科小区后，每次出入都要经过两次门禁，导致虽然装了智能锁，但还是要带门禁卡，所以一直想着怎样把门禁复制到手机 NFC 上。一加7 pro 在 11 月已推送了门禁卡功能，但只支持未加密的门禁卡，万科的一卡通都是加密过的，所以直接复制不了。&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on cxfksword's notes</title><link>//blog.tri-lib.com/post/</link><description>Recent content in Posts on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Thu, 07 May 2020 11:27:10 +0800</lastBuildDate><atom:link href="//blog.tri-lib.com/post/index.xml" rel="self" type="application/rss+xml"/><item><title>pip更换国内源提高下载速度</title><link>//blog.tri-lib.com/2020/05/use-pn532-copy-encryption-card-in-oneplus7pro/</link><pubDate>Thu, 07 May 2020 11:27:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2020/05/use-pn532-copy-encryption-card-in-oneplus7pro/</guid><description>pip 国内源 清华：https://pypi.tuna.tsinghua.edu.cn/simple
+阿里云：http://mirrors.aliyun.com/pypi/simple/
+中国科技大学 https://pypi.mirrors.ustc.edu.cn/simple/
+华中理工大学：http://pypi.hustunique.com/
+山东理工大学：http://pypi.sdutlinux.org/
+豆瓣：http://pypi.douban.com/simple/清华：https://pypi.tuna.tsinghua.edu.cn/simple
+阿里云：http://mirrors.aliyun.com/pypi/simple/
+中国科技大学 https://pypi.mirrors.ustc.edu.cn/simple/
+华中理工大学：http://pypi.hustunique.com/
+山东理工大学：http://pypi.sdutlinux.org/
+豆瓣：http://pypi.douban.com/simple/
+使用方法 临时使用 pip install pyspider -i https://pypi.tuna.tsinghua.edu.cn/simple 永久修改，一劳永逸 Linux下，修改 ~/.pip/pip.conf (没有就创建一个文件夹及文件。文件夹要加“.”，表示是隐藏文件夹)
+内容如下：
+[global] index-url = https://pypi.tuna.tsinghua.edu.cn/simple [install] trusted-host=mirrors.aliyun.com</description></item><item><title>一加7 pro使用 pn532 复制手机加密门禁卡</title><link>//blog.tri-lib.com/2019/12/use-pn532-copy-encryption-card-in-oneplus7pro/</link><pubDate>Mon, 30 Dec 2019 11:27:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2019/12/use-pn532-copy-encryption-card-in-oneplus7pro/</guid><description>&lt;p>入住万科小区后，每次出入都要经过两次门禁，导致虽然装了智能锁，但还是要带门禁卡，所以一直想着怎样把门禁复制到手机 NFC 上。一加7 pro 在 11 月已推送了门禁卡功能，但只支持未加密的门禁卡，万科的一卡通都是加密过的，所以直接复制不了。&lt;/p>
 &lt;p>加密卡也分半加密或全加密，属于哪种类型，可以手机下载 &lt;a href="https://github.com/ikarus23/MifareClassicTool">MifareClassicTool (MCT)&lt;/a> 查看，部分扇位可以看到内容的就是半加密，所有扇位内容都看不到的就是全加密卡，全加密卡的话，建议直接放弃，破解密钥需要太多时间了。&lt;/p>
 &lt;p>经过在酷安浏览 NFC 相关内容，发现是有方法可以实现复制的，但需要一个 PN532 的 NFC 解密设备和 CUID 空白卡，复制流程如下：&lt;/p>
 &lt;ol>

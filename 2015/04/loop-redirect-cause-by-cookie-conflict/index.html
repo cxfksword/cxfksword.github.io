@@ -12,8 +12,8 @@ PHPSESSID=token2; path=/; expired=/; domain=.test.test.com
 </span><span style=color:#75715e>     * to have the same (plain text) cookie name for the same path and we should not overwrite
 </span><span style=color:#75715e>     * more specific cookies with the less specific ones.
 </span><span style=color:#75715e>     */</span>
-    <span style=color:#66d9ef>if</span> (Z_TYPE(PG(http_globals)[TRACK_VARS_COOKIE]) <span style=color:#f92672>!</span><span style=color:#f92672>=</span> IS_UNDEF <span style=color:#f92672>&amp;</span><span style=color:#f92672>&amp;</span>
-    	symtable1 <span style=color:#f92672>=</span><span style=color:#f92672>=</span> Z_ARRVAL(PG(http_globals)[TRACK_VARS_COOKIE]) <span style=color:#f92672>&amp;</span><span style=color:#f92672>&amp;</span>
+    <span style=color:#66d9ef>if</span> (Z_TYPE(PG(http_globals)[TRACK_VARS_COOKIE]) <span style=color:#f92672>!=</span> IS_UNDEF <span style=color:#f92672>&amp;&amp;</span>
+    	symtable1 <span style=color:#f92672>==</span> Z_ARRVAL(PG(http_globals)[TRACK_VARS_COOKIE]) <span style=color:#f92672>&amp;&amp;</span>
     	zend_symtable_str_exists(symtable1, index, index_len)) {
     	zval_ptr_dtor(<span style=color:#f92672>&amp;</span>gpc_element);
     } <span style=color:#66d9ef>else</span> {

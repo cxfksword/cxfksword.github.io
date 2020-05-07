@@ -35,7 +35,7 @@ set_exception_handler(&#39;user_exception_handler&#39;);
 function handle_fatal_error()
 {
 	$error = error_get_last();
-	if (isset($error[&#39;type&#39;]) <span style=color:#960050;background-color:#1e0010>&amp;</span><span style=color:#960050;background-color:#1e0010>&amp;</span> E_ERROR == $error[&#39;type&#39;]) {
+	if (isset($error[&#39;type&#39;]) <span style=color:#960050;background-color:#1e0010>&amp;&amp;</span> E_ERROR == $error[&#39;type&#39;]) {
 		send_error_to_log_server($msg);
 	}
 }
