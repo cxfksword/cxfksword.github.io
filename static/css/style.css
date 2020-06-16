@@ -3,3 +3,7 @@
     vertical-align: top;
     border: solid 1px #ccc;
 }
+
+.footer img {
+    vertical-align: middle;
+}
