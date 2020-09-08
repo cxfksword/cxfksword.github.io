@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>python on cxfksword's notes</title><link>//blog.tri-lib.com/tags/python/</link><description>Recent content in python on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Mon, 26 Mar 2012 15:41:54 +0000</lastBuildDate><atom:link href="//blog.tri-lib.com/tags/python/index.xml" rel="self" type="application/rss+xml"/><item><title>WSGI处理流程图</title><link>//blog.tri-lib.com/2012/03/a-diagram-to-explain-wsgi/</link><pubDate>Mon, 26 Mar 2012 15:41:54 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/03/a-diagram-to-explain-wsgi/</guid><description>&lt;p>StackOverflow上看到的解释WSGI如何工作的图（一图胜千言）：
-&lt;img src="http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q1rcz9d8j21kw0pzjwx.jpg" alt="">&lt;/p>
+&lt;img src="http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q1rcz9d8j21kw0pzjwx.jpg" alt="" />&lt;/p>
 &lt;p>相关：
-&lt;a href="http://stackoverflow.com/questions/1303118/looking-for-a-diagram-to-explain-wsgi">http://stackoverflow.com/questions/1303118/looking-for-a-diagram-to-explain-wsgi&lt;/a>
-&lt;a href="http://stackoverflow.com/questions/1303118/looking-for-a-diagram-to-explain-wsgi">http://www.python.org/dev/peps/pep-0333/&lt;/a>&lt;/p></description></item></channel></rss>
+&lt;a class="link" href="http://stackoverflow.com/questions/1303118/looking-for-a-diagram-to-explain-wsgi" target="_blank" rel="noopener"
+>http://stackoverflow.com/questions/1303118/looking-for-a-diagram-to-explain-wsgi&lt;/a>
+&lt;a class="link" href="http://stackoverflow.com/questions/1303118/looking-for-a-diagram-to-explain-wsgi" target="_blank" rel="noopener"
+>http://www.python.org/dev/peps/pep-0333/&lt;/a>&lt;/p></description></item></channel></rss>

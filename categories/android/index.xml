@@ -11,4 +11,6 @@
 &lt;p>IntelliJ IDEA 12正常也可以换为Android Studio，不过因为Android Studio是基于IntelliJ IDEA 13 EAP开发的，当前scala plugin还不支持13 EAP，所以还是建议使用IntelliJ IDEA 12，等scala plugin支持最新版后，再换为Android Studio进行开发。&lt;/p>
 &lt;/blockquote>
 &lt;h3 id="示例项目">示例项目&lt;/h3>
-&lt;p>&lt;a href="https://github.com/pocorall/hello-scaloid-maven">hello-scaloid-maven&lt;/a>是一个完全使用maven编译的示例项目,借助&lt;a href="http://code.google.com/p/maven-android-plugin/">android maven plugin&lt;/a>插件可以把代码编译为android的apk文件。&lt;/p></description></item></channel></rss>
+&lt;p>&lt;a class="link" href="https://github.com/pocorall/hello-scaloid-maven" target="_blank" rel="noopener"
+>hello-scaloid-maven&lt;/a>是一个完全使用maven编译的示例项目,借助&lt;a class="link" href="http://code.google.com/p/maven-android-plugin/" target="_blank" rel="noopener"
+>android maven plugin&lt;/a>插件可以把代码编译为android的apk文件。&lt;/p></description></item></channel></rss>

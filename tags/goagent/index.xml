@@ -4,7 +4,7 @@
 3、到http://code.google.com/p/smarthosts/下载最新程序更新下hosts
 4、按GoAgent部署教程上传程序到Appspot
 5、把SwitchSharp的代理设为127.0.0.1:8087，并把在代规则指向：http://autoproxy-gfwlist.googlecode.com/svn/trunk/gfwlist.txt
-&lt;img src="http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q178g3ouj20ol03g0t4.jpg" alt="switchsharp rule setting">
+&lt;img src="http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q178g3ouj20ol03g0t4.jpg" alt="switchsharp rule setting" />
 6、have fun!&lt;/p>
 &lt;p>更详细教程：
 &lt;a href="http://maolihui.com/goagent-detailed-version-of-the-tutorial.html">http://maolihui.com/goagent-detailed-version-of-the-tutorial.html&lt;/a>&lt;/p></description></item></channel></rss>

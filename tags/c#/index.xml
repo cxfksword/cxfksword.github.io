@@ -4,7 +4,8 @@
 serviceInstaller.Description = ConfigurationManager.AppSetting[&amp;quot;ServiceDescription&amp;quot;];
 &lt;/code>&lt;/pre>
 &lt;p>编译执行安装，可惜抛出了异常，安装失败了。
-&lt;a href="http://cxfksword.me/wp-content/uploads/2012/01/QQ%E4%BA%94%E7%AC%94%E6%88%AA%E5%9B%BE%E6%9C%AA%E5%91%BD%E5%90%8D.png">&lt;img src="http://cxfksword.me/wp-content/uploads/2012/01/QQ%E4%BA%94%E7%AC%94%E6%88%AA%E5%9B%BE%E6%9C%AA%E5%91%BD%E5%90%8D.png" alt="">&lt;/a>
+&lt;a class="link" href="http://cxfksword.me/wp-content/uploads/2012/01/QQ%e4%ba%94%e7%ac%94%e6%88%aa%e5%9b%be%e6%9c%aa%e5%91%bd%e5%90%8d.png" target="_blank" rel="noopener"
+>&lt;img src="http://cxfksword.me/wp-content/uploads/2012/01/QQ%e4%ba%94%e7%ac%94%e6%88%aa%e5%9b%be%e6%9c%aa%e5%91%bd%e5%90%8d.png" alt="" />&lt;/a>
 失败的原因是，执行安装服务的程序是InstallUtil.exe，安装阶段不会自动加载服务的app.config配置文件，只会加载全局的machine.config，需改为手动加载app.config并读取。
 确定解决思路后，我写出了下面的代码：&lt;/p></description></item><item><title>开源线程池组件SmartThreadPool</title><link>//blog.tri-lib.com/2012/01/smartthreadpool/</link><pubDate>Mon, 09 Jan 2012 07:11:38 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/01/smartthreadpool/</guid><description>&lt;p>1、为什么需要使用线程池(Thread Pool）&lt;/p>
 &lt;ul>

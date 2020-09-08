@@ -2,6 +2,6 @@
 &lt;p>下面以windows服务器和Sql Server数据库为例，数据库服务器的ip是192.168.6.189，linux平台的思路差不多，只是命令有变化。&lt;/p>
 &lt;h3 id="1查看sql-server进程id">1、查看Sql Server进程ID&lt;/h3>
 &lt;p>打开任务管理器，点击“&lt;strong>查看&lt;/strong>-&amp;gt;&lt;strong>选择列&lt;/strong>”，勾选“&lt;strong>PID(进程标识符)&lt;/strong>”
-&lt;img src="http://ww1.sinaimg.cn/large/7ce4a9f6gw1e5q1p9zo5yj20b70bkabs.jpg" alt="sql server">
-&lt;img src="http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q1pyu9epj205k07ywf2.jpg" alt="sql server">&lt;/p>
+&lt;img src="http://ww1.sinaimg.cn/large/7ce4a9f6gw1e5q1p9zo5yj20b70bkabs.jpg" alt="sql server" />
+&lt;img src="http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q1pyu9epj205k07ywf2.jpg" alt="sql server" />&lt;/p>
 &lt;p>进程名称为“&lt;strong>sqlservr.exe&lt;/strong>”的PID就是Sql Server的进程ID，当前是&lt;strong>1800&lt;/strong>。&lt;/p></description></item></channel></rss>
