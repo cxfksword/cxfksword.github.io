@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>android on cxfksword's notes</title><link>//blog.tri-lib.com/tags/android/</link><description>Recent content in android on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Wed, 01 Jul 2020 11:27:10 +0800</lastBuildDate><atom:link href="//blog.tri-lib.com/tags/android/index.xml" rel="self" type="application/rss+xml"/><item><title>如何在android 9以上版本抓取https网络请求包</title><link>//blog.tri-lib.com/2020/07/how-capture-https-network-packet/</link><pubDate>Wed, 01 Jul 2020 11:27:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2020/07/how-capture-https-network-packet/</guid><description>&lt;p>在 android 9 以上版本，很多 app 都使用&lt;a class="link" href="https://github.com/moxie0/AndroidPinning" target="_blank" rel="noopener"
 >certificate pinning&lt;/a>技术来防止 https 中间人攻击，当 app 检测到证书不正确时，会自动断开网络请求，导致抓取不到 https 网络请求包。&lt;/p>
 &lt;p>要顺利抓到 https 请求包，需要借助&lt;a class="link" href="https://github.com/android-hacker/VirtualXposed" target="_blank" rel="noopener"
->VirtualXposed&lt;/a>来避开certificate pinning检测。&lt;/p></description></item><item><title>增加Android模拟器的"Internal Storage"容量</title><link>//blog.tri-lib.com/2012/04/android-internal-storage-space/</link><pubDate>Thu, 12 Apr 2012 16:06:07 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/04/android-internal-storage-space/</guid><description>&lt;p>android模拟器默认的内部存储空间只有几十m，随便安装几个app就满了，google了下，发现AVD管理器是没有增加内部存储空间的设置的，要增加需要使用命令行来启动模拟器，命令如下：&lt;/p>
+>VirtualXposed&lt;/a>来避开certificate pinning检测。&lt;/p></description></item><item><title>使用scala+scaloid+IntelliJ IDEA 12开发android应用</title><link>//blog.tri-lib.com/2013/06/develop-android-with-intellij-idea-12-and-scaloid/</link><pubDate>Sun, 30 Jun 2013 15:41:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2013/06/develop-android-with-intellij-idea-12-and-scaloid/</guid><description>&lt;h3 id="软件环境">软件环境&lt;/h3>
+&lt;p>继续下面的示例前，需要保证安装了下面的软件：&lt;/p>
+&lt;ul>
+&lt;li>JDK 1.6&lt;/li>
+&lt;li>Android SDK&lt;/li>
+&lt;li>IntelliJ IDEA 12&lt;/li>
+&lt;li>Scala 2.10.2&lt;/li>
+&lt;li>Maven 3&lt;/li>
+&lt;/ul>
+&lt;blockquote>
+&lt;p>IntelliJ IDEA 12正常也可以换为Android Studio，不过因为Android Studio是基于IntelliJ IDEA 13 EAP开发的，当前scala plugin还不支持13 EAP，所以还是建议使用IntelliJ IDEA 12，等scala plugin支持最新版后，再换为Android Studio进行开发。&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="示例项目">示例项目&lt;/h3>
+&lt;p>&lt;a class="link" href="https://github.com/pocorall/hello-scaloid-maven" target="_blank" rel="noopener"
+>hello-scaloid-maven&lt;/a>是一个完全使用maven编译的示例项目,借助&lt;a class="link" href="http://code.google.com/p/maven-android-plugin/" target="_blank" rel="noopener"
+>android maven plugin&lt;/a>插件可以把代码编译为android的apk文件。&lt;/p></description></item><item><title>增加Android模拟器的"Internal Storage"容量</title><link>//blog.tri-lib.com/2012/04/android-internal-storage-space/</link><pubDate>Thu, 12 Apr 2012 16:06:07 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/04/android-internal-storage-space/</guid><description>&lt;p>android模拟器默认的内部存储空间只有几十m，随便安装几个app就满了，google了下，发现AVD管理器是没有增加内部存储空间的设置的，要增加需要使用命令行来启动模拟器，命令如下：&lt;/p>
 &lt;pre>&lt;code>emulator -partition-size &amp;lt;size&amp;gt; -avd &amp;lt;virtual device name&amp;gt;
 &lt;/code>&lt;/pre>
 &lt;p>可以把命令保存到批处理bat文件中，以方便以后直接启动。&lt;/p>

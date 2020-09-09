@@ -7,16 +7,7 @@
 &lt;p>中国科技大学 &lt;a href="https://pypi.mirrors.ustc.edu.cn/simple/">https://pypi.mirrors.ustc.edu.cn/simple/&lt;/a>&lt;/p>
 &lt;p>华中理工大学：http://pypi.hustunique.com/&lt;/p>
 &lt;p>山东理工大学：http://pypi.sdutlinux.org/&lt;/p>
-&lt;p>豆瓣：http://pypi.douban.com/simple/&lt;/p></description></item><item><title>一加7 pro使用 pn532 复制手机加密门禁卡</title><link>//blog.tri-lib.com/2019/12/use-pn532-copy-encryption-card-in-oneplus7pro/</link><pubDate>Mon, 30 Dec 2019 11:27:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2019/12/use-pn532-copy-encryption-card-in-oneplus7pro/</guid><description>&lt;p>入住万科小区后，每次出入都要经过两次门禁，导致虽然装了智能锁，但还是要带门禁卡，所以一直想着怎样把门禁复制到手机 NFC 上。一加7 pro 在 11 月已推送了门禁卡功能，但只支持未加密的门禁卡，万科的一卡通都是加密过的，所以直接复制不了。&lt;/p>
-&lt;p>加密卡也分半加密或全加密，属于哪种类型，可以手机下载 &lt;a class="link" href="https://github.com/ikarus23/MifareClassicTool" target="_blank" rel="noopener"
->MifareClassicTool (MCT)&lt;/a> 查看，部分扇位可以看到内容的就是半加密，所有扇位内容都看不到的就是全加密卡，全加密卡的话，建议直接放弃，破解密钥需要太多时间了。&lt;/p>
-&lt;p>经过在酷安浏览 NFC 相关内容，发现是有方法可以实现复制的，但需要一个 PN532 的 NFC 解密设备和 CUID 空白卡，复制流程如下：&lt;/p>
-&lt;ol>
-&lt;li>使用 PN532 解密半加密的原卡内容&lt;/li>
-&lt;li>把门禁卡的 0 扇区的 0 块的 UID 和厂商号写入 CUID 空白卡（这样空白卡就变成未加密卡了）&lt;/li>
-&lt;li>使用手机 NFC 模拟 CUID 空白卡&lt;/li>
-&lt;li>使用 PN532 或另一带 NFC 功能的手机把余下加密的所有扇区信息写下手机模拟的门禁卡&lt;/li>
-&lt;/ol></description></item><item><title>解决npm 安装 electron 卡住，无法完成</title><link>//blog.tri-lib.com/2019/12/fix-npm-hang-when-install-electron/</link><pubDate>Thu, 26 Dec 2019 14:10:18 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2019/12/fix-npm-hang-when-install-electron/</guid><description>&lt;p>使用最新的 node v12 安装 electron 时，发现每次跑到下面的语句就会挂住，无法继续安装：&lt;/p>
+&lt;p>豆瓣：http://pypi.douban.com/simple/&lt;/p></description></item><item><title>解决npm 安装 electron 卡住，无法完成</title><link>//blog.tri-lib.com/2019/12/fix-npm-hang-when-install-electron/</link><pubDate>Thu, 26 Dec 2019 14:10:18 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2019/12/fix-npm-hang-when-install-electron/</guid><description>&lt;p>使用最新的 node v12 安装 electron 时，发现每次跑到下面的语句就会挂住，无法继续安装：&lt;/p>
 &lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-bash" data-lang="bash">&amp;gt; electron@7.1.7 postinstall /Users/cxf/Dev/CapsIndicator/node_modules/electron
 &amp;gt; node install.js
 &lt;/code>&lt;/pre>&lt;/div>&lt;p>查看网上相关解决方案，发现是因为 npm 需要连接 github 下载 electron 安装包导致，安装包有 60M 左右，但从 github 下载却只有几 KB，所以感觉是卡住了。但改使用淘宝的 cnpm 发现还是会卡住，这是因为 electron 的包默认还是指向 github 下载，还有 electron 提供了修改下载地址的环境变量&lt;code>electron_mirror&lt;/code>，使用&lt;code>npm config&lt;/code>设置配置变量&lt;/p>

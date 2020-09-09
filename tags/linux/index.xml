@@ -1,4 +1,23 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>linux on cxfksword's notes</title><link>//blog.tri-lib.com/tags/linux/</link><description>Recent content in linux on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Sat, 17 Mar 2012 09:42:44 +0000</lastBuildDate><atom:link href="//blog.tri-lib.com/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>linux常用命令</title><link>//blog.tri-lib.com/2012/03/linux-useful-commands/</link><pubDate>Sat, 17 Mar 2012 09:42:44 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/03/linux-useful-commands/</guid><description>&lt;p>在微博上发现已有同学整理了一个不错的linux命令文档：&lt;a class="link" href="http://115.com/file/c2rzrvw3#Unix-Linux" target="_blank" rel="noopener"
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>linux on cxfksword's notes</title><link>//blog.tri-lib.com/tags/linux/</link><description>Recent content in linux on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Mon, 15 Jul 2013 00:15:00 +0800</lastBuildDate><atom:link href="//blog.tri-lib.com/tags/linux/index.xml" rel="self" type="application/rss+xml"/><item><title>更改rubygems镜像源</title><link>//blog.tri-lib.com/2013/07/change-rubygem-source/</link><pubDate>Mon, 15 Jul 2013 00:15:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2013/07/change-rubygem-source/</guid><description>&lt;p>由于国内网络的原因，在安装ruby相关软件时，经常会在请求&lt;strong>rubygems.org&lt;/strong>下载时一直卡着不动，这时可以切换到淘宝的镜像源，速度嗖嗖的。&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;a href="http://ruby.taobao.org/">http://ruby.taobao.org/&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;p>详细的更改方法可以访问上面的网址，假如项目下有GemFile文件，还需要更改GemFile文件的配置源地址。&lt;/p></description></item><item><title>ubuntu日常操作</title><link>//blog.tri-lib.com/2012/10/ubuntu-daily/</link><pubDate>Tue, 30 Oct 2012 15:14:22 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/10/ubuntu-daily/</guid><description>&lt;p>工作用电脑将会切换到ubuntu上了，记录下ubuntu常用操作。&lt;/p>
+&lt;h3 id="升级到php54">===升级到php5.4===&lt;/h3>
+&lt;pre>&lt;code>For Ubuntu 11.10/12.04:
+sudo add-apt-repository ppa:ondrej/php5
+sudo apt-get update
+sudo apt-get install php5
+For Ubuntu 10.04 LTS, run the following commands (Thanks to Ivan Castellanos for the extra tip):
+sudo echo &amp;quot;deb http://ppa.launchpad.net/ondrej/php5/ubuntu lucid main&amp;quot; &amp;gt;&amp;gt; /etc/apt/sources.list
+sudo echo &amp;quot;deb-src http://ppa.launchpad.net/ondrej/php5/ubuntu lucid main&amp;quot; &amp;gt;&amp;gt; /etc/apt/sources.list
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E5267A6C
+sudo apt-get update
+sudo apt-get install php5
+You can check if PHP 5.4.x is successfully installed with this command:
+php5 -v
+&lt;/code>&lt;/pre>
+&lt;p>&lt;a href="http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu">http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu&lt;/a>&lt;/p></description></item><item><title>linux常用命令</title><link>//blog.tri-lib.com/2012/03/linux-useful-commands/</link><pubDate>Sat, 17 Mar 2012 09:42:44 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2012/03/linux-useful-commands/</guid><description>&lt;p>在微博上发现已有同学整理了一个不错的linux命令文档：&lt;a class="link" href="http://115.com/file/c2rzrvw3#Unix-Linux" target="_blank" rel="noopener"
 >http://115.com/file/c2rzrvw3#Unix-Linux&lt;/a>
 这篇文章等遇到好的命令再继续更新。。。&lt;/p>
 &lt;p>文件命令 | 程序命令 | 网络命令 | 系统命令&lt;/p>

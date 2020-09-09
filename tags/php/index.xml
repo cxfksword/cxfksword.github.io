@@ -11,7 +11,36 @@
 PHPSESSID=token2; path=/; expired=/; domain=.test.test.com
 &lt;/code>&lt;/pre>&lt;p>显然这两个cookie的domain因为都是admin.test.test.com的根域名，使浏览器都发送到php后台系统了。第一个是后台系统（admin.test.test.com）写入的，是正确的session id，而第二个是由未知系统写入的。测试打印**$_COOKIE[&amp;lsquo;PHPSESSID&amp;rsquo;]**发现输出是：&lt;/p>
 &lt;pre>&lt;code>token2
-&lt;/code>&lt;/pre>&lt;p>很明显php读取到了错误的session id，所以导致系统读取不到保存在session中的登录信息，而误判用户为未登录，之后再把用户跳转回SSO登录页面，跳转回SSO系统后，SSO系统知道用户已登录过，再跳转回系统。。。这样就一直循环下去了=。=&lt;/p></description></item><item><title>关于</title><link>//blog.tri-lib.com/abouts/</link><pubDate>Fri, 24 Dec 2010 00:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/abouts/</guid><description>在广州工作的大龄程序员。。。毕业后一直从事程序开发工作，接触的技术比较多，如.NET/PHP/JAVA/Javascript等等，现在喜欢 Go 语言。</description></item><item><title>Github收藏开源项目</title><link>//blog.tri-lib.com/star/</link><pubDate>Tue, 09 Feb 2010 17:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/star/</guid><description>.Net Westwind.ApplicationConfiguration
+&lt;/code>&lt;/pre>&lt;p>很明显php读取到了错误的session id，所以导致系统读取不到保存在session中的登录信息，而误判用户为未登录，之后再把用户跳转回SSO登录页面，跳转回SSO系统后，SSO系统知道用户已登录过，再跳转回系统。。。这样就一直循环下去了=。=&lt;/p></description></item><item><title>在ubuntu中编译安装php</title><link>//blog.tri-lib.com/2013/11/install-php-from-source-in-ubuntu/</link><pubDate>Tue, 12 Nov 2013 01:07:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2013/11/install-php-from-source-in-ubuntu/</guid><description>&lt;h3 id="预装编译环境">预装编译环境&lt;/h3>
+&lt;p>在ubuntu中执行下面命令安装编译依赖软件&lt;/p>
+&lt;pre>&lt;code>&amp;gt; sudo apt-get install \
+libxml2-dev \
+libcurl4-openssl-dev \
+libjpeg-dev \
+libpng-dev \
+libxpm-dev \
+libmysqlclient-dev \
+libpq-dev \
+libicu-dev \
+libfreetype6-dev \
+libldap2-dev \
+libxslt-dev
+&lt;/code>&lt;/pre></description></item><item><title>捕捉php中的fatal error错误</title><link>//blog.tri-lib.com/2013/11/handle-fatal-error-in-php/</link><pubDate>Mon, 04 Nov 2013 00:48:00 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2013/11/handle-fatal-error-in-php/</guid><description>&lt;p>php中有三个函数与捕捉运行错误有关，分别是：&lt;/p>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="http://cn2.php.net/set_error_handler" target="_blank" rel="noopener"
+>set_error_handler&lt;/a>：运行错误处理函数，php内核执行代码出错时一般是触发error，而不是抛异常，抛异常是面向对象编程中用的&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="http://cn2.php.net/set_exception_handler" target="_blank" rel="noopener"
+>set_exception_handler&lt;/a>：运行异常信息处理函数，当代码中throw的异常没有被try-catch捕获时，就会调用该函数。php中error和exception的区别可以看这篇回答：&lt;a class="link" href="http://stackoverflow.com/questions/841500/php-exceptions-vs-errors" target="_blank" rel="noopener"
+>php-exceptions-vs-errors&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="http://cn2.php.net/register_shutdown_function" target="_blank" rel="noopener"
+>register_shutdown_function&lt;/a>：脚本关闭执行函数，会在php脚本每次执行完成退出前运行。&lt;/p>
+&lt;/blockquote>
+&lt;p>为了保证运行错误能被顺利捕捉到，必须保证在有错的程序执行前先注册了错误处理函数。
+一般错误处理代码结构如下：&lt;/p></description></item><item><title>关于</title><link>//blog.tri-lib.com/abouts/</link><pubDate>Fri, 24 Dec 2010 00:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/abouts/</guid><description>在广州工作的大龄程序员。。。毕业后一直从事程序开发工作，接触的技术比较多，如.NET/PHP/JAVA/Javascript等等，现在喜欢 Go 语言。</description></item><item><title>Github收藏开源项目</title><link>//blog.tri-lib.com/star/</link><pubDate>Tue, 09 Feb 2010 17:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/star/</guid><description>.Net Westwind.ApplicationConfiguration
 Strongly typed, code-first configuration classes for .NET applications
 pythonnet
 Python for .NET is a package that gives Python programmers nearly seamless integration with the .NET Common Language Runtime (CLR) and provides a powerful application scripting tool for .NET developers. http://pythonnet.github.io
