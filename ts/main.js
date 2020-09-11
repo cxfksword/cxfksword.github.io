@@ -2,3 +2,10 @@
                         linear-gradient(0deg, 
                             rgba(${e.DarkMuted.rgb[0]}, ${e.DarkMuted.rgb[1]}, ${e.DarkMuted.rgb[2]}, 0.5) 0%, 
                             rgba(${e.Vibrant.rgb[0]}, ${e.Vibrant.rgb[1]}, ${e.Vibrant.rgb[2]}, 0.75) 100%)`})})});b.observe(a)}},alert:(a,b=5e3,c=500)=>{const d=document.createElement("div");d.innerHTML=a,d.className="alert",d.style.visibility="hidden",document.body.appendChild(d),d.style.transform=`translateY(${d.clientHeight+50}px)`,d.style.transition=`transform ${c/1e3}s ease`,setTimeout(()=>{d.style.removeProperty("visibility"),d.style.transform="translateY(0)"},c),setTimeout(()=>{d.style.transform=`translateY(${d.clientHeight+50}px)`},c+b),setTimeout(()=>{d.remove()},2*c+b)}};window.addEventListener("load",()=>{setTimeout(function(){C.init()},0)});window.Stack=C;})();
+/*!
+*   Hugo Theme Stack
+*
+*   @author: Jimmy Cai
+*   @website: https://jimmycai.com
+*   @link: https://github.com/CaiJimmy/hugo-theme-stack
+*/
