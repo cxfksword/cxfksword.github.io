@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>adb on cxfksword's notes</title><link>//blog.tri-lib.com/tags/adb/</link><description>Recent content in adb on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Fri, 11 Sep 2020 11:27:10 +0800</lastBuildDate><atom:link href="//blog.tri-lib.com/tags/adb/index.xml" rel="self" type="application/rss+xml"/><item><title>常用adb命令</title><link>//blog.tri-lib.com/2020/09/adb-commands/</link><pubDate>Fri, 11 Sep 2020 11:27:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/2020/09/adb-commands/</guid><description>&lt;ol>
+&lt;li>
+&lt;p>查看连接设备&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell"> adb devcies
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol></description></item></channel></rss>
