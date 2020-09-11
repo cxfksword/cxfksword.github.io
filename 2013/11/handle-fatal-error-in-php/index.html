@@ -2,7 +2,7 @@
  set_error_handler：运行错误处理函数，php内核执行代码出错时一般是触发error，而不是抛异常，抛异常是面向对象编程中用的
   set_exception_handler：运行异常信息处理函数，当代码中throw的异常没有被try-catch捕获时，就会调用该函数。php中error和exception的区别可以看这篇回答：php-exceptions-vs-errors
   register_shutdown_function：脚本关闭执行函数，会在php脚本每次执行完成退出前运行。
- 为了保证运行错误能被顺利捕捉到，必须保证在有错的程序执行前先注册了错误处理函数。 一般错误处理代码结构如下："><title>捕捉php中的fatal error错误</title><link rel=canonical href=//blog.tri-lib.com/2013/11/handle-fatal-error-in-php/><link rel=stylesheet href=//blog.tri-lib.com/scss/style.min.css><meta property="og:title" content="捕捉php中的fatal error错误"><meta property="og:description" content="php中有三个函数与捕捉运行错误有关，分别是：
+ 为了保证运行错误能被顺利捕捉到，必须保证在有错的程序执行前先注册了错误处理函数。 一般错误处理代码结构如下："><title>捕捉php中的fatal error错误</title><link rel=canonical href=//blog.tri-lib.com/2013/11/handle-fatal-error-in-php/><link rel=stylesheet href=//blog.tri-lib.com/scss/style.min.877eb08bffd23d4beea6863a88c518e3.css><meta property="og:title" content="捕捉php中的fatal error错误"><meta property="og:description" content="php中有三个函数与捕捉运行错误有关，分别是：
  set_error_handler：运行错误处理函数，php内核执行代码出错时一般是触发error，而不是抛异常，抛异常是面向对象编程中用的
   set_exception_handler：运行异常信息处理函数，当代码中throw的异常没有被try-catch捕获时，就会调用该函数。php中error和exception的区别可以看这篇回答：php-exceptions-vs-errors
   register_shutdown_function：脚本关闭执行函数，会在php脚本每次执行完成退出前运行。

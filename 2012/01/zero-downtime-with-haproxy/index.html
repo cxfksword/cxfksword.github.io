@@ -2,7 +2,7 @@
 问题起因 入公司一年，我发现在ASP.NET网站上部署更新时，经常会遇到下面这样的烦恼：
   假如更新到bin文件夹下的dll文件，会引起iis的应用程序池重启，从而导致更新这段时间内，用户访问网站会非常缓慢，甚至出现页面超时。
   部署更新时要小心翼翼，祈祷上帝没少拷了什么文件，假如更新后网站出错，就只能心跳加速地快速还原系统
-  编辑经常提一些需求只是简单更改下页面文字，而为了不使这种简单的更改引起应用程序池重启，一般部署网站时都是采用copy方式发布，而网站也工作在debug模式下，而不是更优化速度更快的release模式"><title>利用HAProxy实现零停机更新维护</title><link rel=canonical href=//blog.tri-lib.com/2012/01/zero-downtime-with-haproxy/><link rel=stylesheet href=//blog.tri-lib.com/scss/style.min.css><meta property="og:title" content="利用HAProxy实现零停机更新维护"><meta property="og:description" content="HAProxy是linux平台上的负载均衡软件，有完善的服务器健康检测和会话(session)保持功能，性能高，支持tcp和http网络连接分发。
+  编辑经常提一些需求只是简单更改下页面文字，而为了不使这种简单的更改引起应用程序池重启，一般部署网站时都是采用copy方式发布，而网站也工作在debug模式下，而不是更优化速度更快的release模式"><title>利用HAProxy实现零停机更新维护</title><link rel=canonical href=//blog.tri-lib.com/2012/01/zero-downtime-with-haproxy/><link rel=stylesheet href=//blog.tri-lib.com/scss/style.min.877eb08bffd23d4beea6863a88c518e3.css><meta property="og:title" content="利用HAProxy实现零停机更新维护"><meta property="og:description" content="HAProxy是linux平台上的负载均衡软件，有完善的服务器健康检测和会话(session)保持功能，性能高，支持tcp和http网络连接分发。
 问题起因 入公司一年，我发现在ASP.NET网站上部署更新时，经常会遇到下面这样的烦恼：
   假如更新到bin文件夹下的dll文件，会引起iis的应用程序池重启，从而导致更新这段时间内，用户访问网站会非常缓慢，甚至出现页面超时。
   部署更新时要小心翼翼，祈祷上帝没少拷了什么文件，假如更新后网站出错，就只能心跳加速地快速还原系统
