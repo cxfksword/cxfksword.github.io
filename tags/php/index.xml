@@ -40,7 +40,7 @@ libxslt-dev
 >register_shutdown_function&lt;/a>：脚本关闭执行函数，会在php脚本每次执行完成退出前运行。&lt;/p>
 &lt;/blockquote>
 &lt;p>为了保证运行错误能被顺利捕捉到，必须保证在有错的程序执行前先注册了错误处理函数。
-一般错误处理代码结构如下：&lt;/p></description></item><item><title>关于</title><link>//blog.tri-lib.com/abouts/</link><pubDate>Fri, 24 Dec 2010 00:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/abouts/</guid><description>在广州工作的大龄程序员。。。毕业后一直从事程序开发工作，接触的技术比较多，如.NET/PHP/JAVA/Javascript等等，现在喜欢 Go 语言。</description></item><item><title>Github收藏开源项目</title><link>//blog.tri-lib.com/star/</link><pubDate>Tue, 09 Feb 2010 17:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/star/</guid><description>.Net Westwind.ApplicationConfiguration
+一般错误处理代码结构如下：&lt;/p></description></item><item><title>Github收藏开源项目</title><link>//blog.tri-lib.com/star/</link><pubDate>Tue, 09 Feb 2010 17:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.tri-lib.com/star/</guid><description>.Net Westwind.ApplicationConfiguration
 Strongly typed, code-first configuration classes for .NET applications
 pythonnet
 Python for .NET is a package that gives Python programmers nearly seamless integration with the .NET Common Language Runtime (CLR) and provides a powerful application scripting tool for .NET developers. http://pythonnet.github.io
