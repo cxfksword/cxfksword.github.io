@@ -1,12 +1,108 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>cxfksword's notes</title><link>//blog.xetri.net/</link><description>Recent content on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Fri, 15 Jan 2021 16:03:08 +0800</lastBuildDate><atom:link href="//blog.xetri.net/index.xml" rel="self" type="application/rss+xml"/><item><title>2020年度总结</title><link>//blog.xetri.net/2021/01/the-summary-of-2020/</link><pubDate>Fri, 15 Jan 2021 16:03:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2021/01/the-summary-of-2020/</guid><description>文章的部分内容被密码保护：
-Javascript needs to be enabled to decrypt content 今年对大部分人来说，都会是难忘和难过的一年。年初新冠肺炎大爆发，到处寸步难行，食肆工厂关闭。年中中美关系加剧恶化，中印边境紧张，让人对未来几年的形势越来越担忧，年末新冠肺炎再次来袭，希望不会再出现大爆发了。
-生活上还是变化不大，时间越来越快了。今年活得比较颓废，现在年龄太大，工作不好找，在转行和找工作间不断徘徊。比较熟的朋友都结婚生子了，平时也不好联系他们，对未来找不到方向。
-今年生活状态：
-学完车，拿到C1驾照 未有女朋友，未婚 未会游泳 2020年年度选择如下：
-年度游戏： 2077赛博朋克 绝地求生（手机） 为了玩 2077，下半年配了新电脑，的确算好玩的，推荐玩 PC 版。只是 BUG 比较多，主机版被批得不成人形了
-年度动画： 我的三体之章比海传 没想到唯一的是国创😂，虽然画风精奇，但有三体剧本底子在，再加上不错的宏大画面表现和音乐，是难得的佳作。日本动画越来越低幼卖萌向，看不到出路，唯一期待的进击的巨人最终季刚出，要算到 2021 年了。
-年度音乐： 推开世界的门 - 杨乃文 荒蛋 - 太一 世界不会轻易崩塌 - 打扰一下乐团 今年的歌只能择优记录下，没有特别非常喜欢的，不过今年因为喜欢看综艺的原因，认识了两个新生代不错的歌手：太一、华晨宇，感觉都很有才华，创作力也强，歌词有点非常人思维😂，感觉中国流行音乐开始有些起色了。
-年度电影（电视剧）： 沉默的真相 真相捕捉 唐人街探案 今年因疫情原因，没什么电影上映，今年都是看电视剧。《沉默的真相》和《唐人街探案》使我对国产剧大大改观了，非常好看，强烈推荐。《唐人街探案》记得只需要看前 8 集，最后 4 集是送的广告😂</description></item><item><title>华硕主板AX200网卡如何开启WOL网络唤醒</title><link>//blog.xetri.net/2020/12/intel-ax200-wol/</link><pubDate>Tue, 22 Dec 2020 13:27:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2020/12/intel-ax200-wol/</guid><description>&lt;p>&lt;a class="link" href="https://en.wikipedia.org/wiki/Wake-on-LAN" target="_blank" rel="noopener"
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>cxfksword's notes</title><link>//blog.xetri.net/</link><description>Recent content on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Fri, 15 Jan 2021 16:03:08 +0800</lastBuildDate><atom:link href="//blog.xetri.net/index.xml" rel="self" type="application/rss+xml"/><item><title>2020年度总结</title><link>//blog.xetri.net/2021/01/the-summary-of-2020/</link><pubDate>Fri, 15 Jan 2021 16:03:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2021/01/the-summary-of-2020/</guid><description>&lt;p>今年对大部分人来说，都会是难忘和难过的一年。年初新冠肺炎大爆发，到处寸步难行，食肆工厂关闭。年中中美关系加剧恶化，中印边境紧张，让人对未来几年的形势越来越担忧，年末新冠肺炎再次来袭，希望不会再出现大爆发了。&lt;/p>
+&lt;hugo-encrypt>
+&lt;div class="hugo-encrypt-encryption-notice">
+&lt;p class="hugo-encryptor-tips">文章的部分内容被密码保护：&lt;/p>
+&lt;noscript>&lt;span id="hugo-encrypt-enable-js">Javascript needs to be enabled to decrypt content&lt;/span>&lt;/noscript>
+&lt;div class='hugo-encrypt-form'>
+&lt;input
+class="hugo-encrypt-input"
+id="hugo-encrypt-password"
+placeholder='请输入密码'
+/>
+&lt;input
+class="hugo-encrypt-button"
+type="button"
+value='点击验证'
+id="button" onclick="hugoDecrypt(document.getElementById('hugo-encrypt-password').value,'input')"
+/>
+&lt;span class="hugo-encrypt-input-response">&lt;/span>
+&lt;/div>
+&lt;/div>
+&lt;cipher-text data-password='xetri123' style="display:none;">
+&lt;p>生活上还是变化不大，时间越来越快了。今年活得比较颓废，现在年龄太大，工作不好找，在转行和找工作间不断徘徊。比较熟的朋友都结婚生子了，平时也不好联系他们，对未来找不到方向。&lt;/p>
+&lt;p>今年生活状态：&lt;/p>
+&lt;ul>
+&lt;li>学完车，拿到C1驾照&lt;/li>
+&lt;li>未有女朋友，未婚&lt;/li>
+&lt;li>未会游泳&lt;/li>
+&lt;/ul>
+&lt;/cipher-text>
+&lt;style type="text/css">div#hugo-encrypt-sha1sum {display: none;}&lt;/style>
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js">&lt;/script>
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha1.js">&lt;/script>
+&lt;script>
+const storageKey = location.pathname + "password";
+const userStorage = localStorage ;
+function str2buf(str) {
+return new TextEncoder("utf-8").encode(str);
+}
+function buf2str(buffer) {
+return new TextDecoder("utf-8").decode(buffer);
+}
+function hex2buf(hexStr) {
+return new Uint8Array(hexStr.match(/.{2}/g).map(h => parseInt(h, 16)));
+}
+function deriveKey(passphrase, salt) {
+salt = salt || crypto.getRandomValues(new Uint8Array(8));
+return crypto.subtle
+.importKey("raw", str2buf(passphrase), "PBKDF2", false, ["deriveKey"])
+.then(key =>
+crypto.subtle.deriveKey(
+{ name: "PBKDF2", salt, iterations: 1000, hash: "SHA-256" },
+key,
+{ name: "AES-GCM", length: 256 },
+false,
+["encrypt", "decrypt"],
+),
+)
+.then(key => [key, salt]);
+}
+function decrypt(passphrase, saltIvCipherHex) {
+const [salt, iv, data] = saltIvCipherHex.split("-").map(hex2buf);
+return deriveKey(passphrase, salt)
+.then(([key]) => crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, data))
+.then(v => buf2str(new Uint8Array(v)));
+}
+function removeNotice() {
+var notices = document.getElementsByClassName("hugo-encrypt-encryption-notice");
+for (let i = 0; i &lt; notices.length; i++) {
+notices[i].remove();
+}
+}
+const hugoDecrypt = function(password, type) {
+for (const cipher of ciphers) {
+decrypt(password, cipher.innerText).then(function(decrypted_text) {
+let hash = CryptoJS.SHA1(decrypted_text.replace(/\r?\n?[^\r\n]*$/, ""));
+let sha1_sum = CryptoJS.enc.Hex.stringify(hash);
+if ( decrypted_text.includes(sha1_sum) ) {
+removeNotice();
+decrypted_text = decrypted_text.replace(/&lt;div.*?hugo-encrypt-sha1sum.*?>.*?&lt;\/div>/ig, '');
+cipher.parentNode.outerHTML = decrypted_text;
+userStorage.setItem(storageKey, password);
+console.log("Decryption successful. Storing password in Storage.");
+}
+}).catch(function(error) {
+if (type === "input") {
+cipher.parentNode.querySelector('.hugo-encrypt-input-response').innerHTML = "密码错误";
+console.log('密码错误', error);
+} else if (type === "storage") {
+userStorage.removeItem(location.pathname + "password");
+console.log("Password changed. Clearing userStorage.", error);
+}
+});
+}
+};
+&lt;/script>
+&lt;script>
+window.onload = () => {
+ciphers = Array.from(document.querySelectorAll("cipher-text"));
+if (userStorage.getItem(storageKey)) {
+console.log("Found storageKey in userStorage. Attemtping decryption");
+hugoDecrypt(userStorage.getItem(storageKey), "storage");
+}
+};
+&lt;/script>
+&lt;/hugo-encrypt></description></item><item><title>华硕主板AX200网卡如何开启WOL网络唤醒</title><link>//blog.xetri.net/2020/12/intel-ax200-wol/</link><pubDate>Tue, 22 Dec 2020 13:27:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2020/12/intel-ax200-wol/</guid><description>&lt;p>&lt;a class="link" href="https://en.wikipedia.org/wiki/Wake-on-LAN" target="_blank" rel="noopener"
 >WOL网络唤醒&lt;/a>是用来实现通过特定的指令唤醒同一局域网下已关机 PC 的功能。现在常用的 &lt;code>DLNA&lt;/code> 和 &lt;code>moonlight&lt;/code> 软件都支持 WOL 功能，这篇文章只要记录下华硕主板如何打开 WOL 功能（其他厂商的主板大同小异，只要是 BIOS 选项和网卡选项会有些差别）。实现 WOL 功能的 PC 主机是必须通过网线连接在同一局域网下的，只有 WIFI 连接没法实现。&lt;/p></description></item><item><title>Windows下如何连接LG UltraFine 4k显示器</title><link>//blog.xetri.net/2020/09/connect-ultrafine-with-windows/</link><pubDate>Fri, 11 Sep 2020 13:07:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2020/09/connect-ultrafine-with-windows/</guid><description>&lt;blockquote>
 &lt;p>19年时为了开发时字体显示能有更好的效果，所以准备入手一台 4K 的显示器。经过一系列的筛查比较后，最后买了苹果官网的 LG UltraFine 4k 显示器，选它的原因只要有两点：&lt;/p>
 &lt;ol>
@@ -43,6 +139,26 @@ Javascript needs to be enabled to decrypt content 今年对大部分人来说，
 豆瓣 - 2019 年度音乐
 The Game Award 2019
 新浪新闻年终盘点：#2019哪些瞬间值得被看见#</description></item><item><title>The Summary of 2019</title><link>//blog.xetri.net/2019/12/the-summary-of-2019/</link><pubDate>Tue, 24 Dec 2019 15:00:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2019/12/the-summary-of-2019/</guid><description>&lt;p>今年是暖冬，所以即使已过了冬至，广州的天气还只是秋瑟中带点凉意，1111 淘宝买的冬衣还没一次穿过出街==！&lt;/p>
+&lt;hugo-encrypt>
+&lt;div class="hugo-encrypt-encryption-notice">
+&lt;p class="hugo-encryptor-tips">文章的部分内容被密码保护：&lt;/p>
+&lt;noscript>&lt;span id="hugo-encrypt-enable-js">Javascript needs to be enabled to decrypt content&lt;/span>&lt;/noscript>
+&lt;div class='hugo-encrypt-form'>
+&lt;input
+class="hugo-encrypt-input"
+id="hugo-encrypt-password"
+placeholder='请输入密码'
+/>
+&lt;input
+class="hugo-encrypt-button"
+type="button"
+value='点击验证'
+id="button" onclick="hugoDecrypt(document.getElementById('hugo-encrypt-password').value,'input')"
+/>
+&lt;span class="hugo-encrypt-input-response">&lt;/span>
+&lt;/div>
+&lt;/div>
+&lt;cipher-text data-password='xetri123' style="display:none;">
 &lt;p>上周 3 刚被公司裁员，年末正式加入失业大军，现在只能游荡在图书馆，消磨下时间。现在年龄已奔四，对于继续从事开发工作，总是充满焦虑，再投简历找工作，感觉已很困难了。&lt;/p>
 &lt;p>自从去年老爸中风后，到现在有一年时间了，腿还是麻痹无力状态，还是没法自己走路。平时都需要老妈看着，的确太辛苦了。每当这时间就会感觉身体健康是多么重要。&lt;/p>
 &lt;p>今年生活状态：&lt;/p>
@@ -51,7 +167,104 @@ The Game Award 2019
 &lt;li>未有女朋友，未婚&lt;/li>
 &lt;li>未学车&lt;/li>
 &lt;li>未会游泳&lt;/li>
-&lt;/ul></description></item><item><title>归档</title><link>//blog.xetri.net/archive/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/archive/</guid><description/></item><item><title>The Summary of 2017</title><link>//blog.xetri.net/2018/02/the-summary-of-2017/</link><pubDate>Wed, 14 Feb 2018 11:01:07 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2018/02/the-summary-of-2017/</guid><description>&lt;p>还有一天就到2018农历新年了，时间实在过得太快。今年两老的身体都有些不好，就提前请假回家，现在已舒服呆在房间中了。家里的天气实在是舒服，阳光明媚，想起广州住处的阴冷天气就头痛，衣服实在不容易干。&lt;/p>
+&lt;/ul>
+&lt;/cipher-text>
+&lt;style type="text/css">div#hugo-encrypt-sha1sum {display: none;}&lt;/style>
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js">&lt;/script>
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha1.js">&lt;/script>
+&lt;script>
+const storageKey = location.pathname + "password";
+const userStorage = localStorage ;
+function str2buf(str) {
+return new TextEncoder("utf-8").encode(str);
+}
+function buf2str(buffer) {
+return new TextDecoder("utf-8").decode(buffer);
+}
+function hex2buf(hexStr) {
+return new Uint8Array(hexStr.match(/.{2}/g).map(h => parseInt(h, 16)));
+}
+function deriveKey(passphrase, salt) {
+salt = salt || crypto.getRandomValues(new Uint8Array(8));
+return crypto.subtle
+.importKey("raw", str2buf(passphrase), "PBKDF2", false, ["deriveKey"])
+.then(key =>
+crypto.subtle.deriveKey(
+{ name: "PBKDF2", salt, iterations: 1000, hash: "SHA-256" },
+key,
+{ name: "AES-GCM", length: 256 },
+false,
+["encrypt", "decrypt"],
+),
+)
+.then(key => [key, salt]);
+}
+function decrypt(passphrase, saltIvCipherHex) {
+const [salt, iv, data] = saltIvCipherHex.split("-").map(hex2buf);
+return deriveKey(passphrase, salt)
+.then(([key]) => crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, data))
+.then(v => buf2str(new Uint8Array(v)));
+}
+function removeNotice() {
+var notices = document.getElementsByClassName("hugo-encrypt-encryption-notice");
+for (let i = 0; i &lt; notices.length; i++) {
+notices[i].remove();
+}
+}
+const hugoDecrypt = function(password, type) {
+for (const cipher of ciphers) {
+decrypt(password, cipher.innerText).then(function(decrypted_text) {
+let hash = CryptoJS.SHA1(decrypted_text.replace(/\r?\n?[^\r\n]*$/, ""));
+let sha1_sum = CryptoJS.enc.Hex.stringify(hash);
+if ( decrypted_text.includes(sha1_sum) ) {
+removeNotice();
+decrypted_text = decrypted_text.replace(/&lt;div.*?hugo-encrypt-sha1sum.*?>.*?&lt;\/div>/ig, '');
+cipher.parentNode.outerHTML = decrypted_text;
+userStorage.setItem(storageKey, password);
+console.log("Decryption successful. Storing password in Storage.");
+}
+}).catch(function(error) {
+if (type === "input") {
+cipher.parentNode.querySelector('.hugo-encrypt-input-response').innerHTML = "密码错误";
+console.log('密码错误', error);
+} else if (type === "storage") {
+userStorage.removeItem(location.pathname + "password");
+console.log("Password changed. Clearing userStorage.", error);
+}
+});
+}
+};
+&lt;/script>
+&lt;script>
+window.onload = () => {
+ciphers = Array.from(document.querySelectorAll("cipher-text"));
+if (userStorage.getItem(storageKey)) {
+console.log("Found storageKey in userStorage. Attemtping decryption");
+hugoDecrypt(userStorage.getItem(storageKey), "storage");
+}
+};
+&lt;/script>
+&lt;/hugo-encrypt></description></item><item><title>归档</title><link>//blog.xetri.net/archive/</link><pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/archive/</guid><description/></item><item><title>The Summary of 2017</title><link>//blog.xetri.net/2018/02/the-summary-of-2017/</link><pubDate>Wed, 14 Feb 2018 11:01:07 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2018/02/the-summary-of-2017/</guid><description>&lt;p>还有一天就到2018农历新年了，时间实在过得太快。今年两老的身体都有些不好，就提前请假回家，现在已舒服呆在房间中了。家里的天气实在是舒服，阳光明媚，想起广州住处的阴冷天气就头痛，衣服实在不容易干。&lt;/p>
+&lt;hugo-encrypt>
+&lt;div class="hugo-encrypt-encryption-notice">
+&lt;p class="hugo-encryptor-tips">文章的部分内容被密码保护：&lt;/p>
+&lt;noscript>&lt;span id="hugo-encrypt-enable-js">Javascript needs to be enabled to decrypt content&lt;/span>&lt;/noscript>
+&lt;div class='hugo-encrypt-form'>
+&lt;input
+class="hugo-encrypt-input"
+id="hugo-encrypt-password"
+placeholder='请输入密码'
+/>
+&lt;input
+class="hugo-encrypt-button"
+type="button"
+value='点击验证'
+id="button" onclick="hugoDecrypt(document.getElementById('hugo-encrypt-password').value,'input')"
+/>
+&lt;span class="hugo-encrypt-input-response">&lt;/span>
+&lt;/div>
+&lt;/div>
+&lt;cipher-text data-password='xetri123' style="display:none;">
 &lt;p>整理2017年的完成计划，发现还是有很多未完成：&lt;/p>
 &lt;ul>
 &lt;li>&lt;del>广州入户&lt;/del>&lt;/li>
@@ -63,7 +276,84 @@ The Game Award 2019
 &lt;p>学车学了几次就没动力了，开车要关注的太多了，还要养车。。。不过2018年会花多些时间学完，只要是方便接家人出去办事，到时再看下要不要买车位吧。&lt;/p>
 &lt;p>今年感情上还是没大发展，一个人的确生活惯了，发现和人相处和追人实在没动力，感觉还有一点不想结婚。。。不过一个人生活病痛是个问题，12月份出现了一次剧烈的胃痛，当时真的痛到快晕过去了，但周围没人可以依靠带去医院，有时想，假如是遇到心脏抽搐的话，可能就一直没人发现了，唉。&lt;/p>
 &lt;p>工作上也没大进展，维护的现有站点已经稳定了，技术上没什么挑战性，有些想离职，但现在年龄越来越大，找新的合适工作实在不容易，一年都在思考还适不适合做程序员，但找不到其他出路，有些想转做远程SOHO工作，但在中国不是太靠谱。&lt;/p>
-&lt;p>新的一年，希望家人身体能健康快乐些，准备学下自己做饭，到下年春节可以自己来操劳下年夜饭。&lt;/p></description></item><item><title>使用gdb调试php的coredump文件</title><link>//blog.xetri.net/2015/07/2015-using-gdb-to-debug-php-coredump/</link><pubDate>Wed, 08 Jul 2015 01:33:35 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2015/07/2015-using-gdb-to-debug-php-coredump/</guid><description>&lt;p>使用xhprof测试slim框架的性能时，发现php抛了Segment Fault错误，试着使用gdb查看是什么导致的。&lt;/p>
+&lt;p>新的一年，希望家人身体能健康快乐些，准备学下自己做饭，到下年春节可以自己来操劳下年夜饭。&lt;/p>
+&lt;/cipher-text>
+&lt;style type="text/css">div#hugo-encrypt-sha1sum {display: none;}&lt;/style>
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/core.js">&lt;/script>
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/sha1.js">&lt;/script>
+&lt;script>
+const storageKey = location.pathname + "password";
+const userStorage = localStorage ;
+function str2buf(str) {
+return new TextEncoder("utf-8").encode(str);
+}
+function buf2str(buffer) {
+return new TextDecoder("utf-8").decode(buffer);
+}
+function hex2buf(hexStr) {
+return new Uint8Array(hexStr.match(/.{2}/g).map(h => parseInt(h, 16)));
+}
+function deriveKey(passphrase, salt) {
+salt = salt || crypto.getRandomValues(new Uint8Array(8));
+return crypto.subtle
+.importKey("raw", str2buf(passphrase), "PBKDF2", false, ["deriveKey"])
+.then(key =>
+crypto.subtle.deriveKey(
+{ name: "PBKDF2", salt, iterations: 1000, hash: "SHA-256" },
+key,
+{ name: "AES-GCM", length: 256 },
+false,
+["encrypt", "decrypt"],
+),
+)
+.then(key => [key, salt]);
+}
+function decrypt(passphrase, saltIvCipherHex) {
+const [salt, iv, data] = saltIvCipherHex.split("-").map(hex2buf);
+return deriveKey(passphrase, salt)
+.then(([key]) => crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, data))
+.then(v => buf2str(new Uint8Array(v)));
+}
+function removeNotice() {
+var notices = document.getElementsByClassName("hugo-encrypt-encryption-notice");
+for (let i = 0; i &lt; notices.length; i++) {
+notices[i].remove();
+}
+}
+const hugoDecrypt = function(password, type) {
+for (const cipher of ciphers) {
+decrypt(password, cipher.innerText).then(function(decrypted_text) {
+let hash = CryptoJS.SHA1(decrypted_text.replace(/\r?\n?[^\r\n]*$/, ""));
+let sha1_sum = CryptoJS.enc.Hex.stringify(hash);
+if ( decrypted_text.includes(sha1_sum) ) {
+removeNotice();
+decrypted_text = decrypted_text.replace(/&lt;div.*?hugo-encrypt-sha1sum.*?>.*?&lt;\/div>/ig, '');
+cipher.parentNode.outerHTML = decrypted_text;
+userStorage.setItem(storageKey, password);
+console.log("Decryption successful. Storing password in Storage.");
+}
+}).catch(function(error) {
+if (type === "input") {
+cipher.parentNode.querySelector('.hugo-encrypt-input-response').innerHTML = "密码错误";
+console.log('密码错误', error);
+} else if (type === "storage") {
+userStorage.removeItem(location.pathname + "password");
+console.log("Password changed. Clearing userStorage.", error);
+}
+});
+}
+};
+&lt;/script>
+&lt;script>
+window.onload = () => {
+ciphers = Array.from(document.querySelectorAll("cipher-text"));
+if (userStorage.getItem(storageKey)) {
+console.log("Found storageKey in userStorage. Attemtping decryption");
+hugoDecrypt(userStorage.getItem(storageKey), "storage");
+}
+};
+&lt;/script>
+&lt;/hugo-encrypt></description></item><item><title>使用gdb调试php的coredump文件</title><link>//blog.xetri.net/2015/07/2015-using-gdb-to-debug-php-coredump/</link><pubDate>Wed, 08 Jul 2015 01:33:35 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2015/07/2015-using-gdb-to-debug-php-coredump/</guid><description>&lt;p>使用xhprof测试slim框架的性能时，发现php抛了Segment Fault错误，试着使用gdb查看是什么导致的。&lt;/p>
 &lt;h2 id="生成coredump文件">生成coredump文件&lt;/h2>
 &lt;p>要生成php的coredump文件需要对系统进行一些配置，具体查看：&lt;a class="link" href="https://rtcamp.com/tutorials/php/core-dump-php5-fpm/" target="_blank" rel="noopener"
 >Generating core-dump for php5-fpm&lt;/a>&lt;/p>
