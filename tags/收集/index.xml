@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>收集 on cxfksword's notes</title><link>//blog.xetri.net/tags/%E6%94%B6%E9%9B%86/</link><description>Recent content in 收集 on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Mon, 22 Feb 2021 16:58:10 +0800</lastBuildDate><atom:link href="//blog.xetri.net/tags/%E6%94%B6%E9%9B%86/index.xml" rel="self" type="application/rss+xml"/><item><title>常用git命令</title><link>//blog.xetri.net/2021/02/git-commands/</link><pubDate>Mon, 22 Feb 2021 16:58:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2021/02/git-commands/</guid><description>&lt;ol>
+&lt;li>删除所有 tags&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">&lt;span style="color:#75715e"># 先删除所有远程tag&lt;/span>
+git tag -l | xargs -n &lt;span style="color:#ae81ff">1&lt;/span> git push --delete origin
+&lt;span style="color:#75715e"># 再删除所有本地tag&lt;/span>
+git tag | xargs git tag -d
+&lt;/code>&lt;/pre>&lt;/div></description></item><item><title>常用adb命令</title><link>//blog.xetri.net/2020/09/adb-commands/</link><pubDate>Fri, 11 Sep 2020 11:27:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2020/09/adb-commands/</guid><description>&lt;ol>
+&lt;li>
+&lt;p>查看连接设备&lt;/p>
+&lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell"> adb devcies
+&lt;/code>&lt;/pre>&lt;/div>&lt;/li>
+&lt;/ol></description></item><item><title>各种开发相关的国内源</title><link>//blog.xetri.net/2020/05/china-speedup-source-for-develop/</link><pubDate>Thu, 07 May 2020 11:27:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2020/05/china-speedup-source-for-develop/</guid><description>&lt;pre>&lt;code>阿里云统一官方镜像站：https://developer.aliyun.com/mirror/
+包含了所有开源的国内镜像源，如homebrew，npm，pip，centos等，差不多满足所有开发需求， 🐂🍻
+&lt;/code>&lt;/pre></description></item><item><title>门户网站的ip查询接口</title><link>//blog.xetri.net/2011/12/ip-lookup/</link><pubDate>Sun, 25 Dec 2011 06:09:12 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2011/12/ip-lookup/</guid><description>&lt;p>腾讯：&lt;a class="link" href="http://ip.qq.com/cgi-bin/searchip?searchip1=121.236.225.37" target="_blank" rel="noopener"
+>http://ip.qq.com/cgi-bin/searchip?searchip1=121.236.225.37&lt;/a>
+现在只能通过解析页面内容到取得&lt;/p>
+&lt;p>新浪：&lt;a class="link" href="http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&amp;amp;ip=123.124.2.85" target="_blank" rel="noopener"
+>http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=json&amp;amp;ip=123.124.2.85&lt;/a>&lt;/p>
+&lt;p>网易： &lt;a class="link" href="http://www.youdao.com/smartresult-xml/search.s?type=ip&amp;amp;q=123.124.2.85" target="_blank" rel="noopener"
+>http://www.youdao.com/smartresult-xml/search.s?type=ip&amp;amp;q=123.124.2.85&lt;/a>&lt;/p>
+&lt;p>ip地址在各个国家的分配情况表：
+&lt;a class="link" href="http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest" target="_blank" rel="noopener"
+>http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest&lt;/a>
+&lt;a class="link" href="http://www.countryipblocks.net/country-blocks/ip-range-format/" target="_blank" rel="noopener"
+>http://www.countryipblocks.net/country-blocks/ip-range-format/&lt;/a>&lt;/p></description></item></channel></rss>
