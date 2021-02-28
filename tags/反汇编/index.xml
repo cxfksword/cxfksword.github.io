@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>反汇编 on cxfksword's notes</title><link>//blog.xetri.net/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/</link><description>Recent content in 反汇编 on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Wed, 16 May 2012 16:30:16 +0000</lastBuildDate><atom:link href="//blog.xetri.net/tags/%E5%8F%8D%E6%B1%87%E7%BC%96/index.xml" rel="self" type="application/rss+xml"/><item><title>利用IDA Pro反汇编程序</title><link>//blog.xetri.net/2012/05/disassembly-with-ida-pro/</link><pubDate>Wed, 16 May 2012 16:30:16 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2012/05/disassembly-with-ida-pro/</guid><description>&lt;p>&lt;a class="link" href="http://www.hex-rays.com/products/ida/index.shtml" target="_blank" rel="noopener"
->IDA Pro&lt;/a>是一款强大的反汇编软件，特有的IDA视图和交叉引用，可以方便理解程序逻辑和快速定位代码片断，以方便修改。
-&lt;img src="http://ww3.sinaimg.cn/large/7ce4a9f6gw1e5q1vme0mij20ly0ihdil.jpg" alt="IDA视图" />&lt;/p>
+>IDA Pro&lt;/a>是一款强大的反汇编软件，特有的IDA视图和交叉引用，可以方便理解程序逻辑和快速定位代码片断，以方便修改。&lt;/p>
+&lt;p>&lt;img src="http://ww3.sinaimg.cn/large/7ce4a9f6gw1e5q1vme0mij20ly0ihdil.jpg" alt="IDA视图" />&lt;/p>
 &lt;h3 id="示例程序">示例程序&lt;/h3>
 &lt;p>下面会通过修改示例程序的输出字符串，来讲解如何使用IDA Pro。&lt;/p>
 &lt;pre>&lt;code>#include

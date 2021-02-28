@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on cxfksword's notes</title><link>//blog.xetri.net/categories/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Mon, 22 Feb 2021 16:58:10 +0800</lastBuildDate><atom:link href="//blog.xetri.net/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>常用git命令</title><link>//blog.xetri.net/2021/02/git-commands/</link><pubDate>Mon, 22 Feb 2021 16:58:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2021/02/git-commands/</guid><description>&lt;ol>
-&lt;li>删除所有 tags&lt;/li>
-&lt;/ol>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>技术 on cxfksword's notes</title><link>//blog.xetri.net/categories/%E6%8A%80%E6%9C%AF/</link><description>Recent content in 技术 on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Mon, 22 Feb 2021 16:58:10 +0800</lastBuildDate><atom:link href="//blog.xetri.net/categories/%E6%8A%80%E6%9C%AF/index.xml" rel="self" type="application/rss+xml"/><item><title>常用git命令</title><link>//blog.xetri.net/2021/02/git-commands/</link><pubDate>Mon, 22 Feb 2021 16:58:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2021/02/git-commands/</guid><description>&lt;h2 id="1-删除所有-tags">1. 删除所有 tags&lt;/h2>
 &lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">&lt;span style="color:#75715e"># 先删除所有远程tag&lt;/span>
 git tag -l | xargs -n &lt;span style="color:#ae81ff">1&lt;/span> git push --delete origin
 &lt;span style="color:#75715e"># 再删除所有本地tag&lt;/span>
@@ -97,8 +95,8 @@ You can check if PHP 5.4.x is successfully installed with this command:
 php5 -v
 &lt;/code>&lt;/pre>
 &lt;p>&lt;a href="http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu">http://www.zimbio.com/Ubuntu+Linux/articles/D_AsJR2qAL6/How+Upgrade+PHP+5+4+Ubuntu&lt;/a>&lt;/p></description></item><item><title>利用IDA Pro反汇编程序</title><link>//blog.xetri.net/2012/05/disassembly-with-ida-pro/</link><pubDate>Wed, 16 May 2012 16:30:16 +0000</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2012/05/disassembly-with-ida-pro/</guid><description>&lt;p>&lt;a class="link" href="http://www.hex-rays.com/products/ida/index.shtml" target="_blank" rel="noopener"
->IDA Pro&lt;/a>是一款强大的反汇编软件，特有的IDA视图和交叉引用，可以方便理解程序逻辑和快速定位代码片断，以方便修改。
-&lt;img src="http://ww3.sinaimg.cn/large/7ce4a9f6gw1e5q1vme0mij20ly0ihdil.jpg" alt="IDA视图" />&lt;/p>
+>IDA Pro&lt;/a>是一款强大的反汇编软件，特有的IDA视图和交叉引用，可以方便理解程序逻辑和快速定位代码片断，以方便修改。&lt;/p>
+&lt;p>&lt;img src="http://ww3.sinaimg.cn/large/7ce4a9f6gw1e5q1vme0mij20ly0ihdil.jpg" alt="IDA视图" />&lt;/p>
 &lt;h3 id="示例程序">示例程序&lt;/h3>
 &lt;p>下面会通过修改示例程序的输出字符串，来讲解如何使用IDA Pro。&lt;/p>
 &lt;pre>&lt;code>#include
