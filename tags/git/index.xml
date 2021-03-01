@@ -1,4 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>git on cxfksword's notes</title><link>//blog.xetri.net/tags/git/</link><description>Recent content in git on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Mon, 22 Feb 2021 16:58:10 +0800</lastBuildDate><atom:link href="//blog.xetri.net/tags/git/index.xml" rel="self" type="application/rss+xml"/><item><title>常用git命令</title><link>//blog.xetri.net/2021/02/git-commands/</link><pubDate>Mon, 22 Feb 2021 16:58:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2021/02/git-commands/</guid><description>&lt;h2 id="1-删除所有-tags">1. 删除所有 tags&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>git on cxfksword's notes</title><link>//blog.xetri.net/tags/git/</link><description>Recent content in git on cxfksword's notes</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>cxfksword@gmail.com (cxfksword)</managingEditor><webMaster>cxfksword@gmail.com (cxfksword)</webMaster><lastBuildDate>Mon, 22 Feb 2021 16:58:10 +0800</lastBuildDate><atom:link href="//blog.xetri.net/tags/git/index.xml" rel="self" type="application/rss+xml"/><item><title>常用git命令</title><link>//blog.xetri.net/2021/02/git-commands/</link><pubDate>Mon, 22 Feb 2021 16:58:10 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/2021/02/git-commands/</guid><description>&lt;h2 id="还原本地修改过的文件">还原本地修改过的文件&lt;/h2>
+&lt;pre>&lt;code># 会还原所有修改过的文件
+git checkout .
+&lt;/code>&lt;/pre>&lt;h2 id="丢弃本地上一次提交">丢弃本地上一次提交&lt;/h2>
+&lt;pre>&lt;code># 回退上一个 commit 版本
+git reset
+&lt;/code>&lt;/pre>&lt;h2 id="删除所有-tags">删除所有 tags&lt;/h2>
 &lt;div class="highlight">&lt;pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">&lt;code class="language-shell" data-lang="shell">&lt;span style="color:#75715e"># 先删除所有远程tag&lt;/span>
 git tag -l | xargs -n &lt;span style="color:#ae81ff">1&lt;/span> git push --delete origin
 &lt;span style="color:#75715e"># 再删除所有本地tag&lt;/span>
