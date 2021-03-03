@@ -40,13 +40,4 @@ libxslt-dev
 >register_shutdown_function&lt;/a>：脚本关闭执行函数，会在php脚本每次执行完成退出前运行。&lt;/p>
 &lt;/blockquote>
 &lt;p>为了保证运行错误能被顺利捕捉到，必须保证在有错的程序执行前先注册了错误处理函数。
-一般错误处理代码结构如下：&lt;/p></description></item><item><title>Github收藏开源项目</title><link>//blog.xetri.net/star/</link><pubDate>Tue, 09 Feb 2010 17:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/star/</guid><description>.Net Westwind.ApplicationConfiguration
-Strongly typed, code-first configuration classes for .NET applications
-pythonnet
-Python for .NET is a package that gives Python programmers nearly seamless integration with the .NET Common Language Runtime (CLR) and provides a powerful application scripting tool for .NET developers. http://pythonnet.github.io
-dapper-dot-net
-a simple object mapper for .Net.small ORM.
-NLog
-Advanced .NET and Silverlight Logging
-DynamicCsToPowerShell
-provides a cleaner syntax when executing PowerShell code from C#.</description></item></channel></rss>
+一般错误处理代码结构如下：&lt;/p></description></item></channel></rss>
