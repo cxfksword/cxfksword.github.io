@@ -349,12 +349,16 @@ return result;
 &lt;img src="http://ww4.sinaimg.cn/large/7ce4a9f6gw1e5q0qq4u7hj20el0fuabm.jpg" alt="nokia s60 v3 fp1" />&lt;/p>
 &lt;p>假如你想查看nokia模拟器运行日志，可以在运行中打开“%temp%”当前用户临时文件夹，再搜索“epocwind.out”就是了&lt;/p></description></item><item><title>关于</title><link>//blog.xetri.net/abouts/</link><pubDate>Fri, 24 Dec 2010 00:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/abouts/</guid><description>在广州工作的大龄程序员。。。毕业后一直从事程序开发工作，接触的技术比较多，如.NET/PHP/JAVA/Javascript等等，现在喜欢 Go 语言。</description></item><item><title>项目</title><link>//blog.xetri.net/projects/</link><pubDate>Fri, 24 Dec 2010 00:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/projects/</guid><description>施工中。。。</description></item><item><title>推荐</title><link>//blog.xetri.net/star/</link><pubDate>Tue, 09 Feb 2010 17:20:08 +0800</pubDate><author>cxfksword@gmail.com (cxfksword)</author><guid>//blog.xetri.net/star/</guid><description>Windows应用 TrafficMonitor
 Traffic Monitor是一款用于Windows平台的网速监控悬浮窗软件，可以显示当前网速、CPU及内存利用率，支持嵌入到任务栏显示，支持更换皮肤、历史流量统计等功能。
+QuickLook
+可以像 macOS 通过一样空格键快速预览文件内容，支持 word、excel、markdown 和图片等
 Remote Shutdown Manager
 局域网通过 http 接口远程关机服务
 Wox
 An effective launcher for windows http://www.getwox.com
 Mac 应用 Go2Shell
 在 Finder 中使用当前目录打开终端
+AlDente
+限制电池最大充电百分比，如设为 80%，就是充到 80%后，改为用电源直接供电，有效保护电池寿命。适合 MacBook 一直插电使用党。
 shuttle
 A simple SSH shortcut menu for OS X http://fitztrev.github.io/shuttle/
 lauchy
